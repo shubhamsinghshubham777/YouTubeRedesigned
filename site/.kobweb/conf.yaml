@@ -1,0 +1,14 @@
+site:
+  title: "YouTube"
+
+server:
+  files:
+    dev:
+      contentRoot: "build/processedResources/js/main/public"
+      script: "build/kotlin-webpack/js/developmentExecutable/youtube.js"
+      api: "build/libs/youtube.jar"
+    prod:
+      script: "build/kotlin-webpack/js/productionExecutable/youtube.js"
+      siteRoot: ".kobweb/site"
+
+  port: 8080
