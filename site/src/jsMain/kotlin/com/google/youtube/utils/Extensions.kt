@@ -1,43 +1,30 @@
 package com.google.youtube.utils
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.unit.IntSize
-import com.varabyte.kobweb.browser.dom.observers.ResizeObserver
 import com.varabyte.kobweb.compose.ui.graphics.Color
-import kotlinx.browser.document
-import kotlinx.browser.window
+import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import org.w3c.dom.Element
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
+import androidx.compose.ui.graphics.Color as ComposeColor
 
 fun ComposeColor.toKobwebColor(): Color = Color.argb(this.toArgb())
 
-fun Color.toComposeColor(): ComposeColor {
-    val hsl = this.toHsl()
-    return ComposeColor.hsl(
-        hue = hsl.hue,
-        saturation = hsl.saturation,
-        lightness = hsl.lightness,
-        alpha = hsl.alpha
-    )
+fun Color.Rgb.toComposeColor(): ComposeColor {
+    return ComposeColor(red = red, green = green, blue = blue, alpha = alpha)
 }
 
 data class MouseEventCallbacks(
     val onHover: (MouseEvent) -> Unit,
     val onExit: (MouseEvent) -> Unit,
     val onPress: (MouseEvent) -> Unit,
-    val onRelease: (MouseEvent) -> Unit
+    val onRelease: (MouseEvent) -> Unit,
 )
 
 fun Element.onMouseEvent(
     onHoveredAndPressed: (MouseEvent) -> Unit,
     onHovered: (MouseEvent) -> Unit,
-    onReleased: (MouseEvent) -> Unit
+    onReleased: (MouseEvent) -> Unit,
 ): MouseEventCallbacks {
     var isHovered = false
     var isPressed = false
@@ -84,21 +71,4 @@ fun Element.removeMouseEventListeners(callbacks: MouseEventCallbacks) {
     removeEventListener(type = "pointerup", callback = callbacks.onRelease as (Event) -> Unit)
 }
 
-@Composable
-fun rememberWindowSizeAsState(): State<IntSize> {
-    val windowSize = remember {
-        mutableStateOf(IntSize(width = window.innerWidth, height = window.innerHeight))
-    }
-
-    DisposableEffect(Unit) {
-        val observer = ResizeObserver { entry ->
-            entry.firstOrNull()?.contentRect?.let { size ->
-                windowSize.value = IntSize(width = size.width.toInt(), height = size.height.toInt())
-            }
-        }
-        document.body?.let(observer::observe)
-        onDispose { document.body?.let(observer::unobserve) }
-    }
-
-    return windowSize
-}
+infix fun Breakpoint.isGreaterThan(other: Breakpoint): Boolean = ordinal > other.ordinal

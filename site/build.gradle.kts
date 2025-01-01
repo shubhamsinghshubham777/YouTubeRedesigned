@@ -1,10 +1,8 @@
-
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import kotlinx.html.link
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kobweb.application)
 }
@@ -31,7 +29,9 @@ kobweb {
                     attributes["crossorigin"] = ""
                 }
                 link(
-                    href = "https://fonts.googleapis.com/css2?family=Roboto&display=swap",
+                    href = "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0," +
+                            "300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900" +
+                            "&display=swap",
                     rel = "stylesheet"
                 )
             }
@@ -44,13 +44,13 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.animation)
-            implementation(compose.runtime)
-            implementation(compose.ui)
+            implementation(libs.compose.animation)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
         }
 
         jsMain.dependencies {
-            implementation(compose.html.core)
+            implementation(libs.compose.html.core)
             implementation(libs.kobweb.core)
             implementation(libs.kobweb.silk)
             implementation(libs.silk.icons.fa)

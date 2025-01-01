@@ -22,7 +22,7 @@ import org.jetbrains.compose.web.css.vh
 @InitSilk
 fun overrideRootHTMLStyle(ctx: InitSilkContext) {
     ctx.stylesheet.registerStyleBase("html") {
-        Modifier.background(Styles.BACKGROUND)
+        Modifier.background(Styles.SURFACE)
     }
 }
 
@@ -53,7 +53,7 @@ fun AppEntry(content: @Composable () -> Unit) {
             modifier = Modifier
                 .minHeight(100.vh)
                 .fontFamily("Roboto")
-                .background(Styles.BACKGROUND),
+                .background(Styles.SURFACE),
             colorModeOverride = ColorMode.DARK,
         ) {
             content()

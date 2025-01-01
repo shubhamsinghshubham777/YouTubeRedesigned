@@ -7,11 +7,12 @@ import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvg
 import com.google.youtube.utils.Assets
-import com.google.youtube.utils.ComposeColor
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Background
 import com.varabyte.kobweb.compose.css.Cursor
@@ -33,7 +34,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
-import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
@@ -60,7 +60,10 @@ import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.TextInput
 
 @Composable
-fun TopBar() {
+fun TopBar(
+    modifier: Modifier = Modifier,
+    onDrawerButtonClick: () -> Unit,
+) {
     val breakpoint = rememberBreakpoint()
 
     var searchQuery by remember { mutableStateOf("") }
@@ -68,12 +71,12 @@ fun TopBar() {
     var showSearchBar by remember { mutableStateOf(false) }
 
     val animatedTextFieldBorderColor by animateColorAsState(
-        if (isTextFieldFocused) ComposeColor.White
-        else Styles.BORDER_COLOR
+        if (isTextFieldFocused) Styles.WHITE.toComposeColor()
+        else Styles.BORDER_COLOR.toComposeColor()
     )
     val animatedTextFieldContentColor by animateColorAsState(
-        if (isTextFieldFocused) ComposeColor.White
-        else ComposeColor.White.copy(alpha = Styles.Opacity.TOP_BAR_CONTENT)
+        if (isTextFieldFocused) Color.White
+        else Color.White.copy(alpha = Styles.Opacity.TOP_BAR_CONTENT)
     )
 
     val movableSearchBar = remember {
@@ -90,8 +93,9 @@ fun TopBar() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AssetSvg(
+                    id = Assets.Paths::SEARCH.name,
                     path = Assets.Paths.SEARCH,
-                    color = animatedTextFieldContentColor.toKobwebColor(),
+                    primaryColor = animatedTextFieldContentColor.toKobwebColor(),
                 ) {
                     marginLeft(16.px)
                     marginRight(10.px)
@@ -115,8 +119,9 @@ fun TopBar() {
                 }
                 if (searchQuery.isNotEmpty()) {
                     AssetSvg(
+                        id = Assets.Paths::CLOSE.name,
                         path = Assets.Paths.CLOSE,
-                        color = Colors.White,
+                        primaryColor = Colors.White,
                         onClick = { searchQuery = "" },
                     ) {
                         cursor(Cursor.Pointer)
@@ -126,8 +131,9 @@ fun TopBar() {
                     Box(modifier = Modifier.width(36.px))
                 }
                 AssetSvg(
+                    id = Assets.Paths::MIC.name,
                     path = Assets.Paths.MIC,
-                    color = animatedTextFieldContentColor.toKobwebColor(),
+                    primaryColor = animatedTextFieldContentColor.toKobwebColor(),
                     onClick = {}
                 ) {
                     cursor(Cursor.Pointer)
@@ -137,15 +143,16 @@ fun TopBar() {
         }
     }
 
-    Box(modifier = TopBarStyle.toModifier().fillMaxWidth()) {
+    Box(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth().height(64.px),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AssetImageButton(
                 modifier = Modifier.margin(right = 16.px),
-                asset = Assets.Icons.MENU
-            ) {}
+                asset = Assets.Icons.MENU,
+                onClick = onDrawerButtonClick
+            )
             Image(
                 modifier = Modifier.height(20.px),
                 src = Assets.Icons.YOUTUBE_LOGO
@@ -178,7 +185,7 @@ fun TopBar() {
             Row(
                 modifier = Modifier
                     .zIndex(1)
-                    .background(Styles.BACKGROUND)
+                    .background(Styles.SURFACE)
                     .fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -190,11 +197,6 @@ fun TopBar() {
             }
         }
     }
-}
-
-val TopBarStyle = CssStyle {
-    base { Modifier.padding(leftRight = 12.px) }
-    Breakpoint.SM { Modifier.padding(leftRight = 24.px) }
 }
 
 val TopBarSearchButtonStyle = CssStyle {

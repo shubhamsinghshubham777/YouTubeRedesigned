@@ -6,9 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.google.youtube.utils.ComposeColor
+import androidx.compose.ui.graphics.Color
+import com.google.youtube.utils.Styles
 import com.google.youtube.utils.onMouseEvent
 import com.google.youtube.utils.removeMouseEventListeners
+import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.dom.disposableRef
@@ -29,14 +31,14 @@ fun AssetImageButton(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
-    var backgroundColor by remember { mutableStateOf(ComposeColor.Transparent) }
+    var backgroundColor by remember { mutableStateOf(Color.Transparent) }
     val animatedBackgroundColor by animateColorAsState(backgroundColor)
     Image(
         ref = disposableRef { element ->
             val mouseEventCallbacks = element.onMouseEvent(
-                onHoveredAndPressed = { backgroundColor = ComposeColor.White.copy(alpha = .2392f) },
-                onHovered = { backgroundColor = ComposeColor.White.copy(alpha = .1529f) },
-                onReleased = { backgroundColor = ComposeColor.Transparent }
+                onHoveredAndPressed = { backgroundColor = Styles.PRESS_HIGHLIGHT.toComposeColor() },
+                onHovered = { backgroundColor = Styles.HOVER_HIGHLIGHT.toComposeColor() },
+                onReleased = { backgroundColor = Color.Transparent }
             )
             onDispose { element.removeMouseEventListeners(mouseEventCallbacks) }
         },
