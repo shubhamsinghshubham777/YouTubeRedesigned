@@ -12,6 +12,7 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvg
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Background
@@ -171,7 +172,7 @@ fun TopBar(
                     modifier = TopBarSearchButtonStyle.toModifier(),
                     asset = Assets.Icons.SEARCH
                 ) { showSearchBar = true }
-                AssetImageButton(Assets.Icons.ADD) {}
+                if (breakpoint isGreaterThan Breakpoint.SM) AssetImageButton(Assets.Icons.ADD) {}
                 AssetImageButton(Assets.Icons.NOTIFS) {}
                 AssetImageButton(Assets.Icons.SETTINGS) {}
                 AssetImageButton(
