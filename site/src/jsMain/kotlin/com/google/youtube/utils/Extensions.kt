@@ -14,6 +14,8 @@ fun Color.Rgb.toComposeColor(): ComposeColor {
     return ComposeColor(red = red, green = green, blue = blue, alpha = alpha)
 }
 
+enum class MouseEventState { Pressed, Hovered, Released }
+
 data class MouseEventCallbacks(
     val onHover: (MouseEvent) -> Unit,
     val onExit: (MouseEvent) -> Unit,
