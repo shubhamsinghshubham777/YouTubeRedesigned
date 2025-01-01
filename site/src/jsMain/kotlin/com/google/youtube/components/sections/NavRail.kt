@@ -126,9 +126,9 @@ fun NavRail(
                     HorizontalDivider(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(100.percent - 12.px)
+                            .fillMaxWidth(100.percent - 20.px)
                             .backgroundColor(Styles.WHITE)
-                            .opacity(0.15f)
+                            .opacity(0.1f)
                     )
                 }
             }
