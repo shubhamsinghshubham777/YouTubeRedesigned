@@ -20,6 +20,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import org.jetbrains.compose.web.css.px
 
+// TODO: Extend this composable to accept custom animations (like fade*, scale*, slide*Horizontally, slide*Vertically [* means in/out])
 @Composable
 fun AnimatedVisibility(
     isVisible: Boolean,

@@ -1,5 +1,8 @@
 package com.google.youtube.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.graphics.toArgb
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
@@ -22,6 +25,20 @@ data class MouseEventCallbacks(
     val onPress: (MouseEvent) -> Unit,
     val onRelease: (MouseEvent) -> Unit,
 )
+
+@Composable
+fun rememberMouseEventAsState(element: Element?): State<MouseEventState> {
+    return produceState(MouseEventState.Released, element) {
+        val callback = element?.onMouseEvent(
+            onHoveredAndPressed = { value = MouseEventState.Pressed },
+            onHovered = { value = MouseEventState.Hovered },
+            onReleased = { value = MouseEventState.Released }
+        )
+        awaitDispose {
+            callback?.let { safeCallback -> element.removeMouseEventListeners(safeCallback) }
+        }
+    }
+}
 
 fun Element.onMouseEvent(
     onHoveredAndPressed: (MouseEvent) -> Unit,

@@ -12,14 +12,13 @@ import com.google.youtube.utils.Assets
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
-import com.google.youtube.utils.onMouseEvent
-import com.google.youtube.utils.removeMouseEventListeners
+import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
-import com.varabyte.kobweb.compose.dom.disposableRef
+import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
@@ -45,6 +44,7 @@ import org.jetbrains.compose.web.css.marginLeft
 import org.jetbrains.compose.web.css.marginRight
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Text
+import org.w3c.dom.Element
 
 @Composable
 fun AssetSvgButton(
@@ -64,7 +64,8 @@ fun AssetSvgButton(
     val borderRadius = remember {
         if (typeTransition.currentState == AssetSvgButtonType.Button) 24.px else 8.px
     }
-    var mouseEventState by remember { mutableStateOf(MouseEventState.Released) }
+    var elementRef: Element? by remember { mutableStateOf(null) }
+    val mouseEventState by rememberMouseEventAsState(elementRef)
     val contentPadding = remember(startIconPath) {
         when (typeTransition.currentState) {
             AssetSvgButtonType.Button -> PaddingValues(
@@ -113,14 +114,7 @@ fun AssetSvgButton(
     )
 
     Row(
-        ref = disposableRef { element ->
-            val mouseEventCallbacks = element.onMouseEvent(
-                onHoveredAndPressed = { mouseEventState = MouseEventState.Pressed },
-                onHovered = { mouseEventState = MouseEventState.Hovered },
-                onReleased = { mouseEventState = MouseEventState.Released }
-            )
-            onDispose { element.removeMouseEventListeners(mouseEventCallbacks) }
-        },
+        ref = ref { elementRef = it },
         modifier = Modifier
             .background(animatedContainerColor.toKobwebColor())
             .clip(Rect(borderRadius))

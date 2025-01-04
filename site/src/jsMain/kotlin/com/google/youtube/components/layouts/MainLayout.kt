@@ -9,17 +9,24 @@ import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.utils.isGreaterThan
+import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.minWidth
+import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
+import org.jetbrains.compose.web.css.minus
+import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 
 @Composable
@@ -48,7 +55,19 @@ fun MainLayout() {
                 selectedParentChildIndicesState = selectedParentChildIndicesState,
                 isExpandedState = isNavRailExpandedState,
             )
-            Box(modifier = Modifier.weight(1).fillMaxHeight()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(100.percent - navRailWidthPx.px - horizontalPaddingPx.px)
+                    .fillMaxHeight()
+                    .overflow(Overflow.Scroll)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .minWidth(200.px),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                }
             }
         }
     }
