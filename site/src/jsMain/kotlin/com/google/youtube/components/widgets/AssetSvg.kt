@@ -29,9 +29,11 @@ fun AssetSvg(
     Svg(
         attrs = {
             height(size)
-            style { style?.invoke(this) }
             width(size)
             onClick { onClick?.invoke() }
+            style { style?.invoke(this) }
+            // TODO: This is dangerous as we need to ensure all icons are of size 24 x 24 (hoist it as param instead)
+            viewBox(0, 0, 24, 24)
         }
     ) {
         val gradientId = remember(id) { SvgId("fill_gradient_$id") }

@@ -12,7 +12,7 @@ object Styles {
     val OFF_WHITE: Color.Rgb = Color.rgb(241, 241, 241)
     val PINK: Color.Rgb = Color.rgb(245, 0, 87)
     val RED: Color.Rgb = Color.rgb(255, 0, 51)
-    val RED_BUTTON: Color.Rgb = Color.rgb(204, 40, 73)
+    val RED_BUTTON_BACKGROUND: Color.Rgb = Color.rgb(255, 50, 91)
     val RED_LIGHT: Color.Rgb = Color.rgb(255, 170, 187)
     val WHITE: Color.Rgb = Colors.White
     val SUBSCRIPTIONS_COUNT_BADGE_CONTAINER: Color.Rgb = Color.rgb(48, 48, 48)

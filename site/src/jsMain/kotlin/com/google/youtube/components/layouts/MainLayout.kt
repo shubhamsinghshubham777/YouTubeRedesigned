@@ -13,7 +13,6 @@ import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
-import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
@@ -65,7 +64,6 @@ fun MainLayout() {
                     modifier = Modifier
                         .fillMaxSize()
                         .minWidth(200.px),
-                    contentAlignment = Alignment.TopEnd
                 ) {
                 }
             }
