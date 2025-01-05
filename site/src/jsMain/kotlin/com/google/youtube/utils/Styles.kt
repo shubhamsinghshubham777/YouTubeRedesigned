@@ -15,6 +15,7 @@ object Styles {
     val RED_BUTTON: Color.Rgb = Color.rgb(204, 40, 73)
     val RED_LIGHT: Color.Rgb = Color.rgb(255, 170, 187)
     val WHITE: Color.Rgb = Colors.White
+    val SUBSCRIPTIONS_COUNT_BADGE_CONTAINER: Color.Rgb = Color.rgb(48, 48, 48)
 
     object Opacity {
         const val TOP_BAR_CONTENT = 0.4f

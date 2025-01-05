@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
 import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Box
+import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
@@ -67,6 +68,7 @@ fun AnimatedVisibility(
             )
             .opacity(currentOpacity)
             .then(modifier),
+        contentAlignment = Alignment.Center,
     ) {
         if (finalContentSize == null || isVisibleState.currentState || !isOpacityZero) content()
     }
