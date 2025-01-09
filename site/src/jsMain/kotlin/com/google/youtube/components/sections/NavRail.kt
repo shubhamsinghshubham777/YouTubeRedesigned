@@ -83,7 +83,7 @@ fun NavRail(
                                     selectedParentChildIndicesState.value.second == null
                         }
                     },
-                    isHorizontallyExpanded = isExpandedState,
+                    isHorizontallyExpandedState = isExpandedState,
                     isDropDownOpen = isDropDownOpen,
                     hasChildren = parentItem.children?.isNotEmpty() == true,
                     isParentItem = true,
@@ -105,7 +105,7 @@ fun NavRail(
                                                     selectedParentChildIndicesState.value.second == childIndex
                                         }
                                     },
-                                    isHorizontallyExpanded = isExpandedState,
+                                    isHorizontallyExpandedState = isExpandedState,
                                     hasChildren = false,
                                     isParentItem = false,
                                     onClick = {
@@ -156,7 +156,7 @@ sealed class NavRailListItemIconType {
 private fun NavRailListItem(
     item: NavRailItem,
     isSelectedState: State<Boolean>,
-    isHorizontallyExpanded: State<Boolean>,
+    isHorizontallyExpandedState: State<Boolean>,
     isDropDownOpen: MutableState<Boolean>? = null,
     hasChildren: Boolean,
     isParentItem: Boolean,
@@ -253,7 +253,7 @@ private fun NavRailListItem(
             // Label and Count Badge
             AnimatedVisibility(
                 modifier = Modifier.weight(1),
-                isVisible = isHorizontallyExpanded.value,
+                isVisible = isHorizontallyExpandedState.value,
             ) {
                 Row(
                     modifier = Modifier
@@ -284,7 +284,7 @@ private fun NavRailListItem(
             }
         }
 
-        if (isHorizontallyExpanded.value && hasChildren) {
+        if (isHorizontallyExpandedState.value && hasChildren) {
             VerticalDivider(
                 modifier = Modifier
                     .height(28.px)
