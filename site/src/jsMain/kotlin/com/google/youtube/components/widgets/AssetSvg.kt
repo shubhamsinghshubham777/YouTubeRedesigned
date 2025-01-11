@@ -36,7 +36,9 @@ fun AssetSvg(
             viewBox(0, 0, 24, 24)
         }
     ) {
-        val gradientId = remember(id) { SvgId("fill_gradient_$id") }
+        val gradientId = remember(id) {
+            SvgId("fill_gradient_${id.replace(' ', '_')}")
+        }
         Defs {
             LinearGradient(gradientId) {
                 Stop {

@@ -258,7 +258,7 @@ private fun NavRailListItem(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .margin(left = if (isParentItem) 20.px else 0.px)
+                        .margin(left = if (isParentItem) 40.px else 0.px)
                         .fontSize(if (isParentItem) 16.px else 15.px)
                         .fontWeight(if (isParentItem) FontWeight.Medium else FontWeight.Normal)
                         .overflow(Overflow.Hidden)

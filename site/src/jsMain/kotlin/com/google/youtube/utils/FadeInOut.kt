@@ -25,7 +25,7 @@ fun <T> FadeInOut(
     val animatable = remember { Animatable(initialValue = 1f) }
 
     var currentOpacity by remember { mutableFloatStateOf(1f) }
-    var currentTranslationY by remember { mutableFloatStateOf(1f) }
+    var currentTranslationY by remember { mutableFloatStateOf(0f) }
 
     LaunchedEffect(state) {
         if (state != currentState) {

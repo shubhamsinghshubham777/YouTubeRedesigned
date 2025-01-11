@@ -5,6 +5,7 @@ import com.varabyte.kobweb.compose.ui.graphics.Colors
 
 object Styles {
     val SURFACE: Color.Rgb = Color.rgb(17, 17, 17)
+    val SURFACE_ELEVATED: Color.Rgb = Color.rgb(31, 31, 31)
     val BACKGROUND_SELECTED: Color.Rgb = Color.rgba(255, 170, 187, 0.14f)
     val BORDER_COLOR: Color.Rgb = Color.rgb(42, 42, 42)
     val HOVER_HIGHLIGHT: Color.Rgb = Color.rgba(255, 255, 255, 0.15f)
@@ -13,9 +14,11 @@ object Styles {
     val PINK: Color.Rgb = Color.rgb(245, 0, 87)
     val RED: Color.Rgb = Color.rgb(255, 0, 51)
     val RED_BUTTON_BACKGROUND: Color.Rgb = Color.rgb(255, 50, 91)
+    val SWITCH_BACKGROUND_SELECTED: Color.Rgb = Color.rgb(204, 39, 73)
     val RED_LIGHT: Color.Rgb = Color.rgb(255, 170, 187)
     val WHITE: Color.Rgb = Colors.White
     val SUBSCRIPTIONS_COUNT_BADGE_CONTAINER: Color.Rgb = Color.rgb(48, 48, 48)
+    val SWITCH_OUTLINE: Color.Rgb = Color.rgb(121, 116, 126)
 
     object Opacity {
         const val TOP_BAR_CONTENT = 0.4f
