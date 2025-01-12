@@ -9,10 +9,11 @@ import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.pages.HomePage
+import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.Dialog
-import com.google.youtube.utils.FadeInOut
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.isGreaterThan
+import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.minWidth
+import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
@@ -70,9 +72,10 @@ fun MainLayout() {
                     modifier = Modifier
                         .fillMaxWidth(100.percent - navRailWidthPx.px - horizontalPaddingPx.px)
                         .fillMaxHeight()
+                        .overflow(Overflow.Scroll)
                 ) {
-                    Box(modifier = Modifier.fillMaxSize().minWidth(250.px)) {
-                        FadeInOut(selectedParentChildIndicesState.value) { animatedState ->
+                    Box(modifier = Modifier.fillMaxSize().minWidth(320.px)) {
+                        Crossfade(selectedParentChildIndicesState.value) { animatedState ->
                             when (animatedState.first) {
                                 0 -> HomePage(
                                     showPersonalisedFeedDialogState = showPersonalisedFeedDialogState

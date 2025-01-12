@@ -1,12 +1,16 @@
 package com.google.youtube.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.graphics.toArgb
+import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
+import com.varabyte.kobweb.compose.ui.modifiers.onScroll
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import org.w3c.dom.Element
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import androidx.compose.ui.graphics.Color as ComposeColor
@@ -91,3 +95,20 @@ fun Element.removeMouseEventListeners(callbacks: MouseEventCallbacks) {
 }
 
 infix fun Breakpoint.isGreaterThan(other: Breakpoint): Boolean = ordinal > other.ordinal
+
+fun Modifier.bindScrollState(state: MutableState<HorizontalScrollState>) = then(
+    Modifier.onScroll { event ->
+        val target = event.target as HTMLElement
+        when {
+            target.scrollLeft == 0.0 &&
+                    state.value != HorizontalScrollState.ReachedStart ->
+                state.value = HorizontalScrollState.ReachedStart
+
+            target.scrollWidth - (target.scrollLeft + target.clientWidth) <= 0.5 ->
+                state.value = HorizontalScrollState.ReachedEnd
+
+            state.value != HorizontalScrollState.Scrolling ->
+                state.value = HorizontalScrollState.Scrolling
+        }
+    }
+)

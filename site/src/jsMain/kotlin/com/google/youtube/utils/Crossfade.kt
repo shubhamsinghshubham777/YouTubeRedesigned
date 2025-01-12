@@ -16,24 +16,24 @@ import com.varabyte.kobweb.compose.ui.modifiers.translateY
 import org.jetbrains.compose.web.css.px
 
 @Composable
-fun <T> FadeInOut(
-    state: T,
+fun <T> Crossfade(
+    targetState: T,
     modifier: Modifier = Modifier,
     content: @Composable (T) -> Unit,
 ) {
-    var currentState by remember { mutableStateOf(state) }
+    var currentState by remember { mutableStateOf(targetState) }
     val animatable = remember { Animatable(initialValue = 1f) }
 
     var currentOpacity by remember { mutableFloatStateOf(1f) }
     var currentTranslationY by remember { mutableFloatStateOf(0f) }
 
-    LaunchedEffect(state) {
-        if (state != currentState) {
+    LaunchedEffect(targetState) {
+        if (targetState != currentState) {
             animatable.animateTo(targetValue = 0f, animationSpec = tween(150)) {
                 currentOpacity = value
                 currentTranslationY = (1 - value) * 4f
             }
-            currentState = state
+            currentState = targetState
             animatable.animateTo(targetValue = 1f, animationSpec = tween()) {
                 currentOpacity = value
                 currentTranslationY = (1 - value) * 4f
