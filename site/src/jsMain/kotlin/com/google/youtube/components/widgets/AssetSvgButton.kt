@@ -21,6 +21,7 @@ import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.foundation.layout.RowScope
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
@@ -31,6 +32,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
+import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
@@ -55,12 +57,15 @@ fun AssetSvgButton(
     id: String,
     type: AssetSvgButtonType = AssetSvgButtonType.Button,
     containerColor: Color? = null,
+    iconPrimaryColor: Color? = null,
+    iconSecondaryColor: Color? = null,
     isSelected: Boolean = false,
     isOutlined: Boolean = false,
     startIconPath: String? = null,
     endIconPath: String? = null,
     iconSize: CSSLengthOrPercentageValue = if (type == AssetSvgButtonType.Button) 22.px else 24.px,
-    text: String,
+    text: String? = null,
+    content: (@Composable RowScope.() -> Unit)? = null,
 ) {
     val updatedButtonType = updateTransition(type).currentState
     val updatedIsOutlined = updateTransition(isOutlined).currentState
@@ -71,25 +76,8 @@ fun AssetSvgButton(
     var elementRef: Element? by remember { mutableStateOf(null) }
     val mouseEventState by rememberMouseEventAsState(elementRef)
     val animatedContainerColor by animateColorAsState(
-        updateTransition(
-            (containerColor ?: Styles.WHITE.copyf(alpha = 0.08f)).toRgb().toComposeColor()
-        ).targetState
-    )
-    val animatedContainerHighlightColor by animateColorAsState(
-        Styles.WHITE.copyf(
-            alpha = if (updatedIsSelected)
-                when (mouseEventState) {
-                    MouseEventState.Pressed -> Styles.Opacity.PRESSED_SELECTED
-                    MouseEventState.Hovered -> Styles.Opacity.HOVERED_SELECTED
-                    MouseEventState.Released -> 1f
-                }
-            else
-                when {
-                    mouseEventState == MouseEventState.Pressed -> Styles.Opacity.PRESSED
-                    mouseEventState == MouseEventState.Hovered -> Styles.Opacity.HOVERED
-                    mouseEventState == MouseEventState.Released && updatedButtonType != AssetSvgButtonType.Button -> Styles.Opacity.HOVERED
-                    else -> 0f
-                }
+        (containerColor ?: Styles.WHITE).toRgb().copyf(
+            alpha = mouseEventState.alphaFromMouseState(isSelected = updatedIsSelected)
         ).toComposeColor()
     )
     val animatedContentColor by animateColorAsState(
@@ -98,9 +86,22 @@ fun AssetSvgButton(
             else -> Styles.WHITE
         }.toComposeColor()
     )
+    val animatedIconPrimaryColor by animateColorAsState(
+        when {
+            updatedIsSelected -> Colors.Black
+            else -> iconPrimaryColor?.toRgb() ?: Styles.WHITE
+        }.toComposeColor()
+    )
+    val animatedIconSecondaryColor by animateColorAsState(
+        when {
+            updatedIsSelected -> Colors.Black
+            else -> iconSecondaryColor?.toRgb() ?: Styles.WHITE
+        }.toComposeColor()
+    )
 
     Box(
         modifier = Modifier
+            .flexShrink(0)
             .height(if (updatedButtonType == AssetSvgButtonType.Button) 40.px else 36.px)
             .background(animatedContainerColor.toKobwebColor().darkened(0.2f))
             .clip(Rect(borderRadius)),
@@ -109,7 +110,6 @@ fun AssetSvgButton(
             ref = ref { elementRef = it },
             modifier = Modifier
                 .fillMaxHeight()
-                .background(animatedContainerHighlightColor.toKobwebColor())
                 .then(
                     if (updatedIsOutlined) {
                         Modifier
@@ -122,7 +122,7 @@ fun AssetSvgButton(
                     leftRight = animateFloatAsState(
                         when (updatedButtonType) {
                             AssetSvgButtonType.Button -> if (startIconPath != null) 16f else 24f
-                            else -> if (startIconPath != null) 12f else 16f
+                            else -> if (startIconPath != null || content != null) 12f else 16f
                         }
                     ).value.px,
                 )
@@ -148,19 +148,23 @@ fun AssetSvgButton(
                     id = "asset_svg_button_start_$id",
                     path = iconPath.orEmpty(),
                     size = iconSize,
-                    primaryColor = animatedContentColor.toKobwebColor(),
+                    primaryColor = animatedIconPrimaryColor.toKobwebColor(),
+                    secondaryColor = animatedIconSecondaryColor.toKobwebColor()
                 ) { marginRight(8.px) }
             }
 
-            Box(
-                modifier = Modifier
-                    .translateY(1.px)
-                    .thenIf(
-                        updatedButtonType != AssetSvgButtonType.Button,
-                        Modifier.padding(topBottom = 4.px),
-                    )
-            ) { Text(text) }
+            content?.invoke(this)
 
+            text?.let { safeText ->
+                Box(
+                    modifier = Modifier
+                        .translateY(1.px)
+                        .thenIf(
+                            updatedButtonType != AssetSvgButtonType.Button,
+                            Modifier.padding(topBottom = 4.px),
+                        )
+                ) { Text(safeText) }
+            }
 
             AnimatedVisibility(
                 isVisible = updatedButtonType != AssetSvgButtonType.FilterChip && endIconPath != null
@@ -169,11 +173,22 @@ fun AssetSvgButton(
                     id = "asset_svg_button_end_$id",
                     path = endIconPath.orEmpty(),
                     size = iconSize,
-                    primaryColor = animatedContentColor.toKobwebColor(),
+                    primaryColor = animatedIconPrimaryColor.toKobwebColor(),
+                    secondaryColor = animatedIconSecondaryColor.toKobwebColor()
                 ) { marginLeft(8.px) }
             }
         }
     }
+}
+
+private fun MouseEventState.alphaFromMouseState(isSelected: Boolean) = if (isSelected) when (this) {
+    MouseEventState.Pressed -> Styles.Opacity.PRESSED_SELECTED
+    MouseEventState.Hovered -> Styles.Opacity.HOVERED_SELECTED
+    MouseEventState.Released -> 1f
+} else when (this) {
+    MouseEventState.Pressed -> Styles.Opacity.PRESSED
+    MouseEventState.Hovered -> Styles.Opacity.HOVERED
+    MouseEventState.Released -> 0.15f
 }
 
 enum class AssetSvgButtonType { Button, SelectableChip, FilterChip }

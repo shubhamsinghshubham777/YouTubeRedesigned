@@ -23,6 +23,7 @@ import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.css.TextOverflow
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.dom.disposableRef
@@ -36,7 +37,9 @@ import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
+import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
@@ -48,6 +51,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.role
 import com.varabyte.kobweb.compose.ui.modifiers.rotate
 import com.varabyte.kobweb.compose.ui.modifiers.size
+import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
 import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.silk.components.graphics.Image
@@ -56,6 +60,7 @@ import com.varabyte.kobweb.silk.components.layout.VerticalDivider
 import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
+import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.deg
 import org.jetbrains.compose.web.css.minus
 import org.jetbrains.compose.web.css.opacity
@@ -260,14 +265,20 @@ private fun NavRailListItem(
                         .fillMaxWidth()
                         .margin(left = if (isParentItem) 40.px else 0.px)
                         .fontSize(if (isParentItem) 16.px else 15.px)
-                        .fontWeight(if (isParentItem) FontWeight.Medium else FontWeight.Normal)
-                        .overflow(Overflow.Hidden)
-                        .whiteSpace(WhiteSpace.NoWrap),
+                        .fontWeight(if (isParentItem) FontWeight.Medium else FontWeight.Normal),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     // Label
-                    Box(modifier = Modifier.margin(right = 8.px).weight(1)) { Text(item.label) }
+                    Box(
+                        modifier = Modifier
+                            .display(DisplayStyle.Block)
+                            .weight(1)
+                            .padding(right = 24.px)
+                            .overflow(Overflow.Hidden)
+                            .whiteSpace(WhiteSpace.NoWrap)
+                            .textOverflow(TextOverflow.Ellipsis)
+                    ) { Text(item.label) }
 
                     // Count badge
                     if (item.count > 0) {
@@ -276,6 +287,7 @@ private fun NavRailListItem(
                                 .padding(leftRight = 8.px, topBottom = 3.6.px)
                                 .background(Styles.SUBSCRIPTIONS_COUNT_BADGE_CONTAINER)
                                 .clip(Circle())
+                                .flexShrink(0)
                         ) {
                             Text(item.count.toString())
                         }

@@ -19,6 +19,8 @@ import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.width
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.px
 
 // TODO: Extend this composable to accept custom animations (like fade*, scale*, slide*Horizontally, slide*Vertically [* means in/out])
@@ -40,16 +42,24 @@ fun AnimatedVisibility(
     // These states will be responsible for animating the states above
     val sizeAnimatable = remember { Animatable(0f) }
     val opacityAnimatable = remember { Animatable(0f) }
-    val animSpec = remember { tween<Float>() }
+    val animSpec = remember { tween<Float>(durationMillis = ANIM_DURATION_MILLIS.toInt()) }
 
     LaunchedEffect(isVisibleState.currentState) {
         finalContentSize?.let { size ->
             if (isVisibleState.currentState) {
-                sizeAnimatable.animateTo(1f, animSpec) { currentContentSize = size * value }
-                opacityAnimatable.animateTo(1f, animSpec) { currentOpacity = value }
+                launch {
+                    sizeAnimatable.animateTo(1f, animSpec) { currentContentSize = size * value }
+                }
+                launch {
+                    delay(ANIM_DURATION_MILLIS.div(2))
+                    opacityAnimatable.animateTo(1f, animSpec) { currentOpacity = value }
+                }
             } else {
-                sizeAnimatable.animateTo(0f, animSpec) { currentOpacity = value }
-                opacityAnimatable.animateTo(0f, animSpec) { currentContentSize = size * value }
+                launch { opacityAnimatable.animateTo(0f, animSpec) { currentOpacity = value } }
+                launch {
+                    delay(ANIM_DURATION_MILLIS.div(2))
+                    sizeAnimatable.animateTo(0f, animSpec) { currentContentSize = size * value }
+                }
             }
         }
     }
@@ -73,3 +83,5 @@ fun AnimatedVisibility(
         if (finalContentSize == null || isVisibleState.currentState || !isOpacityZero) content()
     }
 }
+
+private const val ANIM_DURATION_MILLIS = 300L

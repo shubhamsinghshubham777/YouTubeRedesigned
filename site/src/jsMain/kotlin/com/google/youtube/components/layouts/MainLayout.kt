@@ -8,23 +8,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
+import com.google.youtube.pages.HomePage
+import com.google.youtube.utils.Dialog
 import com.google.youtube.utils.FadeInOut
+import com.google.youtube.utils.Styles
 import com.google.youtube.utils.isGreaterThan
-import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.minWidth
-import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.width
+import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
+import com.varabyte.kobweb.silk.theme.shapes.Rect
+import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.minus
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
@@ -42,62 +48,80 @@ fun MainLayout() {
     }
     val isNavRailExpandedState = remember(isLargeBreakpoint) { mutableStateOf(isLargeBreakpoint) }
     val navRailWidthPx by animateFloatAsState(if (isNavRailExpandedState.value) 250f else 50f)
+    val showPersonalisedFeedDialogState = remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        TopBar(
-            modifier = Modifier.padding(leftRight = horizontalPaddingPx.px),
-            onDrawerButtonClick = { isNavRailExpandedState.value = !isNavRailExpandedState.value }
-        )
-        Row(modifier = Modifier.fillMaxSize()) {
-            NavRail(
-                modifier = Modifier
-                    .width(navRailWidthPx.px)
-                    .margin(leftRight = horizontalPaddingPx.px),
-                selectedParentChildIndicesState = selectedParentChildIndicesState,
-                isExpandedState = isNavRailExpandedState,
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopBar(
+                modifier = Modifier.padding(leftRight = horizontalPaddingPx.px),
+                onDrawerButtonClick = {
+                    isNavRailExpandedState.value = !isNavRailExpandedState.value
+                }
             )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(100.percent - navRailWidthPx.px - horizontalPaddingPx.px)
-                    .fillMaxHeight()
-                    .overflow(Overflow.Scroll)
-            ) {
+            Row(modifier = Modifier.fillMaxSize()) {
+                NavRail(
+                    modifier = Modifier
+                        .width(navRailWidthPx.px)
+                        .margin(leftRight = horizontalPaddingPx.px),
+                    selectedParentChildIndicesState = selectedParentChildIndicesState,
+                    isExpandedState = isNavRailExpandedState,
+                )
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        // TODO: Get this value from context/theme
-                        .minWidth(576.px),
+                        .fillMaxWidth(100.percent - navRailWidthPx.px - horizontalPaddingPx.px)
+                        .fillMaxHeight()
                 ) {
-                    FadeInOut(selectedParentChildIndicesState.value) { animatedState ->
-                        when (animatedState.first) {
-                            0 -> Text("Home")
-                            1 -> Text("Explore")
-                            2 -> Text("Shorts")
-                            3 -> Text("TV Mode")
-                            4 -> Text("History")
-                            5 -> Text("Watch Later")
-                            6 -> Text("Liked Videos")
+                    Box(modifier = Modifier.fillMaxSize().minWidth(250.px)) {
+                        FadeInOut(selectedParentChildIndicesState.value) { animatedState ->
+                            when (animatedState.first) {
+                                0 -> HomePage(
+                                    showPersonalisedFeedDialogState = showPersonalisedFeedDialogState
+                                )
 
-                            7 -> when (animatedState.second) {
-                                0 -> Text("Cool Stuff")
-                                1 -> Text("Redesigns")
-                                2 -> Text("Artistic")
-                                else -> Text("Playlists")
+                                1 -> Text("Explore")
+                                2 -> Text("Shorts")
+                                3 -> Text("TV Mode")
+                                4 -> Text("History")
+                                5 -> Text("Watch Later")
+                                6 -> Text("Liked Videos")
+
+                                7 -> when (animatedState.second) {
+                                    0 -> Text("Cool Stuff")
+                                    1 -> Text("Redesigns")
+                                    2 -> Text("Artistic")
+                                    else -> Text("Playlists")
+                                }
+
+                                8 -> when (animatedState.second) {
+                                    0 -> Text("Tech Reviews and Unboxings")
+                                    1 -> Text("DIY & Crafting")
+                                    2 -> Text("Gaming")
+                                    3 -> Text("Cooking & Recipes")
+                                    else -> Text("Collections")
+                                }
+
+                                else -> Text(
+                                    "Subscriptions" + (animatedState.second?.toString() ?: "")
+                                )
                             }
-
-                            8 -> when (animatedState.second) {
-                                0 -> Text("Tech Reviews and Unboxings")
-                                1 -> Text("DIY & Crafting")
-                                2 -> Text("Gaming")
-                                3 -> Text("Cooking & Recipes")
-                                else -> Text("Collections")
-                            }
-
-                            else -> Text("Subscriptions" + (animatedState.second?.toString() ?: ""))
                         }
                     }
                 }
             }
+        }
+
+        Dialog(
+            modifier = Modifier.zIndex(1),
+            isDisplayed = showPersonalisedFeedDialogState.value,
+            onDismissed = { showPersonalisedFeedDialogState.value = false }
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Styles.SURFACE_ELEVATED)
+                    .clip(Rect(12.px))
+                    .padding(32.px),
+                contentAlignment = Alignment.Center,
+            ) { Text("Personalised Feed Dialog [WIP]") }
         }
     }
 }

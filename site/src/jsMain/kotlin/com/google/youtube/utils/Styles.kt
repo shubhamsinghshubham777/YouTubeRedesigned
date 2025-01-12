@@ -24,7 +24,7 @@ object Styles {
         const val TOP_BAR_CONTENT = 0.4f
         const val PRESSED = 0.25f
         const val PRESSED_SELECTED = 1f - PRESSED
-        const val HOVERED = 0.15f
+        const val HOVERED = 0.2f
         const val HOVERED_SELECTED = 1f - HOVERED
     }
 }
