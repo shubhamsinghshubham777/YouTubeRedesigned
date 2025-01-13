@@ -19,6 +19,10 @@ object Styles {
     val WHITE: Color.Rgb = Colors.White
     val SUBSCRIPTIONS_COUNT_BADGE_CONTAINER: Color.Rgb = Color.rgb(48, 48, 48)
     val SWITCH_OUTLINE: Color.Rgb = Color.rgb(121, 116, 126)
+    val FEED_CONTAINER: Color.Rgb = Color.rgba(196, 228, 255, 0.08f)
+    val VIDEO_CARD_PRIMARY_TEXT: Color.Rgb = Color.rgb(241, 241, 241)
+    val VIDEO_CARD_SECONDARY_TEXT: Color.Rgb = Color.rgb(170, 170, 170)
+    val VIDEO_CARD_DURATION_CONTAINER: Color.Rgb = Color.rgba(0, 0, 0, 0.6f)
 
     object Opacity {
         const val TOP_BAR_CONTENT = 0.4f
@@ -26,5 +30,9 @@ object Styles {
         const val PRESSED_SELECTED = 1f - PRESSED
         const val HOVERED = 0.2f
         const val HOVERED_SELECTED = 1f - HOVERED
+    }
+
+    object Fonts {
+        const val ROBOTO_CONDENSED = "Roboto Condensed"
     }
 }

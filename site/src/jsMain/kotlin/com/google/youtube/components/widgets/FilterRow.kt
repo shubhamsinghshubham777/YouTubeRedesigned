@@ -12,6 +12,7 @@ import com.google.youtube.utils.Assets
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
+import com.google.youtube.utils.hideScrollBar
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.ScrollBehavior
 import com.varabyte.kobweb.compose.css.functions.LinearGradient
@@ -32,7 +33,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
-import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.components.graphics.Image
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
@@ -49,7 +49,7 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
             ref = ref { element -> elementRef = element },
             modifier = Modifier
                 .overflow(Overflow.Scroll)
-                .styleModifier { property("scrollbar-width", "none") }
+                .hideScrollBar()
                 .scrollBehavior(ScrollBehavior.Smooth)
                 .bindScrollState(horizontalScrollState),
             horizontalArrangement = Arrangement.spacedBy(12.px),

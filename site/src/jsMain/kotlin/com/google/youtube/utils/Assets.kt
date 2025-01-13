@@ -23,6 +23,7 @@ object Assets {
         const val CHECK = "icons/ic_check.svg"
         const val CHECK_SELECTED = "icons/ic_check_selected.svg"
         const val CLIP = "icons/ic_clip.svg"
+        const val CLOSE = "icons/ic_close.svg"
         const val COLLECTIONS = "icons/ic_collections.svg"
         const val COLLECTIONS_SELECTED = "icons/ic_collections_selected.svg"
         const val COMMENTS = "icons/ic_comments.svg"
@@ -129,6 +130,7 @@ object Assets {
         const val TV_SELECTED = "icons/ic_tv_selected.svg"
         const val UNSUBSCRIBE = "icons/ic_unsubscribe.svg"
         const val USER_AVATAR = "icons/ic_user_avatar.png"
+        const val VERIFIED_BADGE = "icons/ic_verified_badge.svg"
         const val VOLUME = "icons/ic_volume.svg"
         const val WATCH_LATER = "icons/ic_watch_later.svg"
         const val WATCH_LATER_SELECTED = "icons/ic_watch_later_selected.svg"
@@ -251,5 +253,9 @@ object Assets {
         const val AVATAR_THE_CODING_SLOTH = "avatars/avatar_the_coding_sloth.png"
         const val AVATAR_THE_CRITICAL_DRINKER = "avatars/avatar_the_critical_drinker.png"
         const val AVATAR_THE_HUMAN_SPIDER = "avatars/avatar_the_human_spider.png"
+    }
+
+    object Thumbnails {
+        const val THUMBNAIL_1 = "thumbnails/thumbnail_1.png"
     }
 }

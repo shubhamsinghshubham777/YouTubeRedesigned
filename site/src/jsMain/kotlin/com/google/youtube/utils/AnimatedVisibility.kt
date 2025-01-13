@@ -30,7 +30,7 @@ fun AnimatedVisibility(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val isVisibleState = updateTransition(isVisible)
+    val animatedIsVisible = updateTransition(isVisible).currentState
     // This state will only be initialised once
     var finalContentSize by remember { mutableStateOf<Size?>(null) }
 
@@ -44,20 +44,22 @@ fun AnimatedVisibility(
     val opacityAnimatable = remember { Animatable(0f) }
     val animSpec = remember { tween<Float>(durationMillis = ANIM_DURATION_MILLIS.toInt()) }
 
-    LaunchedEffect(isVisibleState.currentState) {
+    LaunchedEffect(animatedIsVisible) {
         finalContentSize?.let { size ->
-            if (isVisibleState.currentState) {
+            if (animatedIsVisible) {
                 launch {
                     sizeAnimatable.animateTo(1f, animSpec) { currentContentSize = size * value }
                 }
                 launch {
-                    delay(ANIM_DURATION_MILLIS.div(2))
+                    delay(ANIM_DURATION_MILLIS)
                     opacityAnimatable.animateTo(1f, animSpec) { currentOpacity = value }
                 }
             } else {
-                launch { opacityAnimatable.animateTo(0f, animSpec) { currentOpacity = value } }
                 launch {
-                    delay(ANIM_DURATION_MILLIS.div(2))
+                    opacityAnimatable.animateTo(0f, animSpec) { currentOpacity = value }
+                }
+                launch {
+                    delay(ANIM_DURATION_MILLIS)
                     sizeAnimatable.animateTo(0f, animSpec) { currentContentSize = size * value }
                 }
             }
@@ -80,7 +82,7 @@ fun AnimatedVisibility(
             .then(modifier),
         contentAlignment = Alignment.Center,
     ) {
-        if (finalContentSize == null || isVisibleState.currentState || !isOpacityZero) content()
+        if (finalContentSize == null || animatedIsVisible || !isOpacityZero) content()
     }
 }
 

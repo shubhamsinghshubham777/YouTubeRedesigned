@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.toArgb
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.modifiers.onScroll
+import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
@@ -111,4 +112,8 @@ fun Modifier.bindScrollState(state: MutableState<HorizontalScrollState>) = then(
                 state.value = HorizontalScrollState.Scrolling
         }
     }
+)
+
+fun Modifier.hideScrollBar() = then(
+    Modifier.styleModifier { property("scrollbar-width", "none") }
 )

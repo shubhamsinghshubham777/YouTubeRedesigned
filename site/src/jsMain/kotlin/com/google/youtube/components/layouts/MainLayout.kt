@@ -44,7 +44,7 @@ fun MainLayout() {
     val isLargeBreakpoint by remember(breakpoint) {
         derivedStateOf { breakpoint isGreaterThan Breakpoint.SM }
     }
-    val horizontalPaddingPx by animateFloatAsState(if (isLargeBreakpoint) 24f else 12f)
+    val horizontalPaddingState = animateFloatAsState(if (isLargeBreakpoint) 24f else 12f)
     val selectedParentChildIndicesState = remember {
         mutableStateOf<Pair<Int?, Int?>>(0 to null)
     }
@@ -55,7 +55,7 @@ fun MainLayout() {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             TopBar(
-                modifier = Modifier.padding(leftRight = horizontalPaddingPx.px),
+                modifier = Modifier.padding(leftRight = horizontalPaddingState.value.px),
                 onDrawerButtonClick = {
                     isNavRailExpandedState.value = !isNavRailExpandedState.value
                 }
@@ -64,21 +64,24 @@ fun MainLayout() {
                 NavRail(
                     modifier = Modifier
                         .width(navRailWidthPx.px)
-                        .margin(leftRight = horizontalPaddingPx.px),
+                        .margin(leftRight = horizontalPaddingState.value.px),
                     selectedParentChildIndicesState = selectedParentChildIndicesState,
                     isExpandedState = isNavRailExpandedState,
                 )
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(100.percent - navRailWidthPx.px - horizontalPaddingPx.px)
+                        .fillMaxWidth(
+                            100.percent - navRailWidthPx.px - horizontalPaddingState.value.px
+                        )
                         .fillMaxHeight()
-                        .overflow(Overflow.Scroll)
+                        .overflow { x(Overflow.Scroll) }
                 ) {
                     Box(modifier = Modifier.fillMaxSize().minWidth(320.px)) {
                         Crossfade(selectedParentChildIndicesState.value) { animatedState ->
                             when (animatedState.first) {
                                 0 -> HomePage(
-                                    showPersonalisedFeedDialogState = showPersonalisedFeedDialogState
+                                    showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
+                                    horizontalPaddingState = horizontalPaddingState,
                                 )
 
                                 1 -> Text("Explore")

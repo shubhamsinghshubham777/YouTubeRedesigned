@@ -17,12 +17,18 @@ import com.varabyte.kobweb.compose.foundation.layout.BoxScope
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
-import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
+import com.varabyte.kobweb.compose.ui.modifiers.position
 import com.varabyte.kobweb.compose.ui.modifiers.scale
+import com.varabyte.kobweb.compose.ui.modifiers.size
+import com.varabyte.kobweb.compose.ui.modifiers.top
 import com.varabyte.kobweb.compose.ui.thenIfNotNull
 import kotlinx.browser.window
+import org.jetbrains.compose.web.css.Position
+import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.vh
+import org.jetbrains.compose.web.css.vw
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 
@@ -88,11 +94,13 @@ fun Dialog(
     if (displayContent) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .size(width = 100.vw, height = 100.vh)
                 .background(animatedBackdropColor.toKobwebColor())
                 .thenIfNotNull(onDismissed) { safeOnDismissed ->
                     Modifier.onClick { safeOnDismissed() }
                 }
+                .position(Position.Fixed)
+                .top(0.px)
                 .then(modifier),
             contentAlignment = Alignment.Center,
             content = {
