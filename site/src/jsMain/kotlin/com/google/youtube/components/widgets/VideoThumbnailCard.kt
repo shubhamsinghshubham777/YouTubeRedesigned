@@ -42,7 +42,12 @@ fun VideoThumbnailCard(
         verticalArrangement = Arrangement.spacedBy(15.px)
     ) {
         Box(
-            modifier = Modifier.size(width = 354.px, height = 198.px).clip(Rect(15.9.px)),
+            modifier = Modifier
+                .size(
+                    width = VideoThumbnailCardDefaults.WIDTH.px,
+                    height = VideoThumbnailCardDefaults.HEIGHT.px
+                )
+                .clip(Rect(15.9.px)),
             contentAlignment = Alignment.BottomEnd,
         ) {
             Image(src = thumbnailAsset)
@@ -86,4 +91,9 @@ fun VideoThumbnailCard(
             AssetImageButton(Assets.Icons.MORE) {}
         }
     }
+}
+
+object VideoThumbnailCardDefaults {
+    const val WIDTH: Double = 354.0
+    const val HEIGHT: Double = 198.0
 }

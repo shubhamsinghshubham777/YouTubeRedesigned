@@ -19,7 +19,8 @@ object Styles {
     val WHITE: Color.Rgb = Colors.White
     val SUBSCRIPTIONS_COUNT_BADGE_CONTAINER: Color.Rgb = Color.rgb(48, 48, 48)
     val SWITCH_OUTLINE: Color.Rgb = Color.rgb(121, 116, 126)
-    val FEED_CONTAINER: Color.Rgb = Color.rgba(196, 228, 255, 0.08f)
+    val MISSED_VIDEOS_CONTAINER: Color.Rgb = Color.rgb(32, 34, 36)
+    val MISSED_VIDEOS_ARROW_CONTAINER: Color.Rgb = Color.rgb(63, 63, 63)
     val VIDEO_CARD_PRIMARY_TEXT: Color.Rgb = Color.rgb(241, 241, 241)
     val VIDEO_CARD_SECONDARY_TEXT: Color.Rgb = Color.rgb(170, 170, 170)
     val VIDEO_CARD_DURATION_CONTAINER: Color.Rgb = Color.rgba(0, 0, 0, 0.6f)

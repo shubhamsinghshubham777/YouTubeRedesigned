@@ -40,13 +40,13 @@ import org.w3c.dom.Element
 
 @Composable
 fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
-    var elementRef by remember { mutableStateOf<Element?>(null) }
+    var rowRef by remember { mutableStateOf<Element?>(null) }
     val horizontalScrollState = remember { mutableStateOf(HorizontalScrollState.ReachedStart) }
     var selectedFilterIndex by remember { mutableIntStateOf(0) }
 
     Box(modifier = Modifier.margin(top = 12.px), contentAlignment = Alignment.Center) {
         Row(
-            ref = ref { element -> elementRef = element },
+            ref = ref { element -> rowRef = element },
             modifier = Modifier
                 .overflow(Overflow.Scroll)
                 .hideScrollBar()
@@ -113,7 +113,7 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
                         asset = if (startItem) Assets.Icons.ARROW_LEFT
                         else Assets.Icons.ARROW_RIGHT,
                         onClick = {
-                            elementRef?.scrollBy(x = if (startItem) -200.0 else 200.0, y = 0.0)
+                            rowRef?.scrollBy(x = if (startItem) -200.0 else 200.0, y = 0.0)
                         },
                     )
                 }
