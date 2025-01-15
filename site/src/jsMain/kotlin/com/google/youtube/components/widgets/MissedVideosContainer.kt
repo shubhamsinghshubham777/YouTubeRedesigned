@@ -45,7 +45,6 @@ import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.plus
 import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.css.vw
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.Element
 
@@ -108,7 +107,7 @@ fun MissedVideosContainer() {
                     }
                 }
 
-                // Manual Scroll (Arrow) Buttons
+                //  Buttons
                 repeat(2) { index ->
                     val startItem = index == 0
                     AnimatedVisibility(
@@ -130,7 +129,7 @@ fun MissedVideosContainer() {
                                         add(Colors.Transparent)
                                     }
                                 )
-                                .width(11.vw)
+                                .width(56.px)
                                 .height(rowRef?.clientHeight?.px?.plus(containerPadding) ?: 0.px)
                                 .pointerEvents(PointerEvents.None),
                             contentAlignment = if (startItem) Alignment.TopStart else Alignment.TopEnd
