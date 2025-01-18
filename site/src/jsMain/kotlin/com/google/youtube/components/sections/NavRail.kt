@@ -13,20 +13,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.google.youtube.components.widgets.AssetSvg
+import com.google.youtube.components.widgets.ChannelBriefPopupPage
+import com.google.youtube.components.widgets.Popup
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.onMouseEvent
 import com.google.youtube.utils.removeMouseEventListeners
+import com.google.youtube.utils.singleLineTextEllipsis
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
-import com.varabyte.kobweb.compose.css.Overflow
-import com.varabyte.kobweb.compose.css.TextOverflow
 import com.varabyte.kobweb.compose.css.UserSelect
-import com.varabyte.kobweb.compose.css.WhiteSpace
+import com.varabyte.kobweb.compose.dom.ElementRefScope
 import com.varabyte.kobweb.compose.dom.disposableRef
+import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -45,15 +47,13 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseEnter
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
-import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.role
 import com.varabyte.kobweb.compose.ui.modifiers.rotate
 import com.varabyte.kobweb.compose.ui.modifiers.size
-import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
-import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.layout.HorizontalDivider
 import com.varabyte.kobweb.silk.components.layout.VerticalDivider
@@ -67,6 +67,8 @@ import org.jetbrains.compose.web.css.opacity
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Text
+import org.w3c.dom.Element
+import org.w3c.dom.HTMLElement
 
 @Composable
 fun NavRail(
@@ -75,6 +77,10 @@ fun NavRail(
     isExpandedState: State<Boolean>,
     items: List<NavRailItem> = SampleNavRailItems,
 ) {
+    var hoveredElementRef by remember { mutableStateOf<Element?>(null) }
+    var hoveredElementIndexPair: Pair<Int?, Int?> by remember { mutableStateOf(null to null) }
+    val isPopupContentHoveredState = remember { mutableStateOf(false) }
+
     Column(modifier = modifier) {
         items.forEachIndexed { parentIndex, parentItem ->
             val isDropDownOpen = remember { mutableStateOf(false) }
@@ -99,10 +105,20 @@ fun NavRail(
                     AnimatedVisibility(
                         isVisible = isDropDownOpen.value && isExpandedState.value,
                         modifier = Modifier.fillMaxWidth()
-                    ) {
+                    ) { isAnimating ->
                         Column(modifier = Modifier.fillMaxWidth()) {
                             children.forEachIndexed { childIndex, childItem ->
+                                var elementRef: Element? by remember { mutableStateOf(null) }
                                 NavRailListItem(
+                                    ref = ref { r -> elementRef = r },
+                                    modifier = Modifier
+                                        .onMouseEnter {
+                                            // TODO: Replace indexes with an enum
+                                            if (parentIndex == 9 && !isAnimating.value) {
+                                                hoveredElementRef = elementRef
+                                                hoveredElementIndexPair = parentIndex to childIndex
+                                            }
+                                        },
                                     item = childItem,
                                     isSelectedState = remember {
                                         derivedStateOf {
@@ -135,6 +151,20 @@ fun NavRail(
             }
         }
     }
+
+    Popup(
+        modifier = Modifier
+            .background(Styles.SURFACE_ELEVATED)
+            .clip(Rect(12.px))
+            .margin(left = 8.px),
+        anchor = hoveredElementRef,
+        targetState = hoveredElementIndexPair,
+        isContentHovered = isPopupContentHoveredState,
+    ) { animatedHoveredElementIndexPair ->
+        if (animatedHoveredElementIndexPair.first == 9) {
+            ChannelBriefPopupPage(channelId = animatedHoveredElementIndexPair.second.toString())
+        }
+    }
 }
 
 @Immutable
@@ -159,6 +189,7 @@ sealed class NavRailListItemIconType {
 
 @Composable
 private fun NavRailListItem(
+    ref: ElementRefScope<HTMLElement>? = null,
     item: NavRailItem,
     isSelectedState: State<Boolean>,
     isHorizontallyExpandedState: State<Boolean>,
@@ -187,6 +218,7 @@ private fun NavRailListItem(
     )
 
     Row(
+        ref = ref,
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -275,9 +307,7 @@ private fun NavRailListItem(
                             .display(DisplayStyle.Block)
                             .weight(1)
                             .padding(right = 24.px)
-                            .overflow(Overflow.Hidden)
-                            .whiteSpace(WhiteSpace.NoWrap)
-                            .textOverflow(TextOverflow.Ellipsis)
+                            .singleLineTextEllipsis()
                     ) { Text(item.label) }
 
                     // Count badge
@@ -445,7 +475,7 @@ private val SampleNavRailItems = listOf(
             ),
             NavRailItem(
                 label = "jacksepticeye",
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_JACKSCEPTICEYE),
+                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_JACKSEPTICEYE),
                 count = 1
             ),
             NavRailItem(

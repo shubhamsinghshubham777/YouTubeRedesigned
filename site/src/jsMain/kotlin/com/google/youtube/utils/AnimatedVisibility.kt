@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -28,11 +29,12 @@ import org.jetbrains.compose.web.css.px
 fun AnimatedVisibility(
     isVisible: Boolean,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    content: @Composable (isAnimating: State<Boolean>) -> Unit,
 ) {
     val animatedIsVisible = updateTransition(isVisible).currentState
     // This state will only be initialised once
     var finalContentSize by remember { mutableStateOf<Size?>(null) }
+    val isAnimating = remember { mutableStateOf(false) }
 
     // These states will animate over time
     var currentContentSize by remember { mutableStateOf<Size?>(null) }
@@ -47,21 +49,25 @@ fun AnimatedVisibility(
     LaunchedEffect(animatedIsVisible) {
         finalContentSize?.let { size ->
             if (animatedIsVisible) {
+                isAnimating.value = true
                 launch {
                     sizeAnimatable.animateTo(1f, animSpec) { currentContentSize = size * value }
                 }
                 launch {
                     delay(ANIM_DURATION_MILLIS)
                     opacityAnimatable.animateTo(1f, animSpec) { currentOpacity = value }
-                }
+                }.join()
+                isAnimating.value = false
             } else {
+                isAnimating.value = true
                 launch {
                     opacityAnimatable.animateTo(0f, animSpec) { currentOpacity = value }
                 }
                 launch {
                     delay(ANIM_DURATION_MILLIS)
                     sizeAnimatable.animateTo(0f, animSpec) { currentContentSize = size * value }
-                }
+                }.join()
+                isAnimating.value = false
             }
         }
     }
@@ -82,7 +88,7 @@ fun AnimatedVisibility(
             .then(modifier),
         contentAlignment = Alignment.Center,
     ) {
-        if (finalContentSize == null || animatedIsVisible || !isOpacityZero) content()
+        if (finalContentSize == null || animatedIsVisible || !isOpacityZero) content(isAnimating)
     }
 }
 

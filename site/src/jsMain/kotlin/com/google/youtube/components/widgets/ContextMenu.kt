@@ -17,13 +17,12 @@ import com.google.youtube.utils.Assets
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.rememberMouseEventAsState
+import com.google.youtube.utils.singleLineTextEllipsis
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.Overflow
-import com.varabyte.kobweb.compose.css.TextOverflow
 import com.varabyte.kobweb.compose.css.UserSelect
-import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -43,10 +42,8 @@ import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
-import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
 import com.varabyte.kobweb.compose.ui.modifiers.translateX
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
-import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import kotlinx.coroutines.launch
@@ -223,9 +220,7 @@ private fun List<ContextMenuChild>.toComposables(
                             modifier = Modifier
                                 .weight(1)
                                 .display(DisplayStyle.Block)
-                                .overflow(Overflow.Hidden)
-                                .whiteSpace(WhiteSpace.NoWrap)
-                                .textOverflow(TextOverflow.Ellipsis)
+                                .singleLineTextEllipsis()
                                 .fontSize(if (child.showSmallText) 14.px else 16.px)
                         ) { Text(child.text) }
 

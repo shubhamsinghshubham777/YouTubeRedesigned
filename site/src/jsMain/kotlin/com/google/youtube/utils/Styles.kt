@@ -2,8 +2,10 @@ package com.google.youtube.utils
 
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.graphics.Colors
+import org.jetbrains.compose.web.css.px
 
 object Styles {
+    // TODO: Create its own object named Color
     val SURFACE: Color.Rgb = Color.rgb(17, 17, 17)
     val SURFACE_ELEVATED: Color.Rgb = Color.rgb(31, 31, 31)
     val BACKGROUND_SELECTED: Color.Rgb = Color.rgba(255, 170, 187, 0.14f)
@@ -33,7 +35,12 @@ object Styles {
         const val HOVERED_SELECTED = 1f - HOVERED
     }
 
+    // TODO: Rename to Font
     object Fonts {
         const val ROBOTO_CONDENSED = "Roboto Condensed"
+    }
+
+    object FontSize {
+        val SMALL = 12.px
     }
 }

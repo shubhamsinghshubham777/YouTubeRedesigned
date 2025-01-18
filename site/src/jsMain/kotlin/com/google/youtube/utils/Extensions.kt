@@ -4,12 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.toArgb
+import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.css.TextOverflow
+import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.modifiers.onScroll
+import com.varabyte.kobweb.compose.ui.modifiers.overflow
+import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
+import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
+import org.w3c.dom.DOMRect
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
@@ -116,4 +124,18 @@ fun Modifier.bindScrollState(state: MutableState<HorizontalScrollState>) = then(
 
 fun Modifier.hideScrollBar() = then(
     Modifier.styleModifier { property("scrollbar-width", "none") }
+)
+
+fun Modifier.singleLineTextEllipsis() = then(
+    Modifier
+        .overflow(Overflow.Hidden)
+        .whiteSpace(WhiteSpace.NoWrap)
+        .textOverflow(TextOverflow.Ellipsis)
+)
+
+fun DOMRect.toComposeRect() = Rect(
+    left = left.toFloat(),
+    top = top.toFloat(),
+    right = right.toFloat(),
+    bottom = bottom.toFloat()
 )

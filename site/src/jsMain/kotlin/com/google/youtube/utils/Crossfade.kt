@@ -19,6 +19,7 @@ import org.jetbrains.compose.web.css.px
 fun <T> Crossfade(
     targetState: T,
     modifier: Modifier = Modifier,
+    animateTranslationY: Boolean = true,
     content: @Composable (T) -> Unit,
 ) {
     var currentState by remember { mutableStateOf(targetState) }
@@ -31,12 +32,20 @@ fun <T> Crossfade(
         if (targetState != currentState) {
             animatable.animateTo(targetValue = 0f, animationSpec = tween(150)) {
                 currentOpacity = value
-                currentTranslationY = (1 - value) * 4f
+                if (animateTranslationY) currentTranslationY = (1 - value) * translationYDelta
             }
             currentState = targetState
             animatable.animateTo(targetValue = 1f, animationSpec = tween()) {
                 currentOpacity = value
-                currentTranslationY = (1 - value) * 4f
+                if (animateTranslationY) currentTranslationY = (1 - value) * translationYDelta
+            }
+        } else if (
+            !currentOpacity.hasAnimationEnded ||
+            (!currentTranslationY.hasAnimationEnded && animateTranslationY)
+        ) {
+            animatable.animateTo(targetValue = 1f, animationSpec = tween()) {
+                currentOpacity = value
+                if (animateTranslationY) currentTranslationY = (1 - value) * translationYDelta
             }
         }
     }
@@ -47,3 +56,6 @@ fun <T> Crossfade(
             .translateY(currentTranslationY.px)
     ) { content(currentState) }
 }
+
+private val Float.hasAnimationEnded: Boolean get() = this == 0f || this == 1f
+private const val translationYDelta = 4f
