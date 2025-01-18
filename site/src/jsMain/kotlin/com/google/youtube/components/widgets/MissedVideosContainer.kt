@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.IntSize
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.HorizontalScrollState
@@ -57,15 +58,15 @@ fun MissedVideosContainer() {
 
     AnimatedVisibility(
         isVisible = showContainer,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Styles.MISSED_VIDEOS_CONTAINER)
-            .clip(Rect(20.px)),
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(topBottom = containerPadding),
+                .background(Styles.MISSED_VIDEOS_CONTAINER)
+                .clip(Rect(20.px))
+                .padding(topBottom = containerPadding)
+                .margin(bottom = 40.px),
             verticalArrangement = Arrangement.spacedBy(containerPadding)
         ) {
             Row(
@@ -103,6 +104,10 @@ fun MissedVideosContainer() {
                             views = "150K",
                             daysSinceUploaded = "4 months ago",
                             duration = "12:07",
+                            size = IntSize(
+                                width = VideoThumbnailCardDefaults.WIDTH,
+                                height = VideoThumbnailCardDefaults.HEIGHT,
+                            ),
                         )
                     }
                 }

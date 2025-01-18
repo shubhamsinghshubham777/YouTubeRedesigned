@@ -35,6 +35,7 @@ fun AssetImageButton(
     val animatedBackgroundColor by animateColorAsState(backgroundColor)
     Image(
         ref = disposableRef { element ->
+            // TODO: Replace this code with `rememberMouseEventAsState`
             val mouseEventCallbacks = element.onMouseEvent(
                 onHoveredAndPressed = { backgroundColor = Styles.PRESS_HIGHLIGHT.toComposeColor() },
                 onHovered = { backgroundColor = Styles.HOVER_HIGHLIGHT.toComposeColor() },

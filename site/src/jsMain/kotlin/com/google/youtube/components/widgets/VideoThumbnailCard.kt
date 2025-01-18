@@ -1,10 +1,21 @@
 package com.google.youtube.components.widgets
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntSize
 import com.google.youtube.utils.Assets
+import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.rememberMouseEventAsState
+import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
+import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -13,6 +24,7 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.color
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
@@ -21,11 +33,14 @@ import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
+import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.theme.shapes.Rect
+import com.varabyte.kobweb.silk.theme.shapes.Shape
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Text
+import org.w3c.dom.Element
 
 @Composable
 fun VideoThumbnailCard(
@@ -35,22 +50,43 @@ fun VideoThumbnailCard(
     views: String,
     daysSinceUploaded: String,
     duration: String,
+    shape: Shape = Rect(15.9.px),
     modifier: Modifier = Modifier,
+    size: IntSize? = null,
 ) {
+    var elementRef by remember { mutableStateOf<Element?>(null) }
+    val mouseEvent by rememberMouseEventAsState(elementRef)
+    val containerColor by animateColorAsState(
+        when (mouseEvent) {
+            MouseEventState.Pressed -> Color.White.copy(alpha = Styles.Opacity.HOVERED)
+            else -> Color.Transparent
+        }
+    )
     Column(
-        modifier = Modifier.userSelect(UserSelect.None).then(modifier),
+        ref = ref { e -> elementRef = e },
+        modifier = Modifier
+            .background(containerColor.toKobwebColor())
+            .clip(shape)
+            .userSelect(UserSelect.None)
+            .then(modifier),
         verticalArrangement = Arrangement.spacedBy(15.px)
     ) {
         Box(
             modifier = Modifier
-                .size(
-                    width = VideoThumbnailCardDefaults.WIDTH.px,
-                    height = VideoThumbnailCardDefaults.HEIGHT.px
+                .then(
+                    size?.let { safeSize ->
+                        Modifier.size(width = safeSize.width.px, height = safeSize.height.px)
+                    } ?: Modifier.fillMaxSize()
                 )
-                .clip(Rect(15.9.px)),
+                .clip(shape),
             contentAlignment = Alignment.BottomEnd,
         ) {
-            Image(src = thumbnailAsset)
+            Image(
+                modifier = Modifier.thenIf(size == null) { Modifier.fillMaxSize() },
+                src = thumbnailAsset,
+                width = size?.width,
+                height = size?.height,
+            )
             Box(
                 modifier = Modifier
                     .background(Styles.VIDEO_CARD_DURATION_CONTAINER)
@@ -94,6 +130,6 @@ fun VideoThumbnailCard(
 }
 
 object VideoThumbnailCardDefaults {
-    const val WIDTH: Double = 354.0
-    const val HEIGHT: Double = 198.0
+    const val WIDTH: Int = 354
+    const val HEIGHT: Int = 198
 }

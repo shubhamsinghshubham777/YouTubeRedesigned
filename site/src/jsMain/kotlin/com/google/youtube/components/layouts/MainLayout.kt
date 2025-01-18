@@ -4,16 +4,20 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
+import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.pages.HomePage
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.Dialog
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.isGreaterThan
 import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.css.OverscrollBehavior
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -23,19 +27,25 @@ import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.minWidth
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
+import com.varabyte.kobweb.compose.ui.modifiers.overscrollBehavior
 import com.varabyte.kobweb.compose.ui.modifiers.padding
+import com.varabyte.kobweb.compose.ui.modifiers.position
+import com.varabyte.kobweb.compose.ui.modifiers.top
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
+import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.minus
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
@@ -55,7 +65,12 @@ fun MainLayout() {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             TopBar(
-                modifier = Modifier.padding(leftRight = horizontalPaddingState.value.px),
+                modifier = Modifier
+                    .background(Styles.SURFACE)
+                    .padding(leftRight = horizontalPaddingState.value.px)
+                    .position(Position.Sticky)
+                    .top(0.px)
+                    .zIndex(1),
                 onDrawerButtonClick = {
                     isNavRailExpandedState.value = !isNavRailExpandedState.value
                 }
@@ -63,8 +78,14 @@ fun MainLayout() {
             Row(modifier = Modifier.fillMaxSize()) {
                 NavRail(
                     modifier = Modifier
+                        .height(100.vh - TopBarDefaults.HEIGHT)
+                        .position(Position.Sticky)
+                        .top(TopBarDefaults.HEIGHT)
                         .width(navRailWidthPx.px)
-                        .margin(leftRight = horizontalPaddingState.value.px),
+                        .margin(leftRight = horizontalPaddingState.value.px)
+                        .overflow(overflowX = Overflow.Hidden, overflowY = Overflow.Scroll)
+                        .hideScrollBar()
+                        .overscrollBehavior(OverscrollBehavior.Contain),
                     selectedParentChildIndicesState = selectedParentChildIndicesState,
                     isExpandedState = isNavRailExpandedState,
                 )
@@ -76,14 +97,19 @@ fun MainLayout() {
                         .fillMaxHeight()
                         .overflow { x(Overflow.Scroll) }
                 ) {
+                    val homePage = remember {
+                        movableContentOf {
+                            HomePage(
+                                showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
+                                horizontalPaddingState = horizontalPaddingState,
+                            )
+                        }
+                    }
+
                     Box(modifier = Modifier.fillMaxSize().minWidth(320.px)) {
                         Crossfade(selectedParentChildIndicesState.value) { animatedState ->
                             when (animatedState.first) {
-                                0 -> HomePage(
-                                    showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-                                    horizontalPaddingState = horizontalPaddingState,
-                                )
-
+                                0 -> homePage()
                                 1 -> Text("Explore")
                                 2 -> Text("Shorts")
                                 3 -> Text("TV Mode")

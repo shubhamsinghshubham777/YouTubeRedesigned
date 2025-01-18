@@ -146,7 +146,7 @@ fun TopBar(
 
     Box(modifier = modifier.fillMaxWidth()) {
         Row(
-            modifier = Modifier.fillMaxWidth().height(64.px),
+            modifier = Modifier.fillMaxWidth().height(TopBarDefaults.HEIGHT),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AssetImageButton(
@@ -203,4 +203,8 @@ fun TopBar(
 val TopBarSearchButtonStyle = CssStyle {
     base { Modifier.display(DisplayStyle.None) }
     until(Breakpoint.SM) { Modifier.display(DisplayStyle.Inherit) }
+}
+
+object TopBarDefaults {
+    val HEIGHT = 64.px
 }
