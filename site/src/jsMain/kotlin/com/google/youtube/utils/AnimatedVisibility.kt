@@ -32,8 +32,11 @@ fun AnimatedVisibility(
     content: @Composable (isAnimating: State<Boolean>) -> Unit,
 ) {
     val animatedIsVisible = updateTransition(isVisible).currentState
-    // This state will only be initialised once
+
+    // These states will only be initialised once
+    var isInitialised by remember { mutableStateOf(false) }
     var finalContentSize by remember { mutableStateOf<Size?>(null) }
+
     val isAnimating = remember { mutableStateOf(false) }
 
     // These states will animate over time
@@ -48,26 +51,39 @@ fun AnimatedVisibility(
 
     LaunchedEffect(animatedIsVisible) {
         finalContentSize?.let { size ->
-            if (animatedIsVisible) {
-                isAnimating.value = true
-                launch {
-                    sizeAnimatable.animateTo(1f, animSpec) { currentContentSize = size * value }
+            when {
+                !isInitialised -> {
+                    val targetProgress = if (animatedIsVisible) 1f else 0f
+                    isInitialised = true
+                    currentContentSize = size * targetProgress
+                    currentOpacity = targetProgress
+                    sizeAnimatable.snapTo(targetProgress)
+                    opacityAnimatable.snapTo(targetProgress)
                 }
-                launch {
-                    delay(ANIM_DURATION_MILLIS)
-                    opacityAnimatable.animateTo(1f, animSpec) { currentOpacity = value }
-                }.join()
-                isAnimating.value = false
-            } else {
-                isAnimating.value = true
-                launch {
-                    opacityAnimatable.animateTo(0f, animSpec) { currentOpacity = value }
+
+                animatedIsVisible -> {
+                    isAnimating.value = true
+                    launch {
+                        sizeAnimatable.animateTo(1f, animSpec) { currentContentSize = size * value }
+                    }
+                    launch {
+                        delay(ANIM_DURATION_MILLIS)
+                        opacityAnimatable.animateTo(1f, animSpec) { currentOpacity = value }
+                    }.join()
+                    isAnimating.value = false
                 }
-                launch {
-                    delay(ANIM_DURATION_MILLIS)
-                    sizeAnimatable.animateTo(0f, animSpec) { currentContentSize = size * value }
-                }.join()
-                isAnimating.value = false
+
+                else -> {
+                    isAnimating.value = true
+                    launch {
+                        opacityAnimatable.animateTo(0f, animSpec) { currentOpacity = value }
+                    }
+                    launch {
+                        delay(ANIM_DURATION_MILLIS)
+                        sizeAnimatable.animateTo(0f, animSpec) { currentContentSize = size * value }
+                    }.join()
+                    isAnimating.value = false
+                }
             }
         }
     }
