@@ -27,7 +27,6 @@ import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundImage
 import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
-import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
@@ -44,7 +43,7 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
     val horizontalScrollState = remember { mutableStateOf(HorizontalScrollState.ReachedStart) }
     var selectedFilterIndex by remember { mutableIntStateOf(0) }
 
-    Box(modifier = Modifier.margin(top = 12.px), contentAlignment = Alignment.Center) {
+    Box(contentAlignment = Alignment.Center) {
         Row(
             ref = ref { element -> rowRef = element },
             modifier = Modifier

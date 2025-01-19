@@ -1,5 +1,7 @@
 package com.google.youtube.utils
 
+import com.varabyte.kobweb.compose.css.functions.LinearGradient
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.graphics.Colors
 import org.jetbrains.compose.web.css.px
@@ -26,6 +28,14 @@ object Styles {
     val VIDEO_CARD_PRIMARY_TEXT: Color.Rgb = Color.rgb(241, 241, 241)
     val VIDEO_CARD_SECONDARY_TEXT: Color.Rgb = Color.rgb(170, 170, 170)
     val VIDEO_CARD_DURATION_CONTAINER: Color.Rgb = Color.rgba(0, 0, 0, 0.6f)
+    val DIVIDER: Color.Rgb = WHITE.copyf(alpha = 0.14f)
+
+    object Gradient {
+        val RED_TO_PINK = linearGradient(LinearGradient.Direction.ToRight) {
+            add(RED)
+            add(PINK)
+        }
+    }
 
     object Opacity {
         const val TOP_BAR_CONTENT = 0.4f

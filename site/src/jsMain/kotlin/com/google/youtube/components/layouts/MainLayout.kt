@@ -10,7 +10,9 @@ import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
+import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HomePage
+import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.Dialog
 import com.google.youtube.utils.Styles
@@ -106,11 +108,25 @@ fun MainLayout() {
                         }
                     }
 
+                    val explorePage = remember {
+                        movableContentOf {
+                            ExplorePage(
+                                modifier = Modifier.padding(
+                                    right = horizontalPaddingState.value.px,
+                                    bottom = Constants.CONTENT_PADDING
+                                )
+                            )
+                        }
+                    }
+
                     Box(modifier = Modifier.fillMaxSize().minWidth(320.px)) {
-                        Crossfade(selectedParentChildIndicesState.value) { animatedState ->
+                        Crossfade(
+                            targetState = selectedParentChildIndicesState.value,
+                            modifier = Modifier.margin(top = Constants.CONTENT_PADDING),
+                        ) { animatedState ->
                             when (animatedState.first) {
                                 0 -> homePage()
-                                1 -> Text("Explore")
+                                1 -> explorePage()
                                 2 -> Text("Shorts")
                                 3 -> Text("TV Mode")
                                 4 -> Text("History")
