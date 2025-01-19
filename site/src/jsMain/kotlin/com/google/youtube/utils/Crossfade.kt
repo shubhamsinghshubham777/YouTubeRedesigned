@@ -20,6 +20,7 @@ fun <T> Crossfade(
     targetState: T,
     modifier: Modifier = Modifier,
     animateTranslationY: Boolean = true,
+    onStateChange: (() -> Unit)? = null,
     content: @Composable (T) -> Unit,
 ) {
     var currentState by remember { mutableStateOf(targetState) }
@@ -34,6 +35,7 @@ fun <T> Crossfade(
                 currentOpacity = value
                 if (animateTranslationY) currentTranslationY = (1 - value) * translationYDelta
             }
+            onStateChange?.invoke()
             currentState = targetState
             animatable.animateTo(targetValue = 1f, animationSpec = tween()) {
                 currentOpacity = value

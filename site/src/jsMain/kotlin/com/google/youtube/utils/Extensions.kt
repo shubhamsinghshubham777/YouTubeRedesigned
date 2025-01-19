@@ -8,13 +8,14 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.toArgb
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextOverflow
-import com.varabyte.kobweb.compose.css.WhiteSpace
+import com.varabyte.kobweb.compose.css.WordBreak
 import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.attrsModifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.modifiers.onScroll
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
-import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
+import com.varabyte.kobweb.compose.ui.modifiers.wordBreak
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import org.w3c.dom.DOMRect
@@ -126,11 +127,18 @@ fun Modifier.hideScrollBar() = then(
     Modifier.styleModifier { property("scrollbar-width", "none") }
 )
 
-fun Modifier.singleLineTextEllipsis() = then(
+fun Modifier.limitTextWithEllipsis(maxLines: Int = 1) = then(
     Modifier
+        .attrsModifier {
+            style {
+                property("display", "-webkit-box")
+                property("-webkit-line-clamp", maxLines)
+                property("-webkit-box-orient", "vertical")
+            }
+        }
         .overflow(Overflow.Hidden)
-        .whiteSpace(WhiteSpace.NoWrap)
         .textOverflow(TextOverflow.Ellipsis)
+        .wordBreak(WordBreak.BreakAll)
 )
 
 fun DOMRect.toComposeRect() = Rect(

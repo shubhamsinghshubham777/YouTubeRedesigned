@@ -43,6 +43,7 @@ import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
+import kotlinx.browser.window
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.minus
 import org.jetbrains.compose.web.css.percent
@@ -123,6 +124,7 @@ fun MainLayout() {
                         Crossfade(
                             targetState = selectedParentChildIndicesState.value,
                             modifier = Modifier.margin(top = Constants.CONTENT_PADDING),
+                            onStateChange = { window.scrollTo(0.0, 0.0) },
                         ) { animatedState ->
                             when (animatedState.first) {
                                 0 -> homePage()

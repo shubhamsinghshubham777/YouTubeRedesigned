@@ -65,6 +65,7 @@ fun AssetSvgButton(
     endIconPath: String? = null,
     iconSize: CSSLengthOrPercentageValue = if (type == AssetSvgButtonType.Button) 22.px else 24.px,
     text: String? = null,
+    dense: Boolean = false,
     content: (@Composable RowScope.() -> Unit)? = null,
 ) {
     val updatedButtonType = updateTransition(type).currentState
@@ -102,7 +103,12 @@ fun AssetSvgButton(
     Box(
         modifier = Modifier
             .flexShrink(0)
-            .height(if (updatedButtonType == AssetSvgButtonType.Button) 40.px else 36.px)
+            .height(
+                when {
+                    updatedButtonType == AssetSvgButtonType.Button -> if (dense) 32.px else 40.px
+                    else -> 36.px
+                }
+            )
             .background(animatedContainerColor.toKobwebColor().darkened(0.2f))
             .clip(Rect(borderRadius)),
     ) {
@@ -119,17 +125,33 @@ fun AssetSvgButton(
                 )
                 .cursor(Cursor.Pointer)
                 .padding(
-                    leftRight = animateFloatAsState(
+                    left = animateFloatAsState(
                         when (updatedButtonType) {
-                            AssetSvgButtonType.Button -> if (startIconPath != null) 16f else 24f
+                            AssetSvgButtonType.Button -> when {
+                                startIconPath != null && dense -> 12f
+                                startIconPath != null -> 16f
+                                else -> 24f
+                            }
+
                             else -> if (startIconPath != null || content != null) 12f else 16f
+                        }
+                    ).value.px,
+                    right = animateFloatAsState(
+                        when (updatedButtonType) {
+                            AssetSvgButtonType.Button -> when {
+                                endIconPath != null && dense -> 12f
+                                dense -> 16f
+                                else -> 24f
+                            }
+
+                            else -> if (endIconPath != null || content != null) 12f else 16f
                         }
                     ).value.px,
                 )
                 .onClick { onClick() }
                 .color(animatedContentColor.toKobwebColor())
                 .fontSize(if (updatedButtonType == AssetSvgButtonType.Button) 16.px else 14.px)
-                .fontWeight(FontWeight.Medium)
+                .fontWeight(if (dense) FontWeight.Normal else FontWeight.Medium)
                 .userSelect(UserSelect.None),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -150,7 +172,7 @@ fun AssetSvgButton(
                     size = iconSize,
                     primaryColor = animatedIconPrimaryColor.toKobwebColor(),
                     secondaryColor = animatedIconSecondaryColor.toKobwebColor()
-                ) { marginRight(8.px) }
+                ) { if (text != null || content != null) marginRight(8.px) }
             }
 
             content?.invoke(this)
@@ -161,8 +183,9 @@ fun AssetSvgButton(
                         .translateY(1.px)
                         .thenIf(
                             updatedButtonType != AssetSvgButtonType.Button,
-                            Modifier.padding(topBottom = 4.px),
+                            Modifier.padding(topBottom = if (dense) 0.px else 4.px),
                         )
+                        .fontSize(if (dense) 14.px else 16.px)
                 ) { Text(safeText) }
             }
 

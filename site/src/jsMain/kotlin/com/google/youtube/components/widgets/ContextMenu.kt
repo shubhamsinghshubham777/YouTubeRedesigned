@@ -16,8 +16,8 @@ import androidx.compose.ui.graphics.Color
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.limitTextWithEllipsis
 import com.google.youtube.utils.rememberMouseEventAsState
-import com.google.youtube.utils.singleLineTextEllipsis
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Cursor
@@ -220,7 +220,7 @@ private fun List<ContextMenuChild>.toComposables(
                             modifier = Modifier
                                 .weight(1)
                                 .display(DisplayStyle.Block)
-                                .singleLineTextEllipsis()
+                                .limitTextWithEllipsis()
                                 .fontSize(if (child.showSmallText) 14.px else 16.px)
                         ) { Text(child.text) }
 

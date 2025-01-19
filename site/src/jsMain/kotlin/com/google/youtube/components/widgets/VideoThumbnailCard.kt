@@ -13,6 +13,7 @@ import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toKobwebColor
+import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.dom.ref
@@ -24,12 +25,14 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.color
+import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.lineHeight
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
@@ -50,7 +53,7 @@ fun VideoThumbnailCard(
     views: String,
     daysSinceUploaded: String,
     duration: String,
-    shape: Shape = Rect(15.9.px),
+    shape: Shape = Styles.Shape.CARD,
     modifier: Modifier = Modifier,
     size: IntSize? = null,
 ) {
@@ -67,6 +70,8 @@ fun VideoThumbnailCard(
         modifier = Modifier
             .background(containerColor.toKobwebColor())
             .clip(shape)
+            .cursor(Cursor.Pointer)
+            .thenIf(size != null) { Modifier.maxWidth(size!!.width.px) }
             .userSelect(UserSelect.None)
             .then(modifier),
         verticalArrangement = Arrangement.spacedBy(15.px)
@@ -122,7 +127,7 @@ fun VideoThumbnailCard(
                     Text("Juxtopposed")
                     Image(Assets.Icons.VERIFIED_BADGE)
                 }
-                Row { Text("$views views • $daysSinceUploaded") }
+                Row { Text("$views views • $daysSinceUploaded ago") }
             }
             AssetImageButton(Assets.Icons.MORE) {}
         }

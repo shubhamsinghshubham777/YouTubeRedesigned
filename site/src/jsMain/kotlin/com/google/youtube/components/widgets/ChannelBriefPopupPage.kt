@@ -3,7 +3,7 @@ package com.google.youtube.components.widgets
 import androidx.compose.runtime.Composable
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
-import com.google.youtube.utils.singleLineTextEllipsis
+import com.google.youtube.utils.limitTextWithEllipsis
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -64,7 +64,7 @@ fun ChannelBriefPopupPage(channelId: String) {
                 Box(
                     modifier = Modifier
                         .color(Styles.VIDEO_CARD_SECONDARY_TEXT)
-                        .singleLineTextEllipsis()
+                        .limitTextWithEllipsis()
                 ) {
                     Text("Joined 17 years ago • 30.8M subscribers")
                 }

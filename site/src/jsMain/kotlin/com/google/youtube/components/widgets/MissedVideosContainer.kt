@@ -27,7 +27,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
-import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
@@ -38,7 +37,7 @@ import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.Element
 
 @Composable
-fun MissedVideosContainer() {
+fun MissedVideosContainer(modifier: Modifier = Modifier) {
     var rowRef by remember { mutableStateOf<Element?>(null) }
     val containerPadding = remember { 30.px }
     var showContainer by remember { mutableStateOf(true) }
@@ -49,12 +48,11 @@ fun MissedVideosContainer() {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .background(Styles.MISSED_VIDEOS_CONTAINER)
                 .clip(Rect(20.px))
-                .padding(topBottom = containerPadding)
-                .margin(bottom = 40.px),
+                .padding(topBottom = containerPadding),
             verticalArrangement = Arrangement.spacedBy(containerPadding)
         ) {
             Row(
@@ -90,7 +88,7 @@ fun MissedVideosContainer() {
                             channelAsset = Assets.Icons.USER_AVATAR,
                             title = "How Websites Learned to Fit Everywhere",
                             views = "150K",
-                            daysSinceUploaded = "4 months ago",
+                            daysSinceUploaded = "4 months",
                             duration = "12:07",
                             size = IntSize(
                                 width = VideoThumbnailCardDefaults.WIDTH,

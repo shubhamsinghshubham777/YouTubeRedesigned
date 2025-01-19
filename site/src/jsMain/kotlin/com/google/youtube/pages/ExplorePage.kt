@@ -242,7 +242,7 @@ private val fakeVideoThumbnailDetails: List<VideoThumbnailDetails> = List(20) {
         channelAsset = Assets.Icons.USER_AVATAR,
         title = "How Websites Learned to Fit Everywhere",
         views = "150K",
-        daysSinceUploaded = "4 months ago",
+        daysSinceUploaded = "4 months",
         duration = "12:07",
     )
 }

@@ -4,6 +4,7 @@ import com.varabyte.kobweb.compose.css.functions.LinearGradient
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.graphics.Colors
+import com.varabyte.kobweb.silk.theme.shapes.Rect
 import org.jetbrains.compose.web.css.px
 
 object Styles {
@@ -29,6 +30,8 @@ object Styles {
     val VIDEO_CARD_SECONDARY_TEXT: Color.Rgb = Color.rgb(170, 170, 170)
     val VIDEO_CARD_DURATION_CONTAINER: Color.Rgb = Color.rgba(0, 0, 0, 0.6f)
     val DIVIDER: Color.Rgb = WHITE.copyf(alpha = 0.14f)
+    val PURPLE_BORDER: Color.Rgb = Color.rgba(176, 130, 255, 0.37f)
+    val BLUE_BORDER: Color.Rgb = Color.rgba(130, 191, 255, 0.37f)
 
     object Gradient {
         val RED_TO_PINK = linearGradient(LinearGradient.Direction.ToRight) {
@@ -52,5 +55,9 @@ object Styles {
 
     object FontSize {
         val SMALL = 12.px
+    }
+
+    object Shape {
+        val CARD = Rect(15.9.px)
     }
 }

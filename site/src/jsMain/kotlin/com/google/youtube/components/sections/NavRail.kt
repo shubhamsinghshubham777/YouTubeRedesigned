@@ -18,9 +18,9 @@ import com.google.youtube.components.widgets.Popup
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.limitTextWithEllipsis
 import com.google.youtube.utils.onMouseEvent
 import com.google.youtube.utils.removeMouseEventListeners
-import com.google.youtube.utils.singleLineTextEllipsis
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Cursor
@@ -307,7 +307,7 @@ private fun NavRailListItem(
                             .display(DisplayStyle.Block)
                             .weight(1)
                             .padding(right = 24.px)
-                            .singleLineTextEllipsis()
+                            .limitTextWithEllipsis()
                     ) { Text(item.label) }
 
                     // Count badge
