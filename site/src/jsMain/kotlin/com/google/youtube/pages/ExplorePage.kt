@@ -19,6 +19,7 @@ import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
+import com.google.youtube.utils.gridGap
 import com.google.youtube.utils.hideScrollBar
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -173,10 +174,8 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
                         .gridTemplateRows {
                             repeat(if ((videos?.size ?: 0) <= 10) 1 else 2) { size(1.fr) }
                         }
-                        .toAttrs {
-                            ref { element -> gridElement = element; onDispose {} }
-                            style { property("grid-gap", GRID_ITEMS_GAP.px) }
-                        }
+                        .gridGap(GRID_ITEMS_GAP.px)
+                        .toAttrs { ref { element -> gridElement = element; onDispose {} } }
                 ) {
                     videos?.forEach { details ->
                         VideoThumbnailCard(

@@ -6,6 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.toArgb
+import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextOverflow
 import com.varabyte.kobweb.compose.css.WordBreak
@@ -18,6 +19,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
 import com.varabyte.kobweb.compose.ui.modifiers.wordBreak
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
+import org.jetbrains.compose.web.css.px
 import org.w3c.dom.DOMRect
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
@@ -147,3 +149,8 @@ fun DOMRect.toComposeRect() = Rect(
     right = right.toFloat(),
     bottom = bottom.toFloat()
 )
+
+fun Modifier.gridGap(
+    x: CSSLengthOrPercentageNumericValue = 0.px,
+    y: CSSLengthOrPercentageNumericValue = x,
+) = styleModifier { property("grid-gap", "$y $x") }

@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.NavRail
@@ -12,6 +11,7 @@ import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HomePage
+import com.google.youtube.pages.ShortsPage
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.Dialog
@@ -100,26 +100,6 @@ fun MainLayout() {
                         .fillMaxHeight()
                         .overflow { x(Overflow.Scroll) }
                 ) {
-                    val homePage = remember {
-                        movableContentOf {
-                            HomePage(
-                                showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-                                horizontalPaddingState = horizontalPaddingState,
-                            )
-                        }
-                    }
-
-                    val explorePage = remember {
-                        movableContentOf {
-                            ExplorePage(
-                                modifier = Modifier.padding(
-                                    right = horizontalPaddingState.value.px,
-                                    bottom = Constants.CONTENT_PADDING
-                                )
-                            )
-                        }
-                    }
-
                     Box(modifier = Modifier.fillMaxSize().minWidth(320.px)) {
                         Crossfade(
                             targetState = selectedParentChildIndicesState.value,
@@ -127,9 +107,23 @@ fun MainLayout() {
                             onStateChange = { window.scrollTo(0.0, 0.0) },
                         ) { animatedState ->
                             when (animatedState.first) {
-                                0 -> homePage()
-                                1 -> explorePage()
-                                2 -> Text("Shorts")
+                                0 -> HomePage(
+                                    showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
+                                    horizontalPaddingState = horizontalPaddingState,
+                                )
+
+                                1 -> ExplorePage(
+                                    modifier = Modifier.padding(
+                                        right = horizontalPaddingState.value.px,
+                                        bottom = Constants.CONTENT_PADDING
+                                    )
+                                )
+
+                                2 -> ShortsPage(
+                                    showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
+                                    horizontalPaddingState = horizontalPaddingState,
+                                )
+
                                 3 -> Text("TV Mode")
                                 4 -> Text("History")
                                 5 -> Text("Watch Later")

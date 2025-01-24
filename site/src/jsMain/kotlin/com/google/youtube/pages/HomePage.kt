@@ -16,25 +16,21 @@ import com.google.youtube.components.widgets.ShortThumbnailCardDefaults
 import com.google.youtube.components.widgets.VideoThumbnailCard
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
+import com.google.youtube.utils.BasicGrid
+import com.google.youtube.utils.GridGap
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.isGreaterThan
-import com.varabyte.kobweb.compose.css.GridEntry
-import com.varabyte.kobweb.compose.css.gridTemplateColumns
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.padding
-import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import org.jetbrains.compose.web.css.DisplayStyle
-import org.jetbrains.compose.web.css.display
 import org.jetbrains.compose.web.css.fr
-import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.css.width
-import org.jetbrains.compose.web.dom.Div
 
 @Composable
 fun HomePage(
@@ -117,22 +113,15 @@ private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
 @Composable
 private fun MainVideosGrid(modifier: Modifier = Modifier) {
     val breakpoint = rememberBreakpoint()
-    Div(
-        modifier.toAttrs {
-            style {
-                display(DisplayStyle.Grid)
-                width(100.percent)
-                gridTemplateColumns {
-                    repeat(GridEntry.Repeat.Auto.Type.AutoFit) {
-                        minmax(
-                            min = if (breakpoint.isGreaterThan(Breakpoint.MD)) 380.px else 320.px,
-                            max = 1.fr
-                        )
-                    }
-                }
-                property("grid-gap", "20px")
-            }
-        }
+    BasicGrid(
+        modifier = Modifier.fillMaxWidth().display(DisplayStyle.Grid).then(modifier),
+        columnBuilder = {
+            minmax(
+                min = if (breakpoint.isGreaterThan(Breakpoint.MD)) 380.px else 320.px,
+                max = 1.fr
+            )
+        },
+        gridGap = GridGap(20.px)
     ) {
         repeat(20) {
             VideoThumbnailCard(

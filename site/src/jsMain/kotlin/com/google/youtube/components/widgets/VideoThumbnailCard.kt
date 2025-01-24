@@ -1,22 +1,12 @@
 package com.google.youtube.components.widgets
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntSize
 import com.google.youtube.utils.Assets
-import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
-import com.google.youtube.utils.rememberMouseEventAsState
-import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
-import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -43,7 +33,6 @@ import com.varabyte.kobweb.silk.theme.shapes.Shape
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Text
-import org.w3c.dom.Element
 
 @Composable
 fun VideoThumbnailCard(
@@ -57,18 +46,8 @@ fun VideoThumbnailCard(
     modifier: Modifier = Modifier,
     size: IntSize? = null,
 ) {
-    var elementRef by remember { mutableStateOf<Element?>(null) }
-    val mouseEvent by rememberMouseEventAsState(elementRef)
-    val containerColor by animateColorAsState(
-        when (mouseEvent) {
-            MouseEventState.Pressed -> Color.White.copy(alpha = Styles.Opacity.HOVERED)
-            else -> Color.Transparent
-        }
-    )
     Column(
-        ref = ref { e -> elementRef = e },
         modifier = Modifier
-            .background(containerColor.toKobwebColor())
             .clip(shape)
             .cursor(Cursor.Pointer)
             .thenIf(size != null) { Modifier.maxWidth(size!!.width.px) }
