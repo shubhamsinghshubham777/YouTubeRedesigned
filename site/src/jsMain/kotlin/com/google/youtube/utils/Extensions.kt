@@ -18,8 +18,10 @@ import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
+import com.varabyte.kobweb.compose.ui.modifiers.onKeyUp
 import com.varabyte.kobweb.compose.ui.modifiers.onScroll
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
+import com.varabyte.kobweb.compose.ui.modifiers.tabIndex
 import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
 import com.varabyte.kobweb.compose.ui.modifiers.wordBreak
 import com.varabyte.kobweb.compose.ui.styleModifier
@@ -168,7 +170,14 @@ fun Modifier.noShrink() = then(Modifier.flexShrink(0))
 fun Modifier.clickable(onClick: (() -> Unit)? = null) = then(
     Modifier
         .cursor(Cursor.Pointer)
-        .thenIfNotNull(onClick) { safeOnClick -> Modifier.onClick { safeOnClick() } }
+        .onKeyUp { event -> if ((event.key == "Enter" || event.key == " ") && onClick != null) onClick.invoke() }
+        .tabIndex(0)
+        .thenIfNotNull(onClick) { safeOnClick ->
+            Modifier.onClick { event ->
+                event.stopPropagation()
+                safeOnClick()
+            }
+        }
 )
 
 @Composable

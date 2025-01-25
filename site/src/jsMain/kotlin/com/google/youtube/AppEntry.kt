@@ -16,8 +16,11 @@ import com.varabyte.kobweb.silk.init.registerStyleBase
 import com.varabyte.kobweb.silk.style.breakpoint.BreakpointSizes
 import com.varabyte.kobweb.silk.theme.colors.ColorMode
 import kotlinx.browser.document
+import kotlinx.browser.window
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.vh
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.KeyboardEvent
 
 @InitSilk
 fun overrideRootHTMLStyle(ctx: InitSilkContext) {
@@ -46,6 +49,13 @@ fun AppEntry(content: @Composable () -> Unit) {
             addEventListener("drop", { event -> event.preventDefault() })
             addEventListener("dragover", { event -> event.preventDefault() })
         }
+
+        // Disable space bar causing page to scroll
+        window.addEventListener("keydown", { event ->
+            if ((event as KeyboardEvent).keyCode == 32 && event.target !is HTMLInputElement) {
+                event.preventDefault()
+            }
+        })
     }
 
     SilkApp {

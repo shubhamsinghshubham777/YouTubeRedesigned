@@ -16,10 +16,12 @@ import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.dom.disposableRef
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
+import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.clip
+import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 
 @Composable
@@ -42,9 +44,10 @@ fun AssetImageButton(
         },
         modifier = Modifier
             .background(animatedBackgroundColor.toKobwebColor())
+            .borderRadius(100.percent)
+            .clickable(onClick)
             .clip(Circle())
             .padding(8.px)
-            .clickable(onClick)
             .then(modifier),
         src = asset,
     )

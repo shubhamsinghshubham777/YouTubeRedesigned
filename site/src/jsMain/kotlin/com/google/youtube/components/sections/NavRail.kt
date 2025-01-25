@@ -38,6 +38,7 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
+import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
@@ -230,14 +231,15 @@ private fun NavRailListItem(
                 onDispose { element.removeMouseEventListeners(mouseCallbacks) }
             },
             modifier = Modifier
-                .weight(1f)
                 .background(animatedBGColor.toKobwebColor())
-                .color(Styles.OFF_WHITE)
+                .borderRadius(10.px)
                 .clickable(onClick)
                 .clip(Rect(10.px))
+                .color(Styles.OFF_WHITE)
                 .padding(12.px)
                 .role("button")
-                .userSelect(UserSelect.None),
+                .userSelect(UserSelect.None)
+                .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Icon / Image
@@ -346,10 +348,11 @@ private fun NavRailListItem(
                 },
                 modifier = Modifier
                     .background(animatedDropDownBGColor.toKobwebColor())
-                    .clip(Rect(10.px))
-                    .size(46.px)
-                    .padding(10.px)
+                    .borderRadius(10.px)
                     .clickable { isDropDownOpen?.let { state -> state.value = !state.value } }
+                    .clip(Rect(10.px))
+                    .padding(10.px)
+                    .size(46.px)
             ) {
                 Image(
                     modifier = Modifier
