@@ -36,6 +36,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
@@ -155,7 +156,7 @@ fun TopBar(
             AssetImageButton(asset = Assets.Icons.MENU, onClick = onDrawerButtonClick)
             Box(modifier = Modifier.width(12.px))
             Image(
-                modifier = Modifier.height(20.px).clickable(onLogoClick),
+                modifier = Modifier.height(44.px).padding(topBottom = 12.px).clickable(onLogoClick),
                 src = Assets.Icons.YOUTUBE_LOGO
             )
 
