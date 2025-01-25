@@ -82,7 +82,8 @@ fun MainLayout() {
                     .zIndex(1),
                 onDrawerButtonClick = {
                     isNavRailExpandedState.value = !isNavRailExpandedState.value
-                }
+                },
+                onLogoClick = { selectedParentChildIndicesState.value = 0 to null },
             )
             Row(modifier = Modifier.fillMaxSize()) {
                 NavRail(

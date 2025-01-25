@@ -16,11 +16,11 @@ import androidx.compose.ui.graphics.Color
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.limitTextWithEllipsis
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
-import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.dom.ref
@@ -32,13 +32,11 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.minWidth
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
@@ -189,9 +187,8 @@ private fun List<ContextMenuChild>.toComposables(
                     Row(
                         ref = ref { ref -> buttonRef = ref },
                         modifier = Modifier
-                            .onClick { child.onClick?.invoke() }
+                            .clickable { child.onClick?.invoke() }
                             .background(animatedContainerColor.toKobwebColor())
-                            .cursor(Cursor.Pointer)
                             .fillMaxWidth()
                             .padding(leftRight = CONTAINER_PADDING_HORIZONTAL.px)
                             .height(child.heightPx.px)

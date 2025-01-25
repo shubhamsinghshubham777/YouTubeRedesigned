@@ -12,11 +12,11 @@ import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
-import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.dom.ref
@@ -31,12 +31,10 @@ import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.translateY
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
@@ -123,7 +121,6 @@ fun AssetSvgButton(
                             .border(1.px, LineStyle.Solid, Styles.WHITE.copyf(alpha = 0.2f))
                     } else Modifier
                 )
-                .cursor(Cursor.Pointer)
                 .padding(
                     left = animateFloatAsState(
                         when (updatedButtonType) {
@@ -148,7 +145,7 @@ fun AssetSvgButton(
                         }
                     ).value.px,
                 )
-                .onClick { onClick() }
+                .clickable(onClick)
                 .color(animatedContentColor.toKobwebColor())
                 .fontSize(if (updatedButtonType == AssetSvgButtonType.Button) 16.px else 14.px)
                 .fontWeight(if (dense) FontWeight.Normal else FontWeight.Medium)

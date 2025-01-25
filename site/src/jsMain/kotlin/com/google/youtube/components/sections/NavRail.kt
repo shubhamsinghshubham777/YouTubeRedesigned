@@ -18,13 +18,13 @@ import com.google.youtube.components.widgets.Popup
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.limitTextWithEllipsis
 import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.onMouseEvent
 import com.google.youtube.utils.removeMouseEventListeners
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
-import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.dom.ElementRefScope
@@ -39,14 +39,12 @@ import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.color
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.onMouseEnter
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.padding
@@ -235,10 +233,9 @@ private fun NavRailListItem(
                 .weight(1f)
                 .background(animatedBGColor.toKobwebColor())
                 .color(Styles.OFF_WHITE)
-                .cursor(Cursor.Pointer)
+                .clickable(onClick)
                 .clip(Rect(10.px))
                 .padding(12.px)
-                .onClick { onClick() }
                 .role("button")
                 .userSelect(UserSelect.None),
             verticalAlignment = Alignment.CenterVertically,
@@ -352,8 +349,7 @@ private fun NavRailListItem(
                     .clip(Rect(10.px))
                     .size(46.px)
                     .padding(10.px)
-                    .onClick { isDropDownOpen?.let { state -> state.value = !state.value } }
-                    .cursor(Cursor.Pointer)
+                    .clickable { isDropDownOpen?.let { state -> state.value = !state.value } }
             ) {
                 Image(
                     modifier = Modifier

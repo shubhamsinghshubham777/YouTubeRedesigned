@@ -12,12 +12,12 @@ import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.CSSLengthNumericValue
 import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
-import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FlexBasis
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextOverflow
@@ -34,12 +34,10 @@ import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.flexBasis
 import com.varabyte.kobweb.compose.ui.modifiers.flexGrow
 import com.varabyte.kobweb.compose.ui.modifiers.height
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.div
@@ -104,10 +102,9 @@ fun SegmentedButton(
                         bottomRight = if (index == segments.lastIndex) containerHeight / 2 else 0.px,
                     )
                     .color(animatedContentColor.toKobwebColor())
-                    .cursor(Cursor.Pointer)
+                    .clickable { onSegmentClick(index) }
                     .fillMaxWidth((100 / segments.size).percent)
                     .height(containerHeight)
-                    .onClick { onSegmentClick(index) }
                     .padding(leftRight = 8.px),
                 horizontalArrangement = Arrangement.spacedBy(8.px, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,

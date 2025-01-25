@@ -19,10 +19,11 @@ import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.gridGap
 import com.google.youtube.utils.hideScrollBar
+import com.google.youtube.utils.limitTextWithEllipsis
 import com.google.youtube.utils.noShrink
-import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.ScrollBehavior
@@ -37,7 +38,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundImage
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
@@ -46,7 +46,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.gridAutoColumns
 import com.varabyte.kobweb.compose.ui.modifiers.gridAutoFlow
 import com.varabyte.kobweb.compose.ui.modifiers.gridTemplateRows
 import com.varabyte.kobweb.compose.ui.modifiers.height
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
@@ -113,6 +112,7 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
                     .fontSize(28.px)
                     .fontWeight(FontWeight.Medium)
                     .weight(1)
+                    .limitTextWithEllipsis(1)
             ) { Text(details.title) }
 
             AssetSvgButton(
@@ -214,10 +214,9 @@ private fun CategoryTab(
     val animatedIndicatorHeight by animateFloatAsState(if (updatedIsSelected) 3f else 0f)
     Box(
         modifier = Modifier
-            .cursor(Cursor.Pointer)
-            .noShrink()
+            .clickable(onClick)
             .height(48.px)
-            .onClick { onClick() }
+            .noShrink()
             .padding(leftRight = 16.px)
             .userSelect(UserSelect.None),
         contentAlignment = Alignment.Center

@@ -8,18 +8,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.onMouseEvent
 import com.google.youtube.utils.removeMouseEventListeners
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
-import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.dom.disposableRef
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.padding
-import com.varabyte.kobweb.compose.ui.modifiers.role
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.clip
@@ -47,9 +44,7 @@ fun AssetImageButton(
             .background(animatedBackgroundColor.toKobwebColor())
             .clip(Circle())
             .padding(8.px)
-            .cursor(Cursor.Pointer)
-            .role("button")
-            .then(if (onClick != null) Modifier.onClick { onClick() } else Modifier)
+            .clickable(onClick)
             .then(modifier),
         src = asset,
     )

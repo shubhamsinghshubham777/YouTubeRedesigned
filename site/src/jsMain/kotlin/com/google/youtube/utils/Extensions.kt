@@ -8,18 +8,22 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.toArgb
 import com.varabyte.kobweb.browser.dom.observers.ResizeObserver
 import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
+import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextOverflow
 import com.varabyte.kobweb.compose.css.WordBreak
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.attrsModifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
+import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
+import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.onScroll
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
 import com.varabyte.kobweb.compose.ui.modifiers.wordBreak
 import com.varabyte.kobweb.compose.ui.styleModifier
+import com.varabyte.kobweb.compose.ui.thenIfNotNull
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -160,6 +164,12 @@ fun Modifier.gridGap(
 ) = styleModifier { property("grid-gap", "$y $x") }
 
 fun Modifier.noShrink() = then(Modifier.flexShrink(0))
+
+fun Modifier.clickable(onClick: (() -> Unit)? = null) = then(
+    Modifier
+        .cursor(Cursor.Pointer)
+        .thenIfNotNull(onClick) { safeOnClick -> Modifier.onClick { safeOnClick() } }
+)
 
 @Composable
 fun rememberIsShortWindowAsState(threshold: Int = 650): State<Boolean> {

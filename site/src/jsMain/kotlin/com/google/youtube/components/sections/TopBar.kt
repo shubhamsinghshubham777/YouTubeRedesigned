@@ -12,6 +12,7 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvg
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
@@ -63,6 +64,7 @@ import org.jetbrains.compose.web.dom.TextInput
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
+    onLogoClick: () -> Unit,
     onDrawerButtonClick: () -> Unit,
 ) {
     val breakpoint = rememberBreakpoint()
@@ -149,9 +151,13 @@ fun TopBar(
             modifier = Modifier.fillMaxWidth().height(TopBarDefaults.HEIGHT),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Box(modifier = Modifier.width(4.px))
             AssetImageButton(asset = Assets.Icons.MENU, onClick = onDrawerButtonClick)
-            Box(modifier = Modifier.width(16.px))
-            Image(modifier = Modifier.height(20.px), src = Assets.Icons.YOUTUBE_LOGO)
+            Box(modifier = Modifier.width(12.px))
+            Image(
+                modifier = Modifier.height(20.px).clickable(onLogoClick),
+                src = Assets.Icons.YOUTUBE_LOGO
+            )
 
             Spacer()
             if (breakpoint != Breakpoint.ZERO) movableSearchBar(Modifier.weight(1.5f))

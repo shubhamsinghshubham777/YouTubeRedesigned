@@ -11,10 +11,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
-import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -23,9 +23,7 @@ import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.thenIf
@@ -65,11 +63,7 @@ fun Switch(
     Box(
         ref = if (reactToMouseEvents) ref { ref -> elementRef = ref } else null,
         modifier = modifier
-            .thenIf(reactToMouseEvents) {
-                Modifier
-                    .onClick { onSelectionChange(!isSelected) }
-                    .cursor(Cursor.Pointer)
-            }
+            .thenIf(reactToMouseEvents) { Modifier.clickable { onSelectionChange(!isSelected) } }
             .size(width = 40.px, height = 24.px),
     ) {
         Box(
