@@ -3,12 +3,10 @@ package com.google.youtube
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.google.youtube.utils.Styles
-import com.varabyte.kobweb.compose.css.OverscrollBehavior
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.minHeight
-import com.varabyte.kobweb.compose.ui.modifiers.overscrollBehavior
 import com.varabyte.kobweb.core.App
 import com.varabyte.kobweb.silk.SilkApp
 import com.varabyte.kobweb.silk.components.layout.Surface
@@ -25,9 +23,6 @@ import org.jetbrains.compose.web.css.vh
 fun overrideRootHTMLStyle(ctx: InitSilkContext) {
     ctx.stylesheet.registerStyleBase("html") {
         Modifier.background(Styles.SURFACE)
-    }
-    ctx.stylesheet.registerStyleBase("body") {
-        Modifier.overscrollBehavior(OverscrollBehavior.None)
     }
 }
 

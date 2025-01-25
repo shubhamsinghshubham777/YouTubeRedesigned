@@ -21,7 +21,6 @@ import com.google.youtube.utils.Styles
 import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.isGreaterThan
 import com.varabyte.kobweb.compose.css.Overflow
-import com.varabyte.kobweb.compose.css.OverscrollBehavior
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -35,7 +34,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.minWidth
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
-import com.varabyte.kobweb.compose.ui.modifiers.overscrollBehavior
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.position
 import com.varabyte.kobweb.compose.ui.modifiers.top
@@ -95,8 +93,7 @@ fun MainLayout() {
                         .width(navRailWidthPx.px)
                         .margin(leftRight = horizontalPaddingState.value.px)
                         .overflow(overflowX = Overflow.Hidden, overflowY = Overflow.Scroll)
-                        .hideScrollBar()
-                        .overscrollBehavior(OverscrollBehavior.Contain),
+                        .hideScrollBar(),
                     selectedParentChildIndicesState = selectedParentChildIndicesState,
                     isExpandedState = isNavRailExpandedState,
                 )
