@@ -63,6 +63,8 @@ import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.Element
+import org.w3c.dom.INSTANT
+import org.w3c.dom.ScrollToOptions
 
 @Composable
 fun ExplorePage(
@@ -150,14 +152,21 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
         }
 
         // Grid
-        Crossfade(targetState = selectedTab) { animatedCategory ->
+        var gridElement by remember { mutableStateOf<Element?>(null) }
+        Crossfade(
+            targetState = selectedTab,
+            onStateChange = {
+                gridElement?.scrollTo(
+                    ScrollToOptions(left = 0.0, behavior = org.w3c.dom.ScrollBehavior.INSTANT)
+                )
+            },
+        ) { animatedCategory ->
             val videos = details.categoriesWithVideos
                 .find { categoryWithVideos -> categoryWithVideos.label == animatedCategory }
                 ?.videos
             val horizontalScrollState = remember {
                 mutableStateOf(HorizontalScrollState.ReachedStart)
             }
-            var gridElement by remember { mutableStateOf<Element?>(null) }
 
             Box {
                 Div(
