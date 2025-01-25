@@ -94,14 +94,14 @@ fun ColoredBorderContainer(
                 AssetSvgButton(
                     id = "negative_cta_$title",
                     text = if (isLargeScreen) "Not interested" else null,
-                    dense = true,
+                    isDense = true,
                     startIconPath = Assets.Paths.CLOSE,
                     onClick = onNegativeCTA,
                 )
                 AssetSvgButton(
                     id = "positive_cta_$title",
                     text = if (isLargeScreen) "Show me more" else null,
-                    dense = true,
+                    isDense = true,
                     startIconPath = Assets.Paths.LIKED,
                     onClick = onPositiveCTA,
                     containerColor = color,

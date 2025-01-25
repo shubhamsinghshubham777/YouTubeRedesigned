@@ -64,13 +64,13 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
 
             // Filter Chips
             filters.forEachIndexed { index, filter ->
-                val isSelected = remember(index) { index == selectedFilterIndex }
+                val isSelected = index == selectedFilterIndex
                 AssetSvgButton(
                     id = filter.name.replace(' ', '_'),
                     type = AssetSvgButtonType.SelectableChip,
                     text = filter.name,
                     startIconPath = filter.iconPath,
-                    containerColor = if (!isSelected) filter.backgroundColor else null,
+                    containerColor = if (!isSelected) filter.backgroundColor else Styles.WHITE,
                     iconPrimaryColor = if (!isSelected) filter.iconPrimaryColor else null,
                     iconSecondaryColor = if (!isSelected) filter.iconSecondaryColor else null,
                     isSelected = index == selectedFilterIndex,
@@ -124,7 +124,7 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
 private class FilterInfo(
     val name: String,
     val iconPath: String? = null,
-    val backgroundColor: Color? = null,
+    val backgroundColor: Color = Styles.WHITE.copyf(alpha = Styles.Opacity.ASSET_SVG_BUTTON),
     val iconPrimaryColor: Color? = null,
     val iconSecondaryColor: Color? = null,
 )

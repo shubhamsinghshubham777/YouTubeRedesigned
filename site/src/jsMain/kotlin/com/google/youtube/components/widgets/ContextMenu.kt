@@ -261,7 +261,7 @@ private fun List<ContextMenuChild>.toComposables(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(child.heightPx.px)
-                        .backgroundColor(Styles.WHITE.copyf(alpha = 0.11f))
+                        .backgroundColor(Styles.DIVIDER_LIGHTER)
                 )
 
                 ContextMenuChild.VerticalSpacer -> Box(modifier = Modifier.height(child.heightPx.px))

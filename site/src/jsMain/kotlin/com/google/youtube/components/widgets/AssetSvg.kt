@@ -30,7 +30,12 @@ fun AssetSvg(
         attrs = {
             height(size)
             width(size)
-            onClick { onClick?.invoke() }
+            onClick?.let { safeOnClick ->
+                onClick { event ->
+                    event.stopPropagation()
+                    safeOnClick()
+                }
+            }
             style { style?.invoke(this) }
             // TODO: This is dangerous as we need to ensure all icons are of size 24 x 24 (hoist it as param instead)
             viewBox(0, 0, 24, 24)

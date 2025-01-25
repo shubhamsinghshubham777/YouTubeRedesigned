@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
+import com.google.youtube.components.widgets.PersonalisedFeedDialog
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HomePage
 import com.google.youtube.pages.ShortsPage
@@ -24,7 +25,6 @@ import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
-import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
@@ -41,8 +41,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
-import com.varabyte.kobweb.silk.theme.shapes.Rect
-import com.varabyte.kobweb.silk.theme.shapes.clip
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.minus
@@ -165,13 +163,9 @@ fun MainLayout() {
             isDisplayed = showPersonalisedFeedDialogState.value,
             onDismissed = { showPersonalisedFeedDialogState.value = false }
         ) {
-            Box(
-                modifier = Modifier
-                    .background(Styles.SURFACE_ELEVATED)
-                    .clip(Rect(12.px))
-                    .padding(32.px),
-                contentAlignment = Alignment.Center,
-            ) { Text("Personalised Feed Dialog [WIP]") }
+            PersonalisedFeedDialog(
+                onClose = { showPersonalisedFeedDialogState.value = false }
+            )
         }
     }
 }

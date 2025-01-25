@@ -22,6 +22,7 @@ object Styles {
     val SWITCH_BACKGROUND_SELECTED: Color.Rgb = Color.rgb(204, 39, 73)
     val RED_LIGHT: Color.Rgb = Color.rgb(255, 170, 187)
     val WHITE: Color.Rgb = Colors.White
+    val BLACK: Color.Rgb = Colors.Black
     val SUBSCRIPTIONS_COUNT_BADGE_CONTAINER: Color.Rgb = Color.rgb(48, 48, 48)
     val SWITCH_OUTLINE: Color.Rgb = Color.rgb(121, 116, 126)
     val MISSED_VIDEOS_CONTAINER: Color.Rgb = Color.rgb(32, 34, 36)
@@ -30,6 +31,7 @@ object Styles {
     val VIDEO_CARD_SECONDARY_TEXT: Color.Rgb = Color.rgb(170, 170, 170)
     val VIDEO_CARD_DURATION_CONTAINER: Color.Rgb = Color.rgba(0, 0, 0, 0.6f)
     val DIVIDER: Color.Rgb = WHITE.copyf(alpha = 0.14f)
+    val DIVIDER_LIGHTER: Color.Rgb = WHITE.copyf(alpha = 0.11f)
     val PURPLE_BORDER: Color.Rgb = Color.rgba(176, 130, 255, 0.37f)
     val BLUE_BORDER: Color.Rgb = Color.rgba(130, 191, 255, 0.37f)
 
@@ -41,11 +43,12 @@ object Styles {
     }
 
     object Opacity {
-        const val TOP_BAR_CONTENT = 0.4f
-        const val PRESSED = 0.25f
-        const val PRESSED_SELECTED = 1f - PRESSED
-        const val HOVERED = 0.2f
+        const val ASSET_SVG_BUTTON = 0.1f
+        const val HOVERED = 0.15f
         const val HOVERED_SELECTED = 1f - HOVERED
+        const val PRESSED = 0.2f
+        const val PRESSED_SELECTED = 1f - PRESSED
+        const val TOP_BAR_CONTENT = 0.4f
     }
 
     // TODO: Rename to Font
