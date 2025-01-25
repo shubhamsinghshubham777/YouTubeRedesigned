@@ -6,6 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.toArgb
+import com.varabyte.kobweb.browser.dom.observers.ResizeObserver
 import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextOverflow
@@ -13,12 +14,15 @@ import com.varabyte.kobweb.compose.css.WordBreak
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.attrsModifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
+import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.onScroll
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
 import com.varabyte.kobweb.compose.ui.modifiers.wordBreak
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
+import kotlinx.browser.document
+import kotlinx.browser.window
 import org.jetbrains.compose.web.css.px
 import org.w3c.dom.DOMRect
 import org.w3c.dom.Element
@@ -154,3 +158,23 @@ fun Modifier.gridGap(
     x: CSSLengthOrPercentageNumericValue = 0.px,
     y: CSSLengthOrPercentageNumericValue = x,
 ) = styleModifier { property("grid-gap", "$y $x") }
+
+fun Modifier.noShrink() = then(Modifier.flexShrink(0))
+
+@Composable
+fun rememberIsShortWindowAsState(threshold: Int = 650): State<Boolean> {
+    return produceState(window.innerHeight < threshold) {
+        val observer = ResizeObserver { entries ->
+            entries.firstOrNull()?.let { entry ->
+                value = entry.contentRect.height < threshold
+            }
+        }
+
+        document.documentElement?.let(observer::observe)
+
+        awaitDispose {
+            observer.disconnect()
+            document.documentElement?.let(observer::unobserve)
+        }
+    }
+}

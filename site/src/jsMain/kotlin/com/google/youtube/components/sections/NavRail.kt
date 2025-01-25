@@ -19,6 +19,7 @@ import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.limitTextWithEllipsis
+import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.onMouseEvent
 import com.google.youtube.utils.removeMouseEventListeners
 import com.google.youtube.utils.toComposeColor
@@ -41,7 +42,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
-import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
@@ -317,7 +317,7 @@ private fun NavRailListItem(
                                 .padding(leftRight = 8.px, topBottom = 3.6.px)
                                 .background(Styles.SUBSCRIPTIONS_COUNT_BADGE_CONTAINER)
                                 .clip(Circle())
-                                .flexShrink(0)
+                                .noShrink()
                         ) {
                             Text(item.count.toString())
                         }

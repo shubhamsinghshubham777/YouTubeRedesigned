@@ -12,6 +12,7 @@ import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
@@ -32,7 +33,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
-import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
@@ -102,7 +102,7 @@ fun AssetSvgButton(
 
     Box(
         modifier = Modifier
-            .flexShrink(0)
+            .noShrink()
             .height(
                 when {
                     updatedButtonType == AssetSvgButtonType.Button -> if (dense) 32.px else 40.px

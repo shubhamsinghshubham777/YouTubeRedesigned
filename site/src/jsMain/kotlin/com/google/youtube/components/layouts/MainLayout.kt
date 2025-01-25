@@ -2,6 +2,7 @@ package com.google.youtube.components.layouts
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,6 +66,11 @@ fun MainLayout() {
     val navRailWidthPx by animateFloatAsState(if (isNavRailExpandedState.value) 250f else 50f)
     val showPersonalisedFeedDialogState = remember { mutableStateOf(false) }
 
+    // Auto close NavRail on item selection for smaller devices
+    LaunchedEffect(selectedParentChildIndicesState.value) {
+        if (!isLargeBreakpoint) isNavRailExpandedState.value = false
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             TopBar(
@@ -100,54 +106,55 @@ fun MainLayout() {
                         .fillMaxHeight()
                         .overflow { x(Overflow.Scroll) }
                 ) {
-                    Box(modifier = Modifier.fillMaxSize().minWidth(320.px)) {
-                        Crossfade(
-                            targetState = selectedParentChildIndicesState.value,
-                            modifier = Modifier.margin(top = Constants.CONTENT_PADDING),
-                            onStateChange = { window.scrollTo(0.0, 0.0) },
-                        ) { animatedState ->
-                            when (animatedState.first) {
-                                0 -> HomePage(
-                                    showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-                                    horizontalPaddingState = horizontalPaddingState,
+                    Crossfade(
+                        targetState = selectedParentChildIndicesState.value,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .minWidth(320.px)
+                            .padding(top = Constants.CONTENT_PADDING),
+                        onStateChange = { window.scrollTo(0.0, 0.0) },
+                    ) { animatedState ->
+                        when (animatedState.first) {
+                            0 -> HomePage(
+                                showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
+                                horizontalPaddingState = horizontalPaddingState,
+                            )
+
+                            1 -> ExplorePage(
+                                modifier = Modifier.padding(
+                                    right = horizontalPaddingState.value.px,
+                                    bottom = Constants.CONTENT_PADDING
                                 )
+                            )
 
-                                1 -> ExplorePage(
-                                    modifier = Modifier.padding(
-                                        right = horizontalPaddingState.value.px,
-                                        bottom = Constants.CONTENT_PADDING
-                                    )
-                                )
+                            2 -> ShortsPage(
+                                showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
+                                horizontalPaddingState = horizontalPaddingState,
+                            )
 
-                                2 -> ShortsPage(
-                                    showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-                                    horizontalPaddingState = horizontalPaddingState,
-                                )
+                            3 -> Text("TV Mode")
+                            4 -> Text("History")
+                            5 -> Text("Watch Later")
+                            6 -> Text("Liked Videos")
 
-                                3 -> Text("TV Mode")
-                                4 -> Text("History")
-                                5 -> Text("Watch Later")
-                                6 -> Text("Liked Videos")
-
-                                7 -> when (animatedState.second) {
-                                    0 -> Text("Cool Stuff")
-                                    1 -> Text("Redesigns")
-                                    2 -> Text("Artistic")
-                                    else -> Text("Playlists")
-                                }
-
-                                8 -> when (animatedState.second) {
-                                    0 -> Text("Tech Reviews and Unboxings")
-                                    1 -> Text("DIY & Crafting")
-                                    2 -> Text("Gaming")
-                                    3 -> Text("Cooking & Recipes")
-                                    else -> Text("Collections")
-                                }
-
-                                else -> Text(
-                                    "Subscriptions" + (animatedState.second?.toString() ?: "")
-                                )
+                            7 -> when (animatedState.second) {
+                                0 -> Text("Cool Stuff")
+                                1 -> Text("Redesigns")
+                                2 -> Text("Artistic")
+                                else -> Text("Playlists")
                             }
+
+                            8 -> when (animatedState.second) {
+                                0 -> Text("Tech Reviews and Unboxings")
+                                1 -> Text("DIY & Crafting")
+                                2 -> Text("Gaming")
+                                3 -> Text("Cooking & Recipes")
+                                else -> Text("Collections")
+                            }
+
+                            else -> Text(
+                                "Subscriptions" + (animatedState.second?.toString() ?: "")
+                            )
                         }
                     }
                 }

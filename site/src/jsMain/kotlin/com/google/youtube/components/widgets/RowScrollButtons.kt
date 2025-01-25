@@ -74,7 +74,7 @@ fun BoxScope.RowScrollButtons(
                     if (startItem) Assets.Icons.ARROW_LEFT else Assets.Icons.ARROW_RIGHT,
                     modifier = Modifier
                         .margin(leftRight = 22.px, top = if (centerVertically) 0.px else 96.px)
-                        .background(Styles.MISSED_VIDEOS_ARROW_CONTAINER)
+                        .background(Styles.ARROW_BUTTON_CONTAINER)
                         .pointerEvents(PointerEvents.Auto)
                 ) {
                     elementToControl?.scrollBy(

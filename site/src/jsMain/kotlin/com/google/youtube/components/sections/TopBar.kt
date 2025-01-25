@@ -149,15 +149,9 @@ fun TopBar(
             modifier = Modifier.fillMaxWidth().height(TopBarDefaults.HEIGHT),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            AssetImageButton(
-                modifier = Modifier.margin(right = 16.px),
-                asset = Assets.Icons.MENU,
-                onClick = onDrawerButtonClick
-            )
-            Image(
-                modifier = Modifier.height(20.px),
-                src = Assets.Icons.YOUTUBE_LOGO
-            )
+            AssetImageButton(asset = Assets.Icons.MENU, onClick = onDrawerButtonClick)
+            Box(modifier = Modifier.width(16.px))
+            Image(modifier = Modifier.height(20.px), src = Assets.Icons.YOUTUBE_LOGO)
 
             Spacer()
             if (breakpoint != Breakpoint.ZERO) movableSearchBar(Modifier.weight(1.5f))
@@ -184,10 +178,7 @@ fun TopBar(
 
         if (breakpoint == Breakpoint.ZERO && showSearchBar) {
             Row(
-                modifier = Modifier
-                    .zIndex(1)
-                    .background(Styles.SURFACE)
-                    .fillMaxSize(),
+                modifier = Modifier.zIndex(1).background(Styles.SURFACE).fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AssetImageButton(asset = Assets.Icons.ARROW_LEFT) {

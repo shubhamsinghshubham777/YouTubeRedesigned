@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.IntSize
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.limitTextWithEllipsis
+import com.google.youtube.utils.noShrink
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
@@ -16,7 +17,6 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
-import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.margin
@@ -44,7 +44,7 @@ fun ShortThumbnailCard(
     Column(
         modifier = Modifier
             .cursor(Cursor.Pointer)
-            .flexShrink(0)
+            .noShrink()
             .maxWidth(size.width.px)
             .userSelect(UserSelect.None)
             .then(modifier),

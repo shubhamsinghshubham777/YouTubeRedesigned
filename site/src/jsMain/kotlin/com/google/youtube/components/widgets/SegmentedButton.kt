@@ -12,6 +12,7 @@ import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.CSSLengthNumericValue
@@ -37,7 +38,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.flexBasis
 import com.varabyte.kobweb.compose.ui.modifiers.flexGrow
-import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.padding
@@ -116,7 +116,7 @@ fun SegmentedButton(
                     modifier = Modifier
                         .flexBasis(FlexBasis.Auto)
                         .flexGrow(0)
-                        .flexShrink(0),
+                        .noShrink(),
                     isVisible = index == currentSelectedIndex
                 ) {
                     AssetSvg(

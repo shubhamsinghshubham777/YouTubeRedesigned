@@ -21,6 +21,7 @@ import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
 import com.google.youtube.utils.gridGap
 import com.google.youtube.utils.hideScrollBar
+import com.google.youtube.utils.noShrink
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
@@ -39,7 +40,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
-import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.gridAutoColumns
@@ -215,7 +215,7 @@ private fun CategoryTab(
     Box(
         modifier = Modifier
             .cursor(Cursor.Pointer)
-            .flexShrink(0)
+            .noShrink()
             .height(48.px)
             .onClick { onClick() }
             .padding(leftRight = 16.px)

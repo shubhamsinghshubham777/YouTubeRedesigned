@@ -12,6 +12,7 @@ import com.google.youtube.utils.bindScrollState
 import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.limitTextWithEllipsis
+import com.google.youtube.utils.noShrink
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.ScrollBehavior
@@ -27,7 +28,6 @@ import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
-import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
@@ -88,7 +88,7 @@ fun ColoredBorderContainer(
             }
 
             Row(
-                modifier = Modifier.flexShrink(0),
+                modifier = Modifier.noShrink(),
                 horizontalArrangement = Arrangement.spacedBy(12.px)
             ) {
                 AssetSvgButton(

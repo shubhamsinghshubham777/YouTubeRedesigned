@@ -13,6 +13,7 @@ import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
 import com.google.youtube.utils.hideScrollBar
+import com.google.youtube.utils.noShrink
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.ScrollBehavior
 import com.varabyte.kobweb.compose.css.functions.LinearGradient
@@ -26,7 +27,6 @@ import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundImage
-import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
@@ -79,7 +79,7 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
             }
 
             // Spacer
-            Box(modifier = Modifier.width(12.px).flexShrink(0))
+            Box(modifier = Modifier.width(12.px).noShrink())
         }
 
         repeat(2) { index ->
