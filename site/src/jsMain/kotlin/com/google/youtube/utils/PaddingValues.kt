@@ -1,6 +1,7 @@
 package com.google.youtube.utils
 
 import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
+import org.jetbrains.compose.web.css.times
 
 fun PaddingValues(
     left: CSSLengthOrPercentageNumericValue,
@@ -27,6 +28,7 @@ interface PaddingValues {
     val top: CSSLengthOrPercentageNumericValue
     val right: CSSLengthOrPercentageNumericValue
     val bottom: CSSLengthOrPercentageNumericValue
+    operator fun times(value: Number): PaddingValues
 }
 
 internal data class PaddingValuesImpl(
@@ -34,4 +36,13 @@ internal data class PaddingValuesImpl(
     override val top: CSSLengthOrPercentageNumericValue,
     override val right: CSSLengthOrPercentageNumericValue,
     override val bottom: CSSLengthOrPercentageNumericValue,
-) : PaddingValues
+) : PaddingValues {
+    override fun times(value: Number): PaddingValues {
+        return PaddingValues(
+            left = left * value,
+            top = top * value,
+            right = right * value,
+            bottom = bottom * value,
+        )
+    }
+}

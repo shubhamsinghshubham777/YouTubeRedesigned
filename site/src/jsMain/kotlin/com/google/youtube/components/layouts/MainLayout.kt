@@ -13,6 +13,7 @@ import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HomePage
 import com.google.youtube.pages.ShortsPage
+import com.google.youtube.pages.TVModePage
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.Dialog
@@ -133,7 +134,7 @@ fun MainLayout() {
                                 horizontalPaddingState = horizontalPaddingState,
                             )
 
-                            3 -> Text("TV Mode")
+                            3 -> TVModePage(horizontalPaddingState = horizontalPaddingState)
                             4 -> Text("History")
                             5 -> Text("Watch Later")
                             6 -> Text("Liked Videos")
