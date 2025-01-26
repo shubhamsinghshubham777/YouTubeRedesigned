@@ -3,7 +3,6 @@ package com.google.youtube.components.sections
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -15,6 +14,8 @@ import androidx.compose.ui.graphics.Color
 import com.google.youtube.components.widgets.AssetSvg
 import com.google.youtube.components.widgets.ChannelBriefPopupPage
 import com.google.youtube.components.widgets.Popup
+import com.google.youtube.models.NavRailItem
+import com.google.youtube.models.NavRailListItemIconType
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
@@ -72,16 +73,18 @@ import org.w3c.dom.HTMLElement
 @Composable
 fun NavRail(
     modifier: Modifier = Modifier,
-    selectedParentChildIndicesState: MutableState<Pair<Int?, Int?>>,
+    selectedParentAndChildState: MutableState<Pair<NavRailItem.ParentElement?, String?>>,
     isExpandedState: State<Boolean>,
     items: List<NavRailItem> = SampleNavRailItems,
 ) {
     var hoveredElementRef by remember { mutableStateOf<Element?>(null) }
-    var hoveredElementIndexPair: Pair<Int?, Int?> by remember { mutableStateOf(null to null) }
+    var hoveredElementIndexPair: Pair<NavRailItem.ParentElement?, String?> by remember {
+        mutableStateOf(null to null)
+    }
     val isPopupContentHoveredState = remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
-        items.forEachIndexed { parentIndex, parentItem ->
+        items.forEach { parentItem ->
             val isDropDownOpen = remember { mutableStateOf(false) }
 
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -89,15 +92,18 @@ fun NavRail(
                     item = parentItem,
                     isSelectedState = remember {
                         derivedStateOf {
-                            selectedParentChildIndicesState.value.first == parentIndex &&
-                                    selectedParentChildIndicesState.value.second == null
+                            selectedParentAndChildState.value.first?.label == parentItem.label &&
+                                    selectedParentAndChildState.value.second == null
                         }
                     },
                     isHorizontallyExpandedState = isExpandedState,
                     isDropDownOpen = isDropDownOpen,
                     hasChildren = parentItem.children?.isNotEmpty() == true,
                     isParentItem = true,
-                    onClick = { selectedParentChildIndicesState.value = parentIndex to null }
+                    onClick = {
+                        selectedParentAndChildState.value =
+                            NavRailItem.ParentElement.find(parentItem.label) to null
+                    }
                 )
 
                 parentItem.children?.let { children ->
@@ -106,31 +112,31 @@ fun NavRail(
                         modifier = Modifier.fillMaxWidth()
                     ) { isAnimating ->
                         Column(modifier = Modifier.fillMaxWidth()) {
-                            children.forEachIndexed { childIndex, childItem ->
+                            children.forEach { childItem ->
                                 var elementRef: Element? by remember { mutableStateOf(null) }
                                 NavRailListItem(
                                     ref = ref { r -> elementRef = r },
                                     modifier = Modifier
                                         .onMouseEnter {
-                                            // TODO: Replace indexes with an enum
-                                            if (parentIndex == 9 && !isAnimating.value) {
+                                            if (parentItem.label == NavRailItem.ParentElement.SUBSCRIPTIONS.label && !isAnimating.value) {
                                                 hoveredElementRef = elementRef
-                                                hoveredElementIndexPair = parentIndex to childIndex
+                                                hoveredElementIndexPair =
+                                                    NavRailItem.ParentElement.SUBSCRIPTIONS to childItem.label
                                             }
                                         },
                                     item = childItem,
                                     isSelectedState = remember {
                                         derivedStateOf {
-                                            selectedParentChildIndicesState.value.first == parentIndex &&
-                                                    selectedParentChildIndicesState.value.second == childIndex
+                                            selectedParentAndChildState.value.first?.label == parentItem.label &&
+                                                    selectedParentAndChildState.value.second == childItem.label
                                         }
                                     },
                                     isHorizontallyExpandedState = isExpandedState,
                                     hasChildren = false,
                                     isParentItem = false,
                                     onClick = {
-                                        selectedParentChildIndicesState.value =
-                                            parentIndex to childIndex
+                                        selectedParentAndChildState.value =
+                                            NavRailItem.ParentElement.find(parentItem.label) to childItem.label
                                     }
                                 )
                             }
@@ -160,30 +166,10 @@ fun NavRail(
         targetState = hoveredElementIndexPair,
         isContentHovered = isPopupContentHoveredState,
     ) { animatedHoveredElementIndexPair ->
-        if (animatedHoveredElementIndexPair.first == 9) {
+        if (animatedHoveredElementIndexPair.first == NavRailItem.ParentElement.SUBSCRIPTIONS) {
             ChannelBriefPopupPage(channelId = animatedHoveredElementIndexPair.second.toString())
         }
     }
-}
-
-@Immutable
-data class NavRailItem(
-    val label: String,
-    val iconType: NavRailListItemIconType? = null,
-    val count: Int = 0,
-    val children: List<NavRailItem>? = null,
-    val hasBottomDivider: Boolean = false,
-)
-
-sealed class NavRailListItemIconType {
-    @Immutable
-    data class ToggleableIcons(
-        val inactiveIconPath: String,
-        val activeIconPath: String,
-    ) : NavRailListItemIconType()
-
-    @Immutable
-    data class Image(val ref: String) : NavRailListItemIconType()
 }
 
 @Composable
@@ -282,7 +268,7 @@ private fun NavRailListItem(
                         }
                     }
 
-                    null -> Unit
+                    else -> Unit
                 }
             }
 
@@ -367,28 +353,28 @@ private fun NavRailListItem(
 
 private val SampleNavRailItems = listOf(
     NavRailItem(
-        label = "Home",
+        label = NavRailItem.ParentElement.HOME.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.HOME,
             activeIconPath = Assets.Paths.HOME_SELECTED
         )
     ),
     NavRailItem(
-        label = "Explore",
+        label = NavRailItem.ParentElement.EXPLORE.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.EXPLORE,
             activeIconPath = Assets.Paths.EXPLORE_SELECTED
         )
     ),
     NavRailItem(
-        label = "Shorts",
+        label = NavRailItem.ParentElement.SHORTS.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.SHORTS,
             activeIconPath = Assets.Paths.SHORTS_SELECTED
         )
     ),
     NavRailItem(
-        label = "TV Mode",
+        label = NavRailItem.ParentElement.TV_MODE.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.TV,
             activeIconPath = Assets.Paths.TV_SELECTED
@@ -396,28 +382,28 @@ private val SampleNavRailItems = listOf(
         hasBottomDivider = true,
     ),
     NavRailItem(
-        label = "History",
+        label = NavRailItem.ParentElement.HISTORY.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.HISTORY,
             activeIconPath = Assets.Paths.HISTORY_SELECTED
         )
     ),
     NavRailItem(
-        label = "Watch Later",
+        label = NavRailItem.ParentElement.WATCH_LATER.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.WATCH_LATER,
             activeIconPath = Assets.Paths.WATCH_LATER_SELECTED
         )
     ),
     NavRailItem(
-        label = "Liked Videos",
+        label = NavRailItem.ParentElement.LIKED_VIDEOS.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.LIKED_VIDEOS,
             activeIconPath = Assets.Paths.LIKED_VIDEOS_SELECTED
         )
     ),
     NavRailItem(
-        label = "Playlists",
+        label = NavRailItem.ParentElement.PLAYLISTS.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.PLAYLISTS,
             activeIconPath = Assets.Paths.PLAYLISTS_SELECTED,
@@ -430,7 +416,7 @@ private val SampleNavRailItems = listOf(
         ),
     ),
     NavRailItem(
-        label = "Collections",
+        label = NavRailItem.ParentElement.COLLECTIONS.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.COLLECTIONS,
             activeIconPath = Assets.Paths.COLLECTIONS_SELECTED,
@@ -443,7 +429,7 @@ private val SampleNavRailItems = listOf(
         ),
     ),
     NavRailItem(
-        label = "Subscriptions",
+        label = NavRailItem.ParentElement.SUBSCRIPTIONS.label,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.SUBSCRIPTIONS,
             activeIconPath = Assets.Paths.SUBSCRIPTIONS_SELECTED,

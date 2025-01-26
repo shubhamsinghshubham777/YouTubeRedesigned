@@ -11,6 +11,7 @@ import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.PersonalisedFeedDialog
+import com.google.youtube.models.NavRailItem
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HistoryPage
 import com.google.youtube.pages.HomePage
@@ -57,15 +58,15 @@ fun MainLayout() {
         derivedStateOf { breakpoint isGreaterThan Breakpoint.SM }
     }
     val horizontalPaddingState = animateFloatAsState(if (isLargeBreakpoint) 24f else 12f)
-    val selectedParentChildIndicesState = remember {
-        mutableStateOf<Pair<Int?, Int?>>(0 to null)
+    val selectedParentAndChildState = remember {
+        mutableStateOf<Pair<NavRailItem.ParentElement?, String?>>(NavRailItem.ParentElement.HOME to null)
     }
     val isNavRailExpandedState = remember(isLargeBreakpoint) { mutableStateOf(isLargeBreakpoint) }
     val navRailWidthPx by animateFloatAsState(if (isNavRailExpandedState.value) 250f else 50f)
     val showPersonalisedFeedDialogState = remember { mutableStateOf(false) }
 
     // Auto close NavRail on item selection for smaller devices
-    LaunchedEffect(selectedParentChildIndicesState.value) {
+    LaunchedEffect(selectedParentAndChildState.value) {
         if (!isLargeBreakpoint) isNavRailExpandedState.value = false
     }
 
@@ -81,7 +82,9 @@ fun MainLayout() {
                 onDrawerButtonClick = {
                     isNavRailExpandedState.value = !isNavRailExpandedState.value
                 },
-                onLogoClick = { selectedParentChildIndicesState.value = 0 to null },
+                onLogoClick = {
+                    selectedParentAndChildState.value = NavRailItem.ParentElement.HOME to null
+                },
             )
             Row(modifier = Modifier.fillMaxSize()) {
                 NavRail(
@@ -93,7 +96,7 @@ fun MainLayout() {
                         .margin(leftRight = horizontalPaddingState.value.px)
                         .overflow(overflowX = Overflow.Hidden, overflowY = Overflow.Scroll)
                         .hideScrollBar(),
-                    selectedParentChildIndicesState = selectedParentChildIndicesState,
+                    selectedParentAndChildState = selectedParentAndChildState,
                     isExpandedState = isNavRailExpandedState,
                 )
                 Box(
@@ -103,7 +106,7 @@ fun MainLayout() {
                         .overflow { x(Overflow.Scroll) }
                 ) {
                     Crossfade(
-                        targetState = selectedParentChildIndicesState.value,
+                        targetState = selectedParentAndChildState.value,
                         modifier = Modifier
                             .fillMaxWidth(100.percent - horizontalPaddingState.value.px)
                             .fillMaxHeight()
@@ -111,33 +114,35 @@ fun MainLayout() {
                             .padding(top = Constants.CONTENT_PADDING),
                         onStateChange = { window.scrollTo(0.0, 0.0) },
                     ) { animatedState ->
-                        when (animatedState.first) {
-                            0 -> HomePage(showPersonalisedFeedDialogState)
-                            1 -> ExplorePage(Modifier.padding(bottom = Constants.CONTENT_PADDING))
-                            2 -> ShortsPage(showPersonalisedFeedDialogState)
-                            3 -> TVModePage()
-                            4 -> HistoryPage()
-                            5 -> Text("Watch Later")
-                            6 -> Text("Liked Videos")
+                        animatedState.first?.let { element ->
+                            when (element) {
+                                NavRailItem.ParentElement.HOME ->
+                                    HomePage(showPersonalisedFeedDialogState)
 
-                            7 -> when (animatedState.second) {
-                                0 -> Text("Cool Stuff")
-                                1 -> Text("Redesigns")
-                                2 -> Text("Artistic")
-                                else -> Text("Playlists")
+                                NavRailItem.ParentElement.EXPLORE ->
+                                    ExplorePage(Modifier.padding(bottom = Constants.CONTENT_PADDING))
+
+                                NavRailItem.ParentElement.SHORTS ->
+                                    ShortsPage(showPersonalisedFeedDialogState)
+
+                                NavRailItem.ParentElement.TV_MODE -> TVModePage()
+                                NavRailItem.ParentElement.HISTORY -> HistoryPage()
+                                NavRailItem.ParentElement.WATCH_LATER -> Text("Watch Later")
+                                NavRailItem.ParentElement.LIKED_VIDEOS -> Text("Liked Videos")
+
+                                NavRailItem.ParentElement.PLAYLISTS -> Text(
+                                    animatedState.second
+                                        ?: NavRailItem.ParentElement.PLAYLISTS.label
+                                )
+
+                                NavRailItem.ParentElement.COLLECTIONS -> Text(
+                                    animatedState.second
+                                        ?: NavRailItem.ParentElement.COLLECTIONS.label
+                                )
+
+                                NavRailItem.ParentElement.SUBSCRIPTIONS ->
+                                    Text("Subscriptions " + animatedState.second)
                             }
-
-                            8 -> when (animatedState.second) {
-                                0 -> Text("Tech Reviews and Unboxings")
-                                1 -> Text("DIY & Crafting")
-                                2 -> Text("Gaming")
-                                3 -> Text("Cooking & Recipes")
-                                else -> Text("Collections")
-                            }
-
-                            else -> Text(
-                                "Subscriptions" + (animatedState.second?.toString() ?: "")
-                            )
                         }
                     }
                 }
