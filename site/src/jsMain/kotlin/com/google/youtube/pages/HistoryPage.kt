@@ -2,7 +2,6 @@ package com.google.youtube.pages
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,8 +51,6 @@ import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.borderRadius
 import org.jetbrains.compose.web.css.div
-import org.jetbrains.compose.web.css.minus
-import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.times
 import org.jetbrains.compose.web.css.unaryMinus
@@ -61,7 +58,7 @@ import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
-fun HistoryPage(horizontalPaddingState: State<Float>) {
+fun HistoryPage() {
     val breakpoint = rememberBreakpoint()
     val isLargeBreakpoint = remember(breakpoint) { breakpoint.isGreaterThan(Breakpoint.SM) }
 
@@ -71,7 +68,7 @@ fun HistoryPage(horizontalPaddingState: State<Float>) {
     val searchQueryState = remember { mutableStateOf("") }
     val animatedFilterPaddingFraction by animateFloatAsState(if (isLargeBreakpoint) 1f else 0.5f)
 
-    Column(modifier = Modifier.fillMaxWidth(100.percent - horizontalPaddingState.value.px)) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Box(modifier = Modifier.fontSize(20.px).fontWeight(FontWeight.Medium)) { Text("History") }
 
         // Divider

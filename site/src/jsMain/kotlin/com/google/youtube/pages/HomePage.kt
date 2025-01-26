@@ -2,7 +2,6 @@ package com.google.youtube.pages
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,16 +33,13 @@ import org.jetbrains.compose.web.css.fr
 import org.jetbrains.compose.web.css.px
 
 @Composable
-fun HomePage(
-    showPersonalisedFeedDialogState: MutableState<Boolean>,
-    horizontalPaddingState: State<Float>,
-) {
+fun HomePage(showPersonalisedFeedDialogState: MutableState<Boolean>) {
     Column(modifier = Modifier.fillMaxWidth()) {
         FilterRow(showPersonalisedFeedDialogState = showPersonalisedFeedDialogState)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 27.px, right = horizontalPaddingState.value.px, bottom = 27.px),
+                .padding(top = 27.px, bottom = 27.px),
         ) {
             MissedVideosContainer(Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT))
             MainVideosGrid()

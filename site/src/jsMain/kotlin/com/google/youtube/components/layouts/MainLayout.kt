@@ -98,40 +98,25 @@ fun MainLayout() {
                 )
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(
-                            100.percent - navRailWidthPx.px - horizontalPaddingState.value.px
-                        )
+                        .fillMaxWidth(100.percent - navRailWidthPx.px)
                         .fillMaxHeight()
                         .overflow { x(Overflow.Scroll) }
                 ) {
                     Crossfade(
                         targetState = selectedParentChildIndicesState.value,
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth(100.percent - horizontalPaddingState.value.px)
+                            .fillMaxHeight()
                             .minWidth(Constants.MOBILE_MAX_AVAILABLE_WIDTH.px)
                             .padding(top = Constants.CONTENT_PADDING),
                         onStateChange = { window.scrollTo(0.0, 0.0) },
                     ) { animatedState ->
                         when (animatedState.first) {
-                            0 -> HomePage(
-                                showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-                                horizontalPaddingState = horizontalPaddingState,
-                            )
-
-                            1 -> ExplorePage(
-                                modifier = Modifier.padding(
-                                    right = horizontalPaddingState.value.px,
-                                    bottom = Constants.CONTENT_PADDING
-                                )
-                            )
-
-                            2 -> ShortsPage(
-                                showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-                                horizontalPaddingState = horizontalPaddingState,
-                            )
-
-                            3 -> TVModePage(horizontalPaddingState = horizontalPaddingState)
-                            4 -> HistoryPage(horizontalPaddingState = horizontalPaddingState)
+                            0 -> HomePage(showPersonalisedFeedDialogState)
+                            1 -> ExplorePage(Modifier.padding(bottom = Constants.CONTENT_PADDING))
+                            2 -> ShortsPage(showPersonalisedFeedDialogState)
+                            3 -> TVModePage()
+                            4 -> HistoryPage()
                             5 -> Text("Watch Later")
                             6 -> Text("Liked Videos")
 

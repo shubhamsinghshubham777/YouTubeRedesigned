@@ -79,10 +79,7 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
-fun ShortsPage(
-    showPersonalisedFeedDialogState: MutableState<Boolean>,
-    horizontalPaddingState: State<Float>,
-) {
+fun ShortsPage(showPersonalisedFeedDialogState: MutableState<Boolean>) {
     val isShortWindowState = rememberIsShortWindowAsState()
     val selectedShortIdState = remember { mutableStateOf<String?>(null) }
     Crossfade(
@@ -98,7 +95,6 @@ fun ShortsPage(
             )
         } ?: ShortsGrid(
             showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-            horizontalPaddingState = horizontalPaddingState,
             selectedShortIdState = selectedShortIdState
         )
     }
@@ -107,7 +103,6 @@ fun ShortsPage(
 @Composable
 private fun ShortsGrid(
     showPersonalisedFeedDialogState: MutableState<Boolean>,
-    horizontalPaddingState: State<Float>,
     selectedShortIdState: MutableState<String?>,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -115,22 +110,14 @@ private fun ShortsGrid(
         BasicGrid(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    top = 27.px,
-                    right = horizontalPaddingState.value.px,
-                    bottom = 27.px,
-                ),
+                .padding(top = 27.px, bottom = 27.px),
             gridGap = GridGap(x = 16.px, y = 40.px),
-            columnBuilder = {
-                minmax(ShortThumbnailCardDefaults.SIZE.width.px, 1.fr)
-            },
+            columnBuilder = { minmax(ShortThumbnailCardDefaults.SIZE.width.px, 1.fr) },
             justifyItems = JustifyItems.Center,
         ) {
             repeat(20) { index ->
                 ShortThumbnailCard(
-                    modifier = Modifier.onClick {
-                        selectedShortIdState.value = index.toString()
-                    },
+                    modifier = Modifier.onClick { selectedShortIdState.value = index.toString() },
                     thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                     channelName = "DailyDoseOfInternet",
                     title = "Put this cat in jail",

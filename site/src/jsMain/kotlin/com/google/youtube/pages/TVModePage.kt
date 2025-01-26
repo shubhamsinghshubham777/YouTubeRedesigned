@@ -2,7 +2,6 @@ package com.google.youtube.pages
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,10 +54,7 @@ import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.Element
 
 @Composable
-fun TVModePage(
-    horizontalPaddingState: State<Float>,
-    borderRadius: CSSLengthOrPercentageNumericValue = 14.px,
-) {
+fun TVModePage(borderRadius: CSSLengthOrPercentageNumericValue = 14.px) {
     val breakpoint = rememberBreakpoint()
     val animatedContentPaddingFactor by animateFloatAsState(
         if (breakpoint.isGreaterThan(Breakpoint.SM)) 1f else 0.5f
@@ -71,12 +67,7 @@ fun TVModePage(
     var titleRef by remember { mutableStateOf<Element?>(null) }
     val mouseEventStateForTitle by rememberMouseEventAsState(titleRef)
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(95.percent)
-            .padding(right = horizontalPaddingState.value.px)
-    ) {
+    Box(modifier = Modifier.fillMaxWidth().height(95.percent)) {
         Image(
             modifier = Modifier.borderRadius(borderRadius).fillMaxSize().objectFit(ObjectFit.Cover),
             src = Assets.Thumbnails.THUMBNAIL_1,
