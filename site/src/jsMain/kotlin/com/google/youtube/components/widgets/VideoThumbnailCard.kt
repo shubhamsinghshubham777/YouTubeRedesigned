@@ -39,6 +39,8 @@ fun VideoThumbnailCard(
     thumbnailAsset: String,
     channelAsset: String,
     title: String,
+    channelName: String,
+    isVerified: Boolean,
     views: String,
     daysSinceUploaded: String,
     duration: String,
@@ -103,8 +105,8 @@ fun VideoThumbnailCard(
                     horizontalArrangement = Arrangement.spacedBy(8.px),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Juxtopposed")
-                    Image(Assets.Icons.VERIFIED_BADGE)
+                    Text(channelName)
+                    if (isVerified) Image(Assets.Icons.VERIFIED_BADGE)
                 }
                 Row { Text("$views views • $daysSinceUploaded ago") }
             }

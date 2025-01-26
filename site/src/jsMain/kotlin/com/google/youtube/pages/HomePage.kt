@@ -17,6 +17,7 @@ import com.google.youtube.components.widgets.VideoThumbnailCard
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.BasicGrid
+import com.google.youtube.utils.Constants
 import com.google.youtube.utils.GridGap
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.isGreaterThan
@@ -75,7 +76,7 @@ private fun ShortSuggestions(modifier: Modifier = Modifier) {
                     channelName = "DailyDoseOfInternet",
                     title = "Put this cat in jail",
                     views = "10M",
-                    daysSinceUploaded = "3weeks"
+                    daysSinceUploaded = "3 weeks"
                 )
             }
         }
@@ -100,8 +101,10 @@ private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
                     thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                     channelAsset = Assets.Icons.USER_AVATAR,
                     title = "How Websites Learned to Fit Everywhere",
+                    channelName = "Juxtopposed",
+                    isVerified = true,
                     views = "150K",
-                    daysSinceUploaded = "4 months ago",
+                    daysSinceUploaded = "4 months",
                     duration = "12:07",
                     size = SUGGESTION_THUMBNAIL_SIZE
                 )
@@ -117,7 +120,8 @@ private fun MainVideosGrid(modifier: Modifier = Modifier) {
         modifier = Modifier.fillMaxWidth().display(DisplayStyle.Grid).then(modifier),
         columnBuilder = {
             minmax(
-                min = if (breakpoint.isGreaterThan(Breakpoint.MD)) 380.px else 320.px,
+                min = if (breakpoint.isGreaterThan(Breakpoint.MD)) 380.px
+                else Constants.MOBILE_MAX_AVAILABLE_WIDTH.px,
                 max = 1.fr
             )
         },
@@ -129,8 +133,10 @@ private fun MainVideosGrid(modifier: Modifier = Modifier) {
                 thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                 channelAsset = Assets.Icons.USER_AVATAR,
                 title = "How Websites Learned to Fit Everywhere",
+                channelName = "Juxtopposed",
+                isVerified = true,
                 views = "150K",
-                daysSinceUploaded = "4 months ago",
+                daysSinceUploaded = "4 months",
                 duration = "12:07",
             )
         }

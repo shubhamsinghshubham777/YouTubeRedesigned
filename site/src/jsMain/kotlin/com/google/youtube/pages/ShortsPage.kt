@@ -135,7 +135,7 @@ private fun ShortsGrid(
                     channelName = "DailyDoseOfInternet",
                     title = "Put this cat in jail",
                     views = "10M",
-                    daysSinceUploaded = "3weeks"
+                    daysSinceUploaded = "3 weeks"
                 )
             }
         }

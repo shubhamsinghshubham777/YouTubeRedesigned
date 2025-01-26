@@ -1,24 +1,16 @@
 package com.google.youtube.components.widgets
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import com.google.youtube.components.widgets.context_menu.TextField
 import com.google.youtube.models.TagData
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
-import com.google.youtube.utils.toComposeColor
-import com.google.youtube.utils.toKobwebColor
-import com.varabyte.kobweb.compose.css.Background
 import com.varabyte.kobweb.compose.css.Overflow
-import com.varabyte.kobweb.compose.css.background
-import com.varabyte.kobweb.compose.css.color
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -42,22 +34,13 @@ import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
-import org.jetbrains.compose.web.attributes.placeholder
 import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.FlexWrap
-import org.jetbrains.compose.web.css.LineStyle
-import org.jetbrains.compose.web.css.border
-import org.jetbrains.compose.web.css.borderRadius
-import org.jetbrains.compose.web.css.outline
-import org.jetbrains.compose.web.css.padding
-import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.css.vw
-import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
-import org.jetbrains.compose.web.dom.TextInput
 
 @Composable
 fun PersonalisedFeedDialog(
@@ -172,7 +155,7 @@ private fun Content(
             ) { Text(message) }
         }
 
-        TextField(textState = searchQueryState)
+        TextField(textState = searchQueryState, hintText = "Search for tags...")
 
         Div(Modifier.display(DisplayStyle.Flex).flexWrap(FlexWrap.Wrap).gap(8.px).toAttrs()) {
             allTags
@@ -200,28 +183,5 @@ private fun Content(
                     }
                 }
         }
-    }
-}
-
-@Composable
-private fun TextField(textState: MutableState<String>) {
-    var isFocused by remember { mutableStateOf(false) }
-    val animatedBorderColor by animateColorAsState(
-        Styles.WHITE.copyf(alpha = if (isFocused) 1f else 0.15f).toComposeColor()
-    )
-    TextInput(value = textState.value) {
-        onInput { event -> textState.value = event.value }
-        onFocus { isFocused = true }
-        onBlur { isFocused = false }
-        style {
-            background(Background.None)
-            border(1.px, LineStyle.Solid, animatedBorderColor.toKobwebColor())
-            borderRadius(8.px)
-            color(Styles.WHITE.toString())
-            outline("none")
-            padding(16.px)
-            width(100.percent)
-        }
-        placeholder("Search for tags...")
     }
 }

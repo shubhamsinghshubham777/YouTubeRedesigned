@@ -12,6 +12,7 @@ import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.PersonalisedFeedDialog
 import com.google.youtube.pages.ExplorePage
+import com.google.youtube.pages.HistoryPage
 import com.google.youtube.pages.HomePage
 import com.google.youtube.pages.ShortsPage
 import com.google.youtube.pages.TVModePage
@@ -107,7 +108,7 @@ fun MainLayout() {
                         targetState = selectedParentChildIndicesState.value,
                         modifier = Modifier
                             .fillMaxSize()
-                            .minWidth(320.px)
+                            .minWidth(Constants.MOBILE_MAX_AVAILABLE_WIDTH.px)
                             .padding(top = Constants.CONTENT_PADDING),
                         onStateChange = { window.scrollTo(0.0, 0.0) },
                     ) { animatedState ->
@@ -130,7 +131,7 @@ fun MainLayout() {
                             )
 
                             3 -> TVModePage(horizontalPaddingState = horizontalPaddingState)
-                            4 -> Text("History")
+                            4 -> HistoryPage(horizontalPaddingState = horizontalPaddingState)
                             5 -> Text("Watch Later")
                             6 -> Text("Liked Videos")
 

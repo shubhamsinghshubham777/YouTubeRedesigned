@@ -20,6 +20,7 @@ import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.dom.ref
+import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.foundation.layout.RowScope
@@ -36,8 +37,8 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
+import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.padding
-import com.varabyte.kobweb.compose.ui.modifiers.translateY
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.theme.shapes.Rect
@@ -65,6 +66,7 @@ fun AssetSvgButton(
     endIconPath: String? = null,
     iconSize: CSSLengthOrPercentageValue = if (type == AssetSvgButtonType.Button) 22.px else 24.px,
     text: String? = null,
+    secondaryText: String? = null,
     isDense: Boolean = false,
     onEndIconClick: (() -> Unit)? = null,
     content: (@Composable RowScope.() -> Unit)? = null,
@@ -154,7 +156,10 @@ fun AssetSvgButton(
                                 else -> 24f
                             }
 
-                            else -> if (endIconPath != null || content != null) 12f else 16f
+                            else -> {
+                                if (endIconPath != null || content != null || text == null) 12f
+                                else 16f
+                            }
                         }
                     ).value.px,
                 )
@@ -188,15 +193,20 @@ fun AssetSvgButton(
             content?.invoke(this)
 
             text?.let { safeText ->
-                Box(
+                Row(
                     modifier = Modifier
-                        .translateY(1.px)
                         .thenIf(
                             updatedButtonType != AssetSvgButtonType.Button,
                             Modifier.padding(topBottom = if (isDense) 0.px else 4.px),
                         )
-                        .fontSize(if (isDense) 14.px else 16.px)
-                ) { Text(safeText) }
+                        .fontSize(if (isDense) 14.px else 16.px),
+                    horizontalArrangement = Arrangement.spacedBy(4.px)
+                ) {
+                    secondaryText?.let { safeText ->
+                        Box(modifier = Modifier.opacity(0.6f)) { Text(safeText) }
+                    }
+                    Box { Text(safeText) }
+                }
             }
 
             AnimatedVisibility(
