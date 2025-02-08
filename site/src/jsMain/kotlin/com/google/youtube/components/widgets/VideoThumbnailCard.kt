@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntSize
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Styles
-import com.varabyte.kobweb.compose.css.Cursor
+import com.google.youtube.utils.clickable
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
@@ -15,7 +15,6 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.color
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
@@ -36,6 +35,7 @@ import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun VideoThumbnailCard(
+    onClick: (() -> Unit)? = null,
     thumbnailAsset: String,
     channelAsset: String,
     title: String,
@@ -50,8 +50,8 @@ fun VideoThumbnailCard(
 ) {
     Column(
         modifier = Modifier
+            .clickable(onClick)
             .clip(shape)
-            .cursor(Cursor.Pointer)
             .thenIf(size != null) { Modifier.maxWidth(size!!.width.px) }
             .userSelect(UserSelect.None)
             .then(modifier),

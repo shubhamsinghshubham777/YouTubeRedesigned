@@ -74,6 +74,7 @@ object Assets {
         const val MAGIC_FEED = "icons/ic_magic_feed.svg"
         const val MAIL = "icons/ic_mail.svg"
         const val MENU = "icons/ic_menu.svg"
+        const val MORE_HORIZONTAL = "icons/ic_more_horizontal.svg"
         const val MORE = "icons/ic_more.svg"
         const val MUSIC = "icons/ic_music.svg"
         const val MUSIC_SELECTED = "icons/ic_music_selected.svg"

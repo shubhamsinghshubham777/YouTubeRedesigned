@@ -17,6 +17,7 @@ import com.google.youtube.pages.HistoryPage
 import com.google.youtube.pages.HomePage
 import com.google.youtube.pages.ShortsPage
 import com.google.youtube.pages.TVModePage
+import com.google.youtube.pages.VideoPlayerPage
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.Dialog
@@ -61,9 +62,10 @@ fun MainLayout() {
     val selectedParentAndChildState = remember {
         mutableStateOf<Pair<NavRailItem.ParentElement?, String?>>(NavRailItem.ParentElement.HOME to null)
     }
-    val isNavRailExpandedState = remember(isLargeBreakpoint) { mutableStateOf(isLargeBreakpoint) }
+    val isNavRailExpandedState = remember { mutableStateOf(false) }
     val navRailWidthPx by animateFloatAsState(if (isNavRailExpandedState.value) 250f else 50f)
     val showPersonalisedFeedDialogState = remember { mutableStateOf(false) }
+    val selectedVideoIdState = remember { mutableStateOf<String?>("0") }
 
     // Auto close NavRail on item selection for smaller devices
     LaunchedEffect(selectedParentAndChildState.value) {
@@ -84,6 +86,7 @@ fun MainLayout() {
                 },
                 onLogoClick = {
                     selectedParentAndChildState.value = NavRailItem.ParentElement.HOME to null
+                    selectedVideoIdState.value = null
                 },
             )
             Row(modifier = Modifier.fillMaxSize()) {
@@ -98,6 +101,7 @@ fun MainLayout() {
                         .hideScrollBar(),
                     selectedParentAndChildState = selectedParentAndChildState,
                     isExpandedState = isNavRailExpandedState,
+                    selectedVideoIdState = selectedVideoIdState,
                 )
                 Box(
                     modifier = Modifier
@@ -106,42 +110,57 @@ fun MainLayout() {
                         .overflow { x(Overflow.Scroll) }
                 ) {
                     Crossfade(
-                        targetState = selectedParentAndChildState.value,
+                        targetState = selectedVideoIdState.value,
                         modifier = Modifier
                             .fillMaxWidth(100.percent - horizontalPaddingState.value.px)
                             .fillMaxHeight()
                             .minWidth(Constants.MOBILE_MAX_AVAILABLE_WIDTH.px)
                             .padding(top = Constants.CONTENT_PADDING),
                         onStateChange = { window.scrollTo(0.0, 0.0) },
-                    ) { animatedState ->
-                        animatedState.first?.let { element ->
-                            when (element) {
-                                NavRailItem.ParentElement.HOME ->
-                                    HomePage(showPersonalisedFeedDialogState)
+                        animateTranslationY = false,
+                    ) { animatedSelectedVideoId ->
+                        animatedSelectedVideoId?.let { videoId ->
+                            VideoPlayerPage(videoId = videoId)
+                        } ?: run {
+                            Crossfade(
+                                targetState = selectedParentAndChildState.value,
+                                modifier = Modifier.fillMaxSize(),
+                                onStateChange = { window.scrollTo(0.0, 0.0) },
+                            ) { animatedState ->
+                                animatedState.first?.let { element ->
+                                    when (element) {
+                                        NavRailItem.ParentElement.HOME -> HomePage(
+                                            showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
+                                            selectedVideoIdState = selectedVideoIdState,
+                                        )
 
-                                NavRailItem.ParentElement.EXPLORE ->
-                                    ExplorePage(Modifier.padding(bottom = Constants.CONTENT_PADDING))
+                                        NavRailItem.ParentElement.EXPLORE -> ExplorePage(
+                                            Modifier.padding(bottom = Constants.CONTENT_PADDING)
+                                        )
 
-                                NavRailItem.ParentElement.SHORTS ->
-                                    ShortsPage(showPersonalisedFeedDialogState)
+                                        NavRailItem.ParentElement.SHORTS -> ShortsPage(
+                                            showPersonalisedFeedDialogState
+                                        )
 
-                                NavRailItem.ParentElement.TV_MODE -> TVModePage()
-                                NavRailItem.ParentElement.HISTORY -> HistoryPage()
-                                NavRailItem.ParentElement.WATCH_LATER -> Text("Watch Later")
-                                NavRailItem.ParentElement.LIKED_VIDEOS -> Text("Liked Videos")
+                                        NavRailItem.ParentElement.TV_MODE -> TVModePage()
+                                        NavRailItem.ParentElement.HISTORY -> HistoryPage()
+                                        NavRailItem.ParentElement.WATCH_LATER -> Text("Watch Later")
+                                        NavRailItem.ParentElement.LIKED_VIDEOS -> Text("Liked Videos")
 
-                                NavRailItem.ParentElement.PLAYLISTS -> Text(
-                                    animatedState.second
-                                        ?: NavRailItem.ParentElement.PLAYLISTS.label
-                                )
+                                        NavRailItem.ParentElement.PLAYLISTS -> Text(
+                                            animatedState.second
+                                                ?: NavRailItem.ParentElement.PLAYLISTS.label
+                                        )
 
-                                NavRailItem.ParentElement.COLLECTIONS -> Text(
-                                    animatedState.second
-                                        ?: NavRailItem.ParentElement.COLLECTIONS.label
-                                )
+                                        NavRailItem.ParentElement.COLLECTIONS -> Text(
+                                            animatedState.second
+                                                ?: NavRailItem.ParentElement.COLLECTIONS.label
+                                        )
 
-                                NavRailItem.ParentElement.SUBSCRIPTIONS ->
-                                    Text("Subscriptions " + animatedState.second)
+                                        NavRailItem.ParentElement.SUBSCRIPTIONS ->
+                                            Text("Subscriptions " + animatedState.second)
+                                    }
+                                }
                             }
                         }
                     }

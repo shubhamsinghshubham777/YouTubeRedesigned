@@ -17,6 +17,7 @@ object Styles {
     val PRESS_HIGHLIGHT: Color.Rgb = Color.rgba(255, 255, 255, 0.24f)
     val OFF_WHITE: Color.Rgb = Color.rgb(241, 241, 241)
     val PINK: Color.Rgb = Color.rgb(245, 0, 87)
+    val PINK_DARKENED: Color.Rgb = Color.rgb(204, 40, 73)
     val RED: Color.Rgb = Color.rgb(255, 0, 51)
     val RED_BUTTON_BACKGROUND: Color.Rgb = Color.rgb(255, 50, 91)
     val SWITCH_BACKGROUND_SELECTED: Color.Rgb = Color.rgb(204, 39, 73)

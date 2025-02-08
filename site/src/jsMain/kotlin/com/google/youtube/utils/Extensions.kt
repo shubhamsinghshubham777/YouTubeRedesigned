@@ -1,5 +1,6 @@
 package com.google.youtube.utils
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -11,10 +12,12 @@ import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextOverflow
+import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.css.WordBreak
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.attrsModifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
+import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
@@ -23,10 +26,13 @@ import com.varabyte.kobweb.compose.ui.modifiers.onScroll
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.tabIndex
 import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
+import com.varabyte.kobweb.compose.ui.modifiers.userSelect
 import com.varabyte.kobweb.compose.ui.modifiers.wordBreak
 import com.varabyte.kobweb.compose.ui.styleModifier
+import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.compose.ui.thenIfNotNull
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
+import com.varabyte.kobweb.silk.theme.breakpoint.breakpointFloor
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.px
@@ -34,8 +40,19 @@ import org.w3c.dom.DOMRect
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
+import org.w3c.dom.events.EventListener
 import org.w3c.dom.events.MouseEvent
 import androidx.compose.ui.graphics.Color as ComposeColor
+
+@Composable
+fun rememberBreakpointAsState() = produceState(window.breakpointFloor) {
+    val resizeListener = EventListener { value = window.breakpointFloor }
+
+    window.addEventListener("resize", resizeListener)
+    awaitDispose {
+        window.removeEventListener("resize", resizeListener)
+    }
+}
 
 fun ComposeColor.toKobwebColor(): Color = Color.argb(this.toArgb())
 
@@ -65,6 +82,17 @@ fun rememberMouseEventAsState(element: Element?): State<MouseEventState> {
         }
     }
 }
+
+// TODO: Use it throughout the codebase
+@Composable
+fun State<MouseEventState>.animatedColor(initialColor: Color = Colors.Transparent) =
+    animateColorAsState(
+        when (value) {
+            MouseEventState.Pressed -> Styles.PRESS_HIGHLIGHT
+            MouseEventState.Hovered -> Styles.HOVER_HIGHLIGHT
+            MouseEventState.Released -> initialColor.toRgb()
+        }.toComposeColor()
+    )
 
 fun Element.onMouseEvent(
     onHoveredAndPressed: (MouseEvent) -> Unit,
@@ -139,7 +167,7 @@ fun Modifier.hideScrollBar() = then(
     Modifier.styleModifier { property("scrollbar-width", "none") }
 )
 
-fun Modifier.limitTextWithEllipsis(maxLines: Int = 1) = then(
+fun Modifier.limitTextWithEllipsis(maxLines: Int = 1, breakLetter: Boolean = true) = then(
     Modifier
         .attrsModifier {
             style {
@@ -150,7 +178,8 @@ fun Modifier.limitTextWithEllipsis(maxLines: Int = 1) = then(
         }
         .overflow(Overflow.Hidden)
         .textOverflow(TextOverflow.Ellipsis)
-        .wordBreak(WordBreak.BreakAll)
+        // TODO: Check if this can be removed for a better experience
+        .thenIf(breakLetter) { Modifier.wordBreak(WordBreak.BreakAll) }
 )
 
 fun DOMRect.toComposeRect() = Rect(
@@ -167,7 +196,7 @@ fun Modifier.gridGap(
 
 fun Modifier.noShrink() = then(Modifier.flexShrink(0))
 
-fun Modifier.clickable(onClick: (() -> Unit)? = null) = then(
+fun Modifier.clickable(onClick: (() -> Unit)? = null) = thenIf(onClick != null) {
     Modifier
         .cursor(Cursor.Pointer)
         .onKeyUp { event -> if ((event.key == "Enter" || event.key == " ") && onClick != null) onClick.invoke() }
@@ -178,7 +207,24 @@ fun Modifier.clickable(onClick: (() -> Unit)? = null) = then(
                 safeOnClick()
             }
         }
-)
+        .userSelect(UserSelect.None)
+}
+
+@Composable
+fun rememberWindowWidthAsState(): State<Int> = produceState(window.innerWidth) {
+    val observer = ResizeObserver { entries ->
+        entries.firstOrNull()?.let { entry ->
+            value = entry.contentRect.width.toInt()
+        }
+    }
+
+    document.documentElement?.let(observer::observe)
+
+    awaitDispose {
+        observer.disconnect()
+        document.documentElement?.let(observer::unobserve)
+    }
+}
 
 @Composable
 fun rememberIsShortWindowAsState(threshold: Int = 650): State<Boolean> {
@@ -194,6 +240,29 @@ fun rememberIsShortWindowAsState(threshold: Int = 650): State<Boolean> {
         awaitDispose {
             observer.disconnect()
             document.documentElement?.let(observer::unobserve)
+        }
+    }
+}
+
+@Composable
+fun rememberElementWidthAsState(element: Element?) = produceState<Double?>(
+    initialValue = null,
+    key1 = element
+) {
+    value = element?.getBoundingClientRect()?.width
+
+    val observer = ResizeObserver { entries ->
+        entries.firstOrNull()?.let { entry -> value = entry.contentRect.width }
+    }
+
+    element?.let(observer::observe)
+
+    awaitDispose {
+        element?.let { e ->
+            with(observer) {
+                disconnect()
+                unobserve(e)
+            }
         }
     }
 }

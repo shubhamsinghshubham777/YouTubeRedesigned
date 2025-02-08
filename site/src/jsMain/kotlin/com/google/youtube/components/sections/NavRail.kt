@@ -76,6 +76,7 @@ fun NavRail(
     selectedParentAndChildState: MutableState<Pair<NavRailItem.ParentElement?, String?>>,
     isExpandedState: State<Boolean>,
     items: List<NavRailItem> = SampleNavRailItems,
+    selectedVideoIdState: MutableState<String?>,
 ) {
     var hoveredElementRef by remember { mutableStateOf<Element?>(null) }
     var hoveredElementIndexPair: Pair<NavRailItem.ParentElement?, String?> by remember {
@@ -103,6 +104,8 @@ fun NavRail(
                     onClick = {
                         selectedParentAndChildState.value =
                             NavRailItem.ParentElement.find(parentItem.label) to null
+
+                        selectedVideoIdState.value = null
                     }
                 )
 
@@ -137,6 +140,8 @@ fun NavRail(
                                     onClick = {
                                         selectedParentAndChildState.value =
                                             NavRailItem.ParentElement.find(parentItem.label) to childItem.label
+
+                                        selectedVideoIdState.value = null
                                     }
                                 )
                             }

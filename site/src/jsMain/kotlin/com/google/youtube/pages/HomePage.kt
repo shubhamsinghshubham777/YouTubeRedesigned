@@ -33,7 +33,10 @@ import org.jetbrains.compose.web.css.fr
 import org.jetbrains.compose.web.css.px
 
 @Composable
-fun HomePage(showPersonalisedFeedDialogState: MutableState<Boolean>) {
+fun HomePage(
+    showPersonalisedFeedDialogState: MutableState<Boolean>,
+    selectedVideoIdState: MutableState<String?>,
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         FilterRow(showPersonalisedFeedDialogState = showPersonalisedFeedDialogState)
         Column(
@@ -42,7 +45,7 @@ fun HomePage(showPersonalisedFeedDialogState: MutableState<Boolean>) {
                 .padding(top = 27.px, bottom = 27.px),
         ) {
             MissedVideosContainer(Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT))
-            MainVideosGrid()
+            MainVideosGrid(selectedVideoIdState = selectedVideoIdState)
             RecentWatchSuggestions(Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT))
             ShortSuggestions()
         }
@@ -110,7 +113,10 @@ private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun MainVideosGrid(modifier: Modifier = Modifier) {
+private fun MainVideosGrid(
+    modifier: Modifier = Modifier,
+    selectedVideoIdState: MutableState<String?>,
+) {
     val breakpoint = rememberBreakpoint()
     BasicGrid(
         modifier = Modifier.fillMaxWidth().display(DisplayStyle.Grid).then(modifier),
@@ -123,8 +129,12 @@ private fun MainVideosGrid(modifier: Modifier = Modifier) {
         },
         gridGap = GridGap(20.px)
     ) {
-        repeat(20) {
+        repeat(20) { index ->
             VideoThumbnailCard(
+                onClick = {
+                    // TODO: Use real data here
+                    selectedVideoIdState.value = index.toString()
+                },
                 modifier = Modifier.margin(bottom = 45.px),
                 thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                 channelAsset = Assets.Icons.USER_AVATAR,
