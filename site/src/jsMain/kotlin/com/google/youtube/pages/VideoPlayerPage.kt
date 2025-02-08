@@ -14,7 +14,9 @@ import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.SegmentedButton
+import com.google.youtube.components.widgets.comments.CommentsSection
 import com.google.youtube.models.VideoThumbnailDetails
+import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.MouseEventState
@@ -34,6 +36,7 @@ import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.css.PointerEvents
 import com.varabyte.kobweb.compose.css.TextDecorationLine
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.css.WhiteSpace
@@ -65,6 +68,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.objectFit
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
+import com.varabyte.kobweb.compose.ui.modifiers.pointerEvents
 import com.varabyte.kobweb.compose.ui.modifiers.rotate
 import com.varabyte.kobweb.compose.ui.modifiers.rowGap
 import com.varabyte.kobweb.compose.ui.modifiers.size
@@ -125,11 +129,12 @@ fun VideoPlayerPage(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterEnd) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopEnd) {
         Row(modifier = Modifier.fillMaxSize().then(modifier)) {
             PlayerAndComments(
                 modifier = Modifier.weight(1),
                 isTheaterModeOn = isTheaterModeOn,
+                videoId = videoId,
             )
             Box(modifier = Modifier.width(34.px * animatedFixedSegmentSizeFactor))
             if (animatedFixedSegmentSizeFactor != 0f) {
@@ -141,18 +146,29 @@ fun VideoPlayerPage(
             }
         }
         if (!isLargeBreakpoint) {
-            Column(
-                modifier = Modifier.zIndex(1),
-                verticalArrangement = Arrangement.spacedBy(16.px),
-                horizontalAlignment = Alignment.End,
+            AnimatedVisibility(
+                isVisible = isSegmentedContentVisible.value,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .thenIf(!isSegmentedContentVisible.value) { Modifier.pointerEvents(PointerEvents.None) }
+                    .zIndex(1),
+                skipDelay = true,
             ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Styles.SURFACE.copyf(alpha = 0.5f))
+                        .clickable(noPointer = true) { isSegmentedContentVisible.value = false }
+                )
+            }
+            Box(modifier = Modifier.zIndex(1), contentAlignment = Alignment.CenterEnd) {
                 Row(
                     modifier = Modifier
                         .background(Styles.SURFACE_ELEVATED)
                         .borderRadius(12.px)
                         .height(75.vh)
                         .margin(left = 12.px)
-                        .overflow(Overflow.Scroll)
+                        .overflow { y(Overflow.Scroll) }
                         .width(animatedFloatingSegmentWidth.px),
                     content = {
                         Box(
@@ -164,7 +180,9 @@ fun VideoPlayerPage(
                     },
                 )
                 AssetImageButton(
-                    modifier = Modifier.rotate(animatedSegmentOpenerRotation.deg),
+                    modifier = Modifier
+                        .rotate(animatedSegmentOpenerRotation.deg)
+                        .margin(right = 4.px),
                     asset = Assets.Icons.ARROW_LEFT,
                     containerColor = Styles.SURFACE_ELEVATED,
                     onClick = { isSegmentedContentVisible.value = !isSegmentedContentVisible.value }
@@ -295,6 +313,7 @@ private fun SuggestionSection(author: String, videos: List<VideoThumbnailDetails
 @Composable
 fun PlayerAndComments(
     modifier: Modifier = Modifier,
+    videoId: String,
     isTheaterModeOn: MutableState<Boolean>,
 ) {
     var isDescriptionBoxExpanded by remember { mutableStateOf(false) }
@@ -417,6 +436,11 @@ fun PlayerAndComments(
                 )
             }
         }
+
+        Box(modifier = Modifier.height(31.px))
+
+        // Comments
+        CommentsSection(modifier = Modifier.fillMaxWidth(), videoId = videoId)
     }
 }
 
@@ -465,7 +489,7 @@ private fun SegmentedLikeDislikeButtonItem(
         spacePx = 7,
         modifier = Modifier
             .background(animatedContainerColor.toKobwebColor())
-            .clickable(onClick)
+            .clickable(onClick = onClick)
             .then(modifier),
     ) {
         Image(src = iconAsset)

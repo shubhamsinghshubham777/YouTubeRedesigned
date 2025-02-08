@@ -224,7 +224,7 @@ private fun NavRailListItem(
             modifier = Modifier
                 .background(animatedBGColor.toKobwebColor())
                 .borderRadius(10.px)
-                .clickable(onClick)
+                .clickable(onClick = onClick)
                 .clip(Rect(10.px))
                 .color(Styles.OFF_WHITE)
                 .padding(12.px)

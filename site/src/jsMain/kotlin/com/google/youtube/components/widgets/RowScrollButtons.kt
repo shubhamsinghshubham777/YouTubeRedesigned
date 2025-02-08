@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.HorizontalScrollState
+import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
 import com.varabyte.kobweb.compose.css.PointerEvents
 import com.varabyte.kobweb.compose.css.functions.LinearGradient
@@ -37,6 +38,10 @@ fun BoxScope.RowScrollButtons(
     containerPadding: CSSSizeValue<CSSUnit.px>,
     scrollPixels: Double,
     centerVertically: Boolean = false,
+    buttonPadding: PaddingValues = PaddingValues(
+        leftRight = 22.px,
+        topBottom = if (centerVertically) 0.px else 96.px,
+    ),
     gradientColor: Color = Styles.MISSED_VIDEOS_CONTAINER,
 ) {
     repeat(2) { index ->
@@ -73,7 +78,12 @@ fun BoxScope.RowScrollButtons(
                 AssetImageButton(
                     if (startItem) Assets.Icons.ARROW_LEFT else Assets.Icons.ARROW_RIGHT,
                     modifier = Modifier
-                        .margin(leftRight = 22.px, top = if (centerVertically) 0.px else 96.px)
+                        .margin(
+                            left = buttonPadding.left,
+                            top = buttonPadding.top,
+                            right = buttonPadding.right,
+                            bottom = buttonPadding.bottom,
+                        )
                         .background(Styles.ARROW_BUTTON_CONTAINER)
                         .pointerEvents(PointerEvents.Auto)
                 ) {

@@ -29,6 +29,7 @@ import org.jetbrains.compose.web.css.px
 fun AnimatedVisibility(
     isVisible: Boolean,
     modifier: Modifier = Modifier,
+    skipDelay: Boolean = false,
     content: @Composable (isAnimating: State<Boolean>) -> Unit,
 ) {
     val animatedIsVisible = updateTransition(isVisible).currentState
@@ -66,10 +67,11 @@ fun AnimatedVisibility(
                     launch {
                         sizeAnimatable.animateTo(1f, animSpec) { currentContentSize = size * value }
                     }
-                    launch {
-                        delay(ANIM_DURATION_MILLIS)
+                    val animationJob = launch {
+                        if (!skipDelay) delay(ANIM_DURATION_MILLIS)
                         opacityAnimatable.animateTo(1f, animSpec) { currentOpacity = value }
-                    }.join()
+                    }
+                    if (!skipDelay) animationJob.join()
                     isAnimating.value = false
                 }
 
@@ -78,10 +80,11 @@ fun AnimatedVisibility(
                     launch {
                         opacityAnimatable.animateTo(0f, animSpec) { currentOpacity = value }
                     }
-                    launch {
-                        delay(ANIM_DURATION_MILLIS)
+                    val animationJob = launch {
+                        if (!skipDelay) delay(ANIM_DURATION_MILLIS)
                         sizeAnimatable.animateTo(0f, animSpec) { currentContentSize = size * value }
-                    }.join()
+                    }
+                    if (!skipDelay) animationJob.join()
                     isAnimating.value = false
                 }
             }

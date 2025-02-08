@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.google.youtube.utils.Assets
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.toComposeColor
@@ -67,7 +68,11 @@ fun TextField(
                 backgroundRepeat("no-repeat")
             }
             leadingAsset?.let(::backgroundImage)
-            if (showBorder) border(1.px, LineStyle.Solid, animatedBorderColor.toKobwebColor()) else border(0.px)
+            if (showBorder) border(
+                1.px,
+                LineStyle.Solid,
+                animatedBorderColor.toKobwebColor()
+            ) else border(0.px)
             borderRadius(8.px)
             color(Styles.WHITE.toString())
             flexShrink(0)
@@ -80,5 +85,24 @@ fun TextField(
             style()
         }
         placeholder(hintText)
+    }
+}
+
+@Composable
+fun RoundedSearchTextField(
+    textState: MutableState<String>,
+    hintText: String,
+    widthPx: Int = 314,
+) {
+    TextField(
+        containerColor = Styles.SURFACE_ELEVATED,
+        contentPadding = PaddingValues(left = 48.px, top = 10.px, right = 16.px, bottom = 10.px),
+        hintText = hintText,
+        leadingAsset = Assets.Icons.SEARCH_DIM,
+        textState = textState,
+        showBorder = false,
+    ) {
+        borderRadius(24.px)
+        width(widthPx.px)
     }
 }

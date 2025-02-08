@@ -163,7 +163,7 @@ fun AssetSvgButton(
                         }
                     ).value.px,
                 )
-                .clickable(onClick)
+                .clickable(onClick = onClick)
                 .color(animatedContentColor.toKobwebColor())
                 .fontSize(if (updatedButtonType == AssetSvgButtonType.Button) 16.px else 14.px)
                 .fontWeight(if (isDense) FontWeight.Normal else FontWeight.Medium)

@@ -50,7 +50,7 @@ fun VideoThumbnailCard(
 ) {
     Column(
         modifier = Modifier
-            .clickable(onClick)
+            .clickable(onClick = onClick)
             .clip(shape)
             .thenIf(size != null) { Modifier.maxWidth(size!!.width.px) }
             .userSelect(UserSelect.None)

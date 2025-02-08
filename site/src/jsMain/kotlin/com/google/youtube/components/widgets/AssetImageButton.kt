@@ -39,7 +39,7 @@ fun AssetImageButton(
         modifier = Modifier
             .thenIf(onClick != null) { Modifier.background(animatedBackgroundColor.toKobwebColor()) }
             .borderRadius(100.percent)
-            .clickable(onClick)
+            .clickable(onClick = onClick)
             .clip(Circle())
             .padding(8.px)
             .then(modifier),

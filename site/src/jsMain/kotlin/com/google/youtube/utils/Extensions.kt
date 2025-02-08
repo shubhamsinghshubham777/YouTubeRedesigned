@@ -145,6 +145,7 @@ fun Element.removeMouseEventListeners(callbacks: MouseEventCallbacks) {
 }
 
 infix fun Breakpoint.isGreaterThan(other: Breakpoint): Boolean = ordinal > other.ordinal
+infix fun Breakpoint.isSmallerThan(other: Breakpoint): Boolean = ordinal < other.ordinal
 
 fun Modifier.bindScrollState(state: MutableState<HorizontalScrollState>) = then(
     Modifier.onScroll { event ->
@@ -196,11 +197,14 @@ fun Modifier.gridGap(
 
 fun Modifier.noShrink() = then(Modifier.flexShrink(0))
 
-fun Modifier.clickable(onClick: (() -> Unit)? = null) = thenIf(onClick != null) {
+fun Modifier.clickable(
+    noPointer: Boolean = false,
+    onClick: (() -> Unit)? = null,
+) = thenIf(onClick != null) {
     Modifier
-        .cursor(Cursor.Pointer)
         .onKeyUp { event -> if ((event.key == "Enter" || event.key == " ") && onClick != null) onClick.invoke() }
         .tabIndex(0)
+        .thenIf(!noPointer) { Modifier.cursor(Cursor.Pointer) }
         .thenIfNotNull(onClick) { safeOnClick ->
             Modifier.onClick { event ->
                 event.stopPropagation()

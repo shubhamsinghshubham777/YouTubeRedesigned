@@ -1,21 +1,22 @@
 package com.google.youtube.utils
 
 import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
+import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.times
 
 fun PaddingValues(
-    left: CSSLengthOrPercentageNumericValue,
-    top: CSSLengthOrPercentageNumericValue,
-    right: CSSLengthOrPercentageNumericValue,
-    bottom: CSSLengthOrPercentageNumericValue,
+    left: CSSLengthOrPercentageNumericValue = 0.px,
+    top: CSSLengthOrPercentageNumericValue = 0.px,
+    right: CSSLengthOrPercentageNumericValue = 0.px,
+    bottom: CSSLengthOrPercentageNumericValue = 0.px,
 ): PaddingValues = PaddingValuesImpl(left = left, right = right, top = top, bottom = bottom)
 
-fun PaddingValues(all: CSSLengthOrPercentageNumericValue): PaddingValues =
+fun PaddingValues(all: CSSLengthOrPercentageNumericValue = 0.px): PaddingValues =
     PaddingValuesImpl(left = all, right = all, top = all, bottom = all)
 
 fun PaddingValues(
-    leftRight: CSSLengthOrPercentageNumericValue,
-    topBottom: CSSLengthOrPercentageNumericValue,
+    leftRight: CSSLengthOrPercentageNumericValue = 0.px,
+    topBottom: CSSLengthOrPercentageNumericValue = 0.px,
 ): PaddingValues = PaddingValuesImpl(
     left = leftRight,
     right = leftRight,

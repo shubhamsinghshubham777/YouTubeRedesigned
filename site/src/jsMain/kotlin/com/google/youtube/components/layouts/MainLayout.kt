@@ -107,7 +107,7 @@ fun MainLayout() {
                     modifier = Modifier
                         .fillMaxWidth(100.percent - navRailWidthPx.px)
                         .fillMaxHeight()
-                        .overflow { x(Overflow.Scroll) }
+                        .overflow(overflowX = Overflow.Scroll, overflowY = Overflow.Hidden)
                 ) {
                     Crossfade(
                         targetState = selectedVideoIdState.value,

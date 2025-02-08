@@ -156,7 +156,10 @@ fun TopBar(
             AssetImageButton(asset = Assets.Icons.MENU, onClick = onDrawerButtonClick)
             Box(modifier = Modifier.width(12.px))
             Image(
-                modifier = Modifier.height(44.px).padding(topBottom = 12.px).clickable(onLogoClick),
+                modifier = Modifier
+                    .height(44.px)
+                    .padding(topBottom = 12.px)
+                    .clickable(onClick = onLogoClick),
                 src = Assets.Icons.YOUTUBE_LOGO
             )
 

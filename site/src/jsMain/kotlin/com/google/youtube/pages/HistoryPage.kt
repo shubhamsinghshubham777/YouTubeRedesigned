@@ -10,13 +10,12 @@ import androidx.compose.ui.unit.IntSize
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.VideoThumbnailCard
-import com.google.youtube.components.widgets.context_menu.TextField
+import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.GridGap
-import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.isGreaterThan
@@ -49,12 +48,10 @@ import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.LineStyle
-import org.jetbrains.compose.web.css.borderRadius
 import org.jetbrains.compose.web.css.div
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.times
 import org.jetbrains.compose.web.css.unaryMinus
-import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
@@ -160,25 +157,8 @@ fun HistoryPage() {
                     }
                 }
             }
-
             Spacer()
-
-            TextField(
-                containerColor = Styles.SURFACE_ELEVATED,
-                contentPadding = PaddingValues(
-                    left = 48.px,
-                    top = 10.px,
-                    right = 16.px,
-                    bottom = 10.px,
-                ),
-                hintText = "Search history",
-                leadingAsset = Assets.Icons.SEARCH_DIM,
-                textState = searchQueryState,
-                showBorder = false,
-            ) {
-                borderRadius(24.px)
-                width(314.px)
-            }
+            RoundedSearchTextField(textState = searchQueryState, hintText = "Search history")
         }
 
         ThumbnailGrid(

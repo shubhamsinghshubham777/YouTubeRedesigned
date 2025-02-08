@@ -225,7 +225,7 @@ private fun CategoryTab(
     val animatedIndicatorHeight by animateFloatAsState(if (updatedIsSelected) 3f else 0f)
     Box(
         modifier = Modifier
-            .clickable(onClick)
+            .clickable(onClick = onClick)
             .height(48.px)
             .noShrink()
             .padding(leftRight = 16.px)
