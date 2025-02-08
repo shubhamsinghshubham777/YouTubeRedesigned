@@ -2,12 +2,10 @@ package com.google.youtube.pages
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -103,7 +101,7 @@ fun VideoPlayerPage(
     val isTheaterModeOn = remember { mutableStateOf(false) }
 
     // Segment States
-    val selectedSegmentIndexState = remember { mutableIntStateOf(0) }
+    val selectedSegment = remember { mutableStateOf(SegmentedContentType.Suggestions) }
     val isSegmentedContentVisible = remember { mutableStateOf(false) }
     val windowWidth by rememberWindowWidthAsState()
     val animatedFixedSegmentSizeFactor by animateFloatAsState(
@@ -122,10 +120,7 @@ fun VideoPlayerPage(
     )
     val segmentContent = remember {
         movableContentOf { modifier: Modifier ->
-            SegmentedContent(
-                modifier = modifier,
-                indexState = selectedSegmentIndexState
-            )
+            SegmentedContent(modifier = modifier, state = selectedSegment)
         }
     }
 
@@ -134,6 +129,7 @@ fun VideoPlayerPage(
             PlayerAndComments(
                 modifier = Modifier.weight(1),
                 isTheaterModeOn = isTheaterModeOn,
+                selectedSegment = selectedSegment,
                 videoId = videoId,
             )
             Box(modifier = Modifier.width(34.px * animatedFixedSegmentSizeFactor))
@@ -193,16 +189,24 @@ fun VideoPlayerPage(
 }
 
 @Composable
-private fun SegmentedContent(indexState: MutableIntState, modifier: Modifier = Modifier) {
+private fun SegmentedContent(
+    state: MutableState<SegmentedContentType>,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = Modifier.fillMaxSize().noShrink().then(modifier)) {
         SegmentedButton(
-            segments = listOf("Suggestions", "Transcripts", "Live Chat"),
-            selectedIndex = indexState.value,
-            onSegmentClick = { index -> indexState.value = index },
+            segments = SegmentedContentType.entries.map { e -> e.label },
+            selectedIndex = state.value.ordinal,
+            onSegmentClick = { index ->
+                state.value = SegmentedContentType.entries.elementAt(index)
+            },
         )
-        Crossfade(targetState = indexState.value) { animatedIndex ->
+        Crossfade(targetState = state.value) { animatedIndex ->
             when (animatedIndex) {
-                0 -> SpacedColumn(spacePx = 24, modifier = Modifier.padding(topBottom = 24.px)) {
+                SegmentedContentType.Suggestions -> SpacedColumn(
+                    spacePx = 24,
+                    modifier = Modifier.padding(topBottom = 24.px)
+                ) {
                     repeat(3) {
                         SuggestionSection(
                             author = "Juxtopossed",
@@ -222,12 +226,15 @@ private fun SegmentedContent(indexState: MutableIntState, modifier: Modifier = M
                     }
                 }
 
-                1 -> TextBox(
+                SegmentedContentType.Transcripts -> TextBox(
                     modifier = Modifier.fillMaxSize(),
                     text = "Your transcripts will show here"
                 )
 
-                else -> TextBox(modifier = Modifier.fillMaxSize(), text = "Live Chat")
+                SegmentedContentType.LiveChat -> TextBox(
+                    modifier = Modifier.fillMaxSize(),
+                    text = "Live Chat"
+                )
             }
         }
     }
@@ -311,9 +318,10 @@ private fun SuggestionSection(author: String, videos: List<VideoThumbnailDetails
 }
 
 @Composable
-fun PlayerAndComments(
+private fun PlayerAndComments(
     modifier: Modifier = Modifier,
     videoId: String,
+    selectedSegment: MutableState<SegmentedContentType>,
     isTheaterModeOn: MutableState<Boolean>,
 ) {
     var isDescriptionBoxExpanded by remember { mutableStateOf(false) }
@@ -321,7 +329,7 @@ fun PlayerAndComments(
     val descriptionToggleMouseEventState by rememberMouseEventAsState(descriptionToggleRef)
 
     Column(modifier = modifier) {
-        VideoPlayer(isTheaterModeOn = isTheaterModeOn)
+        VideoPlayer(isTheaterModeOn = isTheaterModeOn, selectedSegment = selectedSegment)
 
         Box(modifier = Modifier.height(13.px))
 
@@ -512,7 +520,10 @@ private fun IconLabel(
 }
 
 @Composable
-private fun VideoPlayer(isTheaterModeOn: MutableState<Boolean>) {
+private fun VideoPlayer(
+    isTheaterModeOn: MutableState<Boolean>,
+    selectedSegment: MutableState<SegmentedContentType>,
+) {
     var ref by remember { mutableStateOf<Element?>(null) }
     val breakpoint by rememberBreakpointAsState()
     val isLargeBreakpoint by remember { derivedStateOf { breakpoint.isGreaterThan(Breakpoint.LG) } }
@@ -581,7 +592,12 @@ private fun VideoPlayer(isTheaterModeOn: MutableState<Boolean>) {
                 if (displayCCButton) AssetImageButton(Assets.Icons.CC) {}
                 if (displayQualityButton) AssetImageButton(Assets.Icons.QUALITY_4K)
                 AssetImageButton(Assets.Icons.SETTINGS) {}
-                if (displayChatButton) AssetImageButton(Assets.Icons.CHAT) {}
+                if (displayChatButton) {
+                    AssetImageButton(Assets.Icons.CHAT) {
+                        isTheaterModeOn.value = false
+                        selectedSegment.value = SegmentedContentType.LiveChat
+                    }
+                }
                 if (displayPIPButton) AssetImageButton(Assets.Icons.PIP) {}
                 if (isLargeBreakpoint) {
                     AssetImageButton(
@@ -594,6 +610,12 @@ private fun VideoPlayer(isTheaterModeOn: MutableState<Boolean>) {
             }
         }
     }
+}
+
+private enum class SegmentedContentType(val label: String) {
+    Suggestions("Suggestions"),
+    Transcripts("Transcripts"),
+    LiveChat("Live Chat")
 }
 
 private val BUTTON_CONTAINER_COLOR = Styles.WHITE.copyf(alpha = 0.05f)
