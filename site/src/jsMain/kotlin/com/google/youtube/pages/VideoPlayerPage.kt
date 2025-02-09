@@ -12,6 +12,8 @@ import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.SegmentedButton
+import com.google.youtube.components.widgets.SegmentedButtonPair
+import com.google.youtube.components.widgets.UnderlinedToggleText
 import com.google.youtube.components.widgets.comments.CommentsSection
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.AnimatedVisibility
@@ -35,8 +37,6 @@ import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.PointerEvents
-import com.varabyte.kobweb.compose.css.TextDecorationLine
-import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.css.functions.LinearGradient
 import com.varabyte.kobweb.compose.css.functions.linearGradient
@@ -70,8 +70,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.pointerEvents
 import com.varabyte.kobweb.compose.ui.modifiers.rotate
 import com.varabyte.kobweb.compose.ui.modifiers.rowGap
 import com.varabyte.kobweb.compose.ui.modifiers.size
-import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
-import com.varabyte.kobweb.compose.ui.modifiers.userSelect
 import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
@@ -394,22 +392,31 @@ private fun PlayerAndComments(
                     .flexWrap(FlexWrap.Wrap)
                     .rowGap(16.px)
             ) {
-                SegmentedLikeDislikeButtons()
+                SegmentedButtonPair(
+                    assetPathLeft = Assets.Paths.LIKED,
+                    assetPathRight = Assets.Paths.DISLIKE,
+                    containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
+                    isLeftLabelBold = true,
+                    labelLeft = "20K",
+                    labelRight = "100",
+                    onClickLeft = {},
+                    onClickRight = {},
+                )
                 AssetImageButton(
                     asset = Assets.Icons.SHARE,
-                    containerColor = BUTTON_CONTAINER_COLOR,
+                    containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
                 AssetImageButton(
                     asset = Assets.Icons.ADD_TO_PLAYLIST,
-                    containerColor = BUTTON_CONTAINER_COLOR,
+                    containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
                 AssetImageButton(
                     asset = Assets.Icons.WATCH_LATER,
-                    containerColor = BUTTON_CONTAINER_COLOR,
+                    containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
                 AssetImageButton(
                     asset = Assets.Icons.MORE_HORIZONTAL,
-                    containerColor = BUTTON_CONTAINER_COLOR,
+                    containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
             }
         }
@@ -432,15 +439,11 @@ private fun PlayerAndComments(
                             "updates.",
                     maxLines = if (isDescriptionBoxExpanded) null else 3,
                 )
-                TextBox(
+                UnderlinedToggleText(
+                    isSelected = isDescriptionBoxExpanded,
+                    mouseEventState = descriptionToggleMouseEventState,
+                    onClick = { isDescriptionBoxExpanded = !isDescriptionBoxExpanded },
                     ref = ref { e -> descriptionToggleRef = e },
-                    modifier = Modifier
-                        .clickable { isDescriptionBoxExpanded = !isDescriptionBoxExpanded }
-                        .thenIf(descriptionToggleMouseEventState == MouseEventState.Hovered) {
-                            Modifier.textDecorationLine(TextDecorationLine.Underline)
-                        },
-                    color = Styles.WHITE.copyf(alpha = 0.47f),
-                    text = if (isDescriptionBoxExpanded) "Show Less" else "Show More",
                 )
             }
         }
@@ -449,59 +452,6 @@ private fun PlayerAndComments(
 
         // Comments
         CommentsSection(modifier = Modifier.fillMaxWidth(), videoId = videoId)
-    }
-}
-
-@Composable
-private fun SegmentedLikeDislikeButtons() {
-    Row(
-        modifier = Modifier
-            .background(BUTTON_CONTAINER_COLOR)
-            .clip(Rect(100.px))
-            .userSelect(UserSelect.None),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        SegmentedLikeDislikeButtonItem(
-            modifier = Modifier.padding(left = 16.px, top = 8.px, right = 14.px, bottom = 8.px),
-            iconAsset = Assets.Icons.LIKED,
-            label = "20K",
-            isLabelBold = true,
-            onClick = {}
-        )
-        Box(
-            modifier = Modifier
-                .background(Styles.WHITE.copyf(alpha = 0.1f))
-                .size(width = 1.29.px, height = 28.px)
-        )
-        SegmentedLikeDislikeButtonItem(
-            modifier = Modifier.padding(left = 14.px, top = 8.px, right = 16.px, bottom = 8.px),
-            iconAsset = Assets.Icons.DISLIKE,
-            label = "100",
-            onClick = {}
-        )
-    }
-}
-
-@Composable
-private fun SegmentedLikeDislikeButtonItem(
-    iconAsset: String,
-    label: String,
-    modifier: Modifier = Modifier,
-    isLabelBold: Boolean = false,
-    onClick: () -> Unit,
-) {
-    var elementRef by remember { mutableStateOf<Element?>(null) }
-    val animatedContainerColor by rememberMouseEventAsState(elementRef).animatedColor()
-    SpacedRow(
-        ref = ref { e -> elementRef = e },
-        spacePx = 7,
-        modifier = Modifier
-            .background(animatedContainerColor.toKobwebColor())
-            .clickable(onClick = onClick)
-            .then(modifier),
-    ) {
-        Image(src = iconAsset)
-        TextBox(text = label, weight = if (isLabelBold) FontWeight.Medium else FontWeight.Normal)
     }
 }
 
@@ -617,5 +567,3 @@ private enum class SegmentedContentType(val label: String) {
     Transcripts("Transcripts"),
     LiveChat("Live Chat")
 }
-
-private val BUTTON_CONTAINER_COLOR = Styles.WHITE.copyf(alpha = 0.05f)

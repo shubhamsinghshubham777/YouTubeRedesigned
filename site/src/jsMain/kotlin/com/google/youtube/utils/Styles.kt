@@ -35,6 +35,8 @@ object Styles {
     val DIVIDER_LIGHTER: Color.Rgb = WHITE.copyf(alpha = 0.11f)
     val PURPLE_BORDER: Color.Rgb = Color.rgba(176, 130, 255, 0.37f)
     val BLUE_BORDER: Color.Rgb = Color.rgba(130, 191, 255, 0.37f)
+    val REPLY_TOGGLE_CONTAINER: Color.Rgb = Color.rgb(46, 37, 39)
+    val ELEVATED_BUTTON_CONTAINER: Color.Rgb = WHITE.copyf(alpha = 0.05f)
 
     object Gradient {
         val RED_TO_PINK = linearGradient(LinearGradient.Direction.ToRight) {

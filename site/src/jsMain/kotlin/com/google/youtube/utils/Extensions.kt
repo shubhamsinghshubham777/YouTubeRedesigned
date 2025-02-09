@@ -248,6 +248,7 @@ fun rememberIsShortWindowAsState(threshold: Int = 650): State<Boolean> {
     }
 }
 
+// TODO: Make it non-null & initialise with 0
 @Composable
 fun rememberElementWidthAsState(element: Element?) = produceState<Double?>(
     initialValue = null,
@@ -257,6 +258,29 @@ fun rememberElementWidthAsState(element: Element?) = produceState<Double?>(
 
     val observer = ResizeObserver { entries ->
         entries.firstOrNull()?.let { entry -> value = entry.contentRect.width }
+    }
+
+    element?.let(observer::observe)
+
+    awaitDispose {
+        element?.let { e ->
+            with(observer) {
+                disconnect()
+                unobserve(e)
+            }
+        }
+    }
+}
+
+@Composable
+fun rememberElementHeightAsState(element: Element?) = produceState(
+    initialValue = 0.0,
+    key1 = element
+) {
+    value = element?.getBoundingClientRect()?.height ?: 0.0
+
+    val observer = ResizeObserver { entries ->
+        entries.firstOrNull()?.let { entry -> value = entry.contentRect.height }
     }
 
     element?.let(observer::observe)

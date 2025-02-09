@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
+import com.google.youtube.models.VideoComment
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -46,6 +47,7 @@ fun CommentsSection(
     val searchQueryState = remember { mutableStateOf("") }
 
     SpacedColumn(spacePx = 24, modifier = modifier) {
+        // Title
         SpacedRow(8) {
             TextBox(
                 text = "Comments",
@@ -58,6 +60,8 @@ fun CommentsSection(
                 color = Styles.WHITE.copyf(alpha = 0.6f),
             )
         }
+
+        // Filters & Search Bar
         Row(
             modifier = Modifier.fillMaxWidth().padding(right = 8.px),
             horizontalArrangement = Arrangement.spacedBy(8.px),
@@ -88,6 +92,35 @@ fun CommentsSection(
                 hintText = if (isSmallBreakpoint) "Search" else "Search comments",
                 widthPx = 314f.times(if (isSmallBreakpoint) 0.5f else 1f).roundToInt(),
             )
+        }
+
+        // Comments
+        SpacedColumn(spacePx = 25, modifier = Modifier.fillMaxWidth().padding(20.px)) {
+            repeat(3) {
+                CommentItem(
+                    VideoComment(
+                        commentId = "0",
+                        dislikeCount = "12",
+                        isHearted = true,
+                        likeCount = "10K",
+                        message = "woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign",
+                        replies = List(3) { index ->
+                            VideoComment(
+                                commentId = "1",
+                                dislikeCount = "6",
+                                isHearted = false,
+                                likeCount = "10K",
+                                message = if (index % 2 == 0) "I like it too" else "bro likes the redesign",
+                                replies = emptyList(),
+                                timestamp = "${index + 1} days",
+                                userId = "1",
+                            )
+                        },
+                        timestamp = "4 days",
+                        userId = "0",
+                    )
+                )
+            }
         }
     }
 }
