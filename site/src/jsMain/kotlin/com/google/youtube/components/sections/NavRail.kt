@@ -14,10 +14,12 @@ import androidx.compose.ui.graphics.Color
 import com.google.youtube.components.widgets.AssetSvg
 import com.google.youtube.components.widgets.ChannelBriefPopupPage
 import com.google.youtube.components.widgets.Popup
-import com.google.youtube.models.NavRailItem
+import com.google.youtube.models.NavRailItemData
 import com.google.youtube.models.NavRailListItemIconType
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
+import com.google.youtube.utils.LocalNavigator
+import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.limitTextWithEllipsis
@@ -73,15 +75,13 @@ import org.w3c.dom.HTMLElement
 @Composable
 fun NavRail(
     modifier: Modifier = Modifier,
-    selectedParentAndChildState: MutableState<Pair<NavRailItem.ParentElement?, String?>>,
     isExpandedState: State<Boolean>,
-    items: List<NavRailItem> = SampleNavRailItems,
-    selectedVideoIdState: MutableState<String?>,
+    items: List<NavRailItemData> = SampleNavRailItems,
 ) {
+    val navigator = LocalNavigator.current
+    val currentRoute by navigator.currentRouteState
     var hoveredElementRef by remember { mutableStateOf<Element?>(null) }
-    var hoveredElementIndexPair: Pair<NavRailItem.ParentElement?, String?> by remember {
-        mutableStateOf(null to null)
-    }
+    var hoveredRoute by remember { mutableStateOf<Route?>(null) }
     val isPopupContentHoveredState = remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
@@ -92,21 +92,13 @@ fun NavRail(
                 NavRailListItem(
                     item = parentItem,
                     isSelectedState = remember {
-                        derivedStateOf {
-                            selectedParentAndChildState.value.first?.label == parentItem.label &&
-                                    selectedParentAndChildState.value.second == null
-                        }
+                        derivedStateOf { parentItem.route == currentRoute }
                     },
                     isHorizontallyExpandedState = isExpandedState,
                     isDropDownOpen = isDropDownOpen,
                     hasChildren = parentItem.children?.isNotEmpty() == true,
                     isParentItem = true,
-                    onClick = {
-                        selectedParentAndChildState.value =
-                            NavRailItem.ParentElement.find(parentItem.label) to null
-
-                        selectedVideoIdState.value = null
-                    }
+                    onClick = { navigator.pushRoute(parentItem.route) }
                 )
 
                 parentItem.children?.let { children ->
@@ -121,28 +113,19 @@ fun NavRail(
                                     ref = ref { r -> elementRef = r },
                                     modifier = Modifier
                                         .onMouseEnter {
-                                            if (parentItem.label == NavRailItem.ParentElement.SUBSCRIPTIONS.label && !isAnimating.value) {
+                                            if (parentItem.route == Route.Subscriptions && !isAnimating.value) {
                                                 hoveredElementRef = elementRef
-                                                hoveredElementIndexPair =
-                                                    NavRailItem.ParentElement.SUBSCRIPTIONS to childItem.label
+                                                hoveredRoute = childItem.route
                                             }
                                         },
                                     item = childItem,
                                     isSelectedState = remember {
-                                        derivedStateOf {
-                                            selectedParentAndChildState.value.first?.label == parentItem.label &&
-                                                    selectedParentAndChildState.value.second == childItem.label
-                                        }
+                                        derivedStateOf { childItem.route == currentRoute }
                                     },
                                     isHorizontallyExpandedState = isExpandedState,
                                     hasChildren = false,
                                     isParentItem = false,
-                                    onClick = {
-                                        selectedParentAndChildState.value =
-                                            NavRailItem.ParentElement.find(parentItem.label) to childItem.label
-
-                                        selectedVideoIdState.value = null
-                                    }
+                                    onClick = { navigator.pushRoute(childItem.route) }
                                 )
                             }
                         }
@@ -168,11 +151,11 @@ fun NavRail(
             .clip(Rect(12.px))
             .margin(left = 8.px),
         anchor = hoveredElementRef,
-        targetState = hoveredElementIndexPair,
+        targetState = hoveredRoute,
         isContentHovered = isPopupContentHoveredState,
-    ) { animatedHoveredElementIndexPair ->
-        if (animatedHoveredElementIndexPair.first == NavRailItem.ParentElement.SUBSCRIPTIONS) {
-            ChannelBriefPopupPage(channelId = animatedHoveredElementIndexPair.second.toString())
+    ) { animatedHoveredRoute ->
+        if (animatedHoveredRoute is Route.Page) {
+            ChannelBriefPopupPage(channelId = animatedHoveredRoute.id)
         }
     }
 }
@@ -180,7 +163,7 @@ fun NavRail(
 @Composable
 private fun NavRailListItem(
     ref: ElementRefScope<HTMLElement>? = null,
-    item: NavRailItem,
+    item: NavRailItemData,
     isSelectedState: State<Boolean>,
     isHorizontallyExpandedState: State<Boolean>,
     isDropDownOpen: MutableState<Boolean>? = null,
@@ -357,154 +340,188 @@ private fun NavRailListItem(
 }
 
 private val SampleNavRailItems = listOf(
-    NavRailItem(
-        label = NavRailItem.ParentElement.HOME.label,
+    NavRailItemData(
+        label = "Home",
+        route = Route.Home,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.HOME,
             activeIconPath = Assets.Paths.HOME_SELECTED
         )
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.EXPLORE.label,
+    NavRailItemData(
+        label = "Explore",
+        route = Route.Explore,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.EXPLORE,
             activeIconPath = Assets.Paths.EXPLORE_SELECTED
         )
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.SHORTS.label,
+    NavRailItemData(
+        label = "Shorts",
+        route = Route.Shorts,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.SHORTS,
             activeIconPath = Assets.Paths.SHORTS_SELECTED
         )
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.TV_MODE.label,
+    NavRailItemData(
+        label = "TV Mode",
+        route = Route.TVMode,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.TV,
             activeIconPath = Assets.Paths.TV_SELECTED
         ),
         hasBottomDivider = true,
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.HISTORY.label,
+    NavRailItemData(
+        label = "History",
+        route = Route.History,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.HISTORY,
             activeIconPath = Assets.Paths.HISTORY_SELECTED
         )
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.WATCH_LATER.label,
+    NavRailItemData(
+        label = "Watch Later",
+        route = Route.WatchLater,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.WATCH_LATER,
             activeIconPath = Assets.Paths.WATCH_LATER_SELECTED
         )
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.LIKED_VIDEOS.label,
+    NavRailItemData(
+        label = "Liked Videos",
+        route = Route.LikedVideos,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.LIKED_VIDEOS,
             activeIconPath = Assets.Paths.LIKED_VIDEOS_SELECTED
         )
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.PLAYLISTS.label,
+    NavRailItemData(
+        label = "Playlists",
+        route = Route.Playlists,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.PLAYLISTS,
             activeIconPath = Assets.Paths.PLAYLISTS_SELECTED,
         ),
         hasBottomDivider = true,
         children = listOf(
-            NavRailItem(label = "Cool Stuff"),
-            NavRailItem(label = "Redesigns"),
-            NavRailItem(label = "Artistic")
+            NavRailItemData(label = "Cool Stuff", route = Route.Playlist(id = "cool_stuff")),
+            NavRailItemData(label = "Redesigns", route = Route.Playlist(id = "redesigns")),
+            NavRailItemData(label = "Artistic", route = Route.Playlist(id = "artistic"))
         ),
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.COLLECTIONS.label,
+    NavRailItemData(
+        label = "Collections",
+        route = Route.Collections,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.COLLECTIONS,
             activeIconPath = Assets.Paths.COLLECTIONS_SELECTED,
         ),
         children = listOf(
-            NavRailItem(label = "Tech Reviews and Unboxings"),
-            NavRailItem(label = "DIY & Crafting"),
-            NavRailItem(label = "Gaming"),
-            NavRailItem(label = "Cooking & Recipes")
+            NavRailItemData(
+                label = "Tech Reviews and Unboxings",
+                route = Route.Collection(id = "tech_reviews_and_unboxings"),
+            ),
+            NavRailItemData(
+                label = "DIY & Crafting",
+                route = Route.Collection(id = "diy_and_crafting"),
+            ),
+            NavRailItemData(label = "Gaming", route = Route.Collection(id = "gaming")),
+            NavRailItemData(
+                label = "Cooking & Recipes",
+                route = Route.Collection(id = "cooking_and_recipes"),
+            )
         ),
     ),
-    NavRailItem(
-        label = NavRailItem.ParentElement.SUBSCRIPTIONS.label,
+    NavRailItemData(
+        label = "Subscriptions",
+        route = Route.Subscriptions,
         iconType = NavRailListItemIconType.ToggleableIcons(
             inactiveIconPath = Assets.Paths.SUBSCRIPTIONS,
             activeIconPath = Assets.Paths.SUBSCRIPTIONS_SELECTED,
         ),
         hasBottomDivider = true,
         children = listOf(
-            NavRailItem(
+            NavRailItemData(
                 label = "Lofi Girl",
+                route = Route.Page(id = "LofiGirl"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_LOFI_GIRL),
                 count = 2
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "Ninja",
+                route = Route.Page(id = "Ninja"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_NINJA),
                 count = 3
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "TechAltar",
+                route = Route.Page(id = "TechAltar"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_TECH_ALTAIR)
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "The Human Spider",
+                route = Route.Page(id = "TheHumanSpider"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_THE_HUMAN_SPIDER)
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "FaceDev",
+                route = Route.Page(id = "FaceDev"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_FACE_DEV)
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "jacksepticeye",
+                route = Route.Page(id = "JackSepticEye"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_JACKSEPTICEYE),
                 count = 1
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "jacksfilms",
+                route = Route.Page(id = "JacksFilms"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_JACKSFILMS)
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "Screen Junkies",
+                route = Route.Page(id = "ScreenJunkies"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_SCREEN_JUNKIES),
                 count = 8
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "Papa Meat",
+                route = Route.Page(id = "PapaMeat"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_PAPA_MEAT),
                 count = 1
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "Steam",
+                route = Route.Page(id = "Steam"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_STEAM)
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "The Critical Drinker",
+                route = Route.Page(id = "TheCriticalDrinker"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_THE_CRITICAL_DRINKER)
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "Hyperplexed",
+                route = Route.Page(id = "Hyperplexed"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_HYPERPLEXED),
                 count = 5
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "The Coding Sloth",
+                route = Route.Page(id = "TheCodingSloth"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_THE_CODING_SLOTH)
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "BOG",
+                route = Route.Page(id = "BOG"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_BOG)
             ),
-            NavRailItem(
+            NavRailItemData(
                 label = "Cyberpunk 2077",
+                route = Route.Page(id = "Cyberpunk2077"),
                 iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_CYBERPUNK_2077),
                 count = 7
             ),

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.movableContentOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.AssetImageButton
@@ -15,8 +14,9 @@ import com.google.youtube.components.widgets.ShortThumbnailCardDefaults
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
-import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.GridGap
+import com.google.youtube.utils.LocalNavigator
+import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.limitTextWithEllipsis
@@ -79,32 +79,10 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
-fun ShortsPage(showPersonalisedFeedDialogState: MutableState<Boolean>) {
-    val isShortWindowState = rememberIsShortWindowAsState()
-    val selectedShortIdState = remember { mutableStateOf<String?>(null) }
-    Crossfade(
-        modifier = Modifier.fillMaxSize(),
-        targetState = selectedShortIdState.value,
-        animateTranslationY = false,
-    ) { shortId ->
-        shortId?.let { safeShortId ->
-            ShortDetails(
-                id = safeShortId,
-                onBackPressed = { selectedShortIdState.value = null },
-                isShortWindowState = isShortWindowState,
-            )
-        } ?: ShortsGrid(
-            showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-            selectedShortIdState = selectedShortIdState
-        )
-    }
-}
-
-@Composable
-private fun ShortsGrid(
+fun ShortsGrid(
     showPersonalisedFeedDialogState: MutableState<Boolean>,
-    selectedShortIdState: MutableState<String?>,
 ) {
+    val navigator = LocalNavigator.current
     Column(modifier = Modifier.fillMaxWidth()) {
         FilterRow(showPersonalisedFeedDialogState = showPersonalisedFeedDialogState)
         BasicGrid(
@@ -117,7 +95,9 @@ private fun ShortsGrid(
         ) {
             repeat(20) { index ->
                 ShortThumbnailCard(
-                    modifier = Modifier.onClick { selectedShortIdState.value = index.toString() },
+                    modifier = Modifier.onClick {
+                        navigator.pushRoute(Route.Short(id = index.toString()))
+                    },
                     thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                     channelName = "DailyDoseOfInternet",
                     title = "Put this cat in jail",
@@ -134,9 +114,9 @@ fun ShortDetails(
     id: String,
     onBackPressed: () -> Unit,
     shape: Shape = Rect(16.px),
-    isShortWindowState: State<Boolean>,
 ) {
     val breakpoint = rememberBreakpoint()
+    val isShortWindowState = rememberIsShortWindowAsState()
     val isSmallBreakpoint = remember(breakpoint) {
         breakpoint == Breakpoint.ZERO || breakpoint == Breakpoint.SM
     }

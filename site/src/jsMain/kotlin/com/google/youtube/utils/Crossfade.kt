@@ -13,6 +13,7 @@ import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.translateY
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.web.css.px
 
 @Composable
@@ -37,6 +38,7 @@ fun <T> Crossfade(
             }
             onStateChange?.invoke()
             currentState = targetState
+            delay(150)
             animatable.animateTo(targetValue = 1f, animationSpec = tween()) {
                 currentOpacity = value
                 if (animateTranslationY) currentTranslationY = (1 - value) * translationYDelta

@@ -1,13 +1,13 @@
 [versions]
-compose = "1.7.1"
-kobweb = "0.20.0"
-kotlin = "2.1.0"
+compose = "1.7.3"
+kobweb = "0.20.3"
+kotlin = "2.1.10"
 
 [libraries]
 compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "compose" }
+compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "compose" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
-compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "compose" }
 kobweb-core = { module = "com.varabyte.kobweb:kobweb-core ", version.ref = "kobweb" }
 kobweb-silk = { module = "com.varabyte.kobweb:kobweb-silk", version.ref = "kobweb" }
 silk-icons-fa = { module = "com.varabyte.kobwebx:silk-icons-fa", version.ref = "kobweb" }

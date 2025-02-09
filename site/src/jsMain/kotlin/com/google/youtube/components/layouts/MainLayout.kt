@@ -11,17 +11,20 @@ import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.PersonalisedFeedDialog
-import com.google.youtube.models.NavRailItem
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HistoryPage
 import com.google.youtube.pages.HomePage
-import com.google.youtube.pages.ShortsPage
+import com.google.youtube.pages.ShortDetails
+import com.google.youtube.pages.ShortsGrid
 import com.google.youtube.pages.TVModePage
 import com.google.youtube.pages.VideoPlayerPage
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.Dialog
+import com.google.youtube.utils.LocalNavigator
+import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.isGreaterThan
 import com.varabyte.kobweb.compose.css.Overflow
@@ -50,25 +53,23 @@ import org.jetbrains.compose.web.css.minus
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.vh
-import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun MainLayout() {
+    val navigator = LocalNavigator.current
+    val currentRoute by navigator.currentRouteState
     val breakpoint = rememberBreakpoint()
     val isLargeBreakpoint by remember(breakpoint) {
         derivedStateOf { breakpoint isGreaterThan Breakpoint.SM }
     }
     val horizontalPaddingState = animateFloatAsState(if (isLargeBreakpoint) 24f else 12f)
-    val selectedParentAndChildState = remember {
-        mutableStateOf<Pair<NavRailItem.ParentElement?, String?>>(NavRailItem.ParentElement.HOME to null)
-    }
     val isNavRailExpandedState = remember { mutableStateOf(false) }
     val navRailWidthPx by animateFloatAsState(if (isNavRailExpandedState.value) 250f else 50f)
+    // TODO: Create a composition local for this
     val showPersonalisedFeedDialogState = remember { mutableStateOf(false) }
-    val selectedVideoIdState = remember { mutableStateOf<String?>("0") }
 
     // Auto close NavRail on item selection for smaller devices
-    LaunchedEffect(selectedParentAndChildState.value) {
+    LaunchedEffect(currentRoute) {
         if (!isLargeBreakpoint) isNavRailExpandedState.value = false
     }
 
@@ -84,10 +85,7 @@ fun MainLayout() {
                 onDrawerButtonClick = {
                     isNavRailExpandedState.value = !isNavRailExpandedState.value
                 },
-                onLogoClick = {
-                    selectedParentAndChildState.value = NavRailItem.ParentElement.HOME to null
-                    selectedVideoIdState.value = null
-                },
+                onLogoClick = { navigator.pushRoute(Route.Home) },
             )
             Row(modifier = Modifier.fillMaxSize()) {
                 NavRail(
@@ -99,9 +97,7 @@ fun MainLayout() {
                         .margin(leftRight = horizontalPaddingState.value.px)
                         .overflow(overflowX = Overflow.Hidden, overflowY = Overflow.Scroll)
                         .hideScrollBar(),
-                    selectedParentAndChildState = selectedParentAndChildState,
                     isExpandedState = isNavRailExpandedState,
-                    selectedVideoIdState = selectedVideoIdState,
                 )
                 Box(
                     modifier = Modifier
@@ -110,7 +106,7 @@ fun MainLayout() {
                         .overflow(overflowX = Overflow.Scroll, overflowY = Overflow.Hidden)
                 ) {
                     Crossfade(
-                        targetState = selectedVideoIdState.value,
+                        targetState = currentRoute,
                         modifier = Modifier
                             .fillMaxWidth(100.percent - horizontalPaddingState.value.px)
                             .fillMaxHeight()
@@ -118,50 +114,33 @@ fun MainLayout() {
                             .padding(top = Constants.CONTENT_PADDING),
                         onStateChange = { window.scrollTo(0.0, 0.0) },
                         animateTranslationY = false,
-                    ) { animatedSelectedVideoId ->
-                        animatedSelectedVideoId?.let { videoId ->
-                            VideoPlayerPage(videoId = videoId)
-                        } ?: run {
-                            Crossfade(
-                                targetState = selectedParentAndChildState.value,
-                                modifier = Modifier.fillMaxSize(),
-                                onStateChange = { window.scrollTo(0.0, 0.0) },
-                            ) { animatedState ->
-                                animatedState.first?.let { element ->
-                                    when (element) {
-                                        NavRailItem.ParentElement.HOME -> HomePage(
-                                            showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
-                                            selectedVideoIdState = selectedVideoIdState,
-                                        )
+                    ) { animatedRoute ->
+                        when (animatedRoute) {
+                            is Route.Collection -> TextBox("Collection (${animatedRoute.id})")
+                            Route.Collections -> TextBox("All Collections")
+                            Route.Explore -> ExplorePage(
+                                Modifier.padding(bottom = Constants.CONTENT_PADDING)
+                            )
 
-                                        NavRailItem.ParentElement.EXPLORE -> ExplorePage(
-                                            Modifier.padding(bottom = Constants.CONTENT_PADDING)
-                                        )
+                            Route.History -> HistoryPage()
+                            Route.Home -> HomePage(
+                                showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
+                            )
 
-                                        NavRailItem.ParentElement.SHORTS -> ShortsPage(
-                                            showPersonalisedFeedDialogState
-                                        )
+                            Route.LikedVideos -> TextBox("Liked Videos")
+                            is Route.Page -> TextBox("Channel (${animatedRoute.id})")
+                            is Route.Playlist -> TextBox("Playlist (${animatedRoute.id})")
+                            Route.Playlists -> TextBox("All Playlists")
+                            is Route.Short -> ShortDetails(
+                                id = animatedRoute.id,
+                                onBackPressed = navigator::pop,
+                            )
 
-                                        NavRailItem.ParentElement.TV_MODE -> TVModePage()
-                                        NavRailItem.ParentElement.HISTORY -> HistoryPage()
-                                        NavRailItem.ParentElement.WATCH_LATER -> Text("Watch Later")
-                                        NavRailItem.ParentElement.LIKED_VIDEOS -> Text("Liked Videos")
-
-                                        NavRailItem.ParentElement.PLAYLISTS -> Text(
-                                            animatedState.second
-                                                ?: NavRailItem.ParentElement.PLAYLISTS.label
-                                        )
-
-                                        NavRailItem.ParentElement.COLLECTIONS -> Text(
-                                            animatedState.second
-                                                ?: NavRailItem.ParentElement.COLLECTIONS.label
-                                        )
-
-                                        NavRailItem.ParentElement.SUBSCRIPTIONS ->
-                                            Text("Subscriptions " + animatedState.second)
-                                    }
-                                }
-                            }
+                            Route.Shorts -> ShortsGrid(showPersonalisedFeedDialogState)
+                            Route.Subscriptions -> TextBox("Subscriptions")
+                            Route.TVMode -> TVModePage()
+                            is Route.Video -> VideoPlayerPage(videoId = animatedRoute.id)
+                            Route.WatchLater -> TextBox("Watch Later")
                         }
                     }
                 }

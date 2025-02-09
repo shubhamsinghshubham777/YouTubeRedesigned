@@ -96,21 +96,22 @@ fun CommentsSection(
 
         // Comments
         SpacedColumn(spacePx = 25, modifier = Modifier.fillMaxWidth().padding(20.px)) {
-            repeat(8) {
+            repeat(5) {
                 CommentItem(
                     VideoComment(
                         commentId = "0",
                         dislikeCount = "12",
                         isHearted = true,
                         likeCount = "10K",
-                        message = "woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign woah I like this redesign",
+                        message = "woah I like this redesign",
                         replies = List(3) { index ->
                             VideoComment(
                                 commentId = "1",
                                 dislikeCount = "6",
                                 isHearted = false,
                                 likeCount = "10K",
-                                message = if (index % 2 == 0) "I like it too" else "bro likes the redesign",
+                                message = if (index % 2 == 0) "I like it too"
+                                else "bro likes the redesign",
                                 replies = emptyList(),
                                 timestamp = "${index + 1} days",
                                 userId = "1",
