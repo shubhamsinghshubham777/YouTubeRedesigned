@@ -1,5 +1,6 @@
 package com.google.youtube.pages
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -32,6 +33,7 @@ import com.google.youtube.utils.rememberBreakpointAsState
 import com.google.youtube.utils.rememberElementWidthAsState
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.rememberWindowWidthAsState
+import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
@@ -109,12 +111,19 @@ fun VideoPlayerPage(
             else -> 1f
         }
     )
+    val shouldDisplayFixedSegmentContent by remember {
+        derivedStateOf { animatedFixedSegmentSizeFactor != 0f }
+    }
     val animatedFloatingSegmentWidth by animateFloatAsState(
         if (isSegmentedContentVisible.value) 473f.coerceAtMost(windowWidth * 0.8f)
         else 0f,
     )
     val animatedSegmentOpenerRotation by animateFloatAsState(
         if (isSegmentedContentVisible.value) 180f else 0f
+    )
+    val animatedSegmentOpenerContainerColor by animateColorAsState(
+        if (isSegmentedContentVisible.value) Styles.SURFACE.toComposeColor()
+        else Styles.SURFACE_ELEVATED.toComposeColor()
     )
     val segmentContent = remember {
         movableContentOf { modifier: Modifier ->
@@ -129,9 +138,14 @@ fun VideoPlayerPage(
                 isTheaterModeOn = isTheaterModeOn,
                 selectedSegment = selectedSegment,
                 videoId = videoId,
+                segmentedContent = if (!shouldDisplayFixedSegmentContent && isLargeBreakpoint) {
+                    {
+                        segmentContent(Modifier.width(411.px))
+                    }
+                } else null,
             )
             Box(modifier = Modifier.width(34.px * animatedFixedSegmentSizeFactor))
-            if (animatedFixedSegmentSizeFactor != 0f) {
+            if (shouldDisplayFixedSegmentContent) {
                 segmentContent(
                     Modifier
                         .opacity(animatedFixedSegmentSizeFactor)
@@ -178,7 +192,7 @@ fun VideoPlayerPage(
                         .rotate(animatedSegmentOpenerRotation.deg)
                         .margin(right = 4.px),
                     asset = Assets.Icons.ARROW_LEFT,
-                    containerColor = Styles.SURFACE_ELEVATED,
+                    containerColor = animatedSegmentOpenerContainerColor.toKobwebColor().toRgb(),
                     onClick = { isSegmentedContentVisible.value = !isSegmentedContentVisible.value }
                 )
             }
@@ -321,6 +335,7 @@ private fun PlayerAndComments(
     videoId: String,
     selectedSegment: MutableState<SegmentedContentType>,
     isTheaterModeOn: MutableState<Boolean>,
+    segmentedContent: (@Composable () -> Unit)?,
 ) {
     var isDescriptionBoxExpanded by remember { mutableStateOf(false) }
     var descriptionToggleRef by remember { mutableStateOf<Element?>(null) }
@@ -451,7 +466,14 @@ private fun PlayerAndComments(
         Box(modifier = Modifier.height(31.px))
 
         // Comments
-        CommentsSection(modifier = Modifier.fillMaxWidth(), videoId = videoId)
+        SpacedRow(
+            spacePx = 16,
+            modifier = Modifier.fillMaxWidth(),
+            centerContentVertically = false,
+        ) {
+            CommentsSection(modifier = Modifier.weight(1), videoId = videoId)
+            segmentedContent?.invoke()
+        }
     }
 }
 

@@ -96,7 +96,7 @@ fun CommentsSection(
 
         // Comments
         SpacedColumn(spacePx = 25, modifier = Modifier.fillMaxWidth().padding(20.px)) {
-            repeat(3) {
+            repeat(8) {
                 CommentItem(
                     VideoComment(
                         commentId = "0",
