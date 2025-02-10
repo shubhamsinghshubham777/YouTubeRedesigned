@@ -9,38 +9,42 @@ import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 @Stable
 class Navigator(private val initialRoute: Route) : CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.Main
 
-    private val currentRouteFlow = MutableStateFlow(arrayOf(initialRoute))
+    private val currentRouteFlow = MutableStateFlow(initialRoute)
 
     val currentRouteState: State<Route>
-        @Composable get() = currentRouteFlow
-            .map { routes -> routes.last() }
-            .collectAsState(initialRoute)
+        @Composable get() = currentRouteFlow.collectAsState(initialRoute)
+
+    init {
+        launch {
+            window.addEventListener(
+                type = "popstate",
+                callback = {
+                    val path = with(window.location) { pathname + search }
+                    Route.valueOf(path)?.let { safeRoute ->
+                        currentRouteFlow.tryEmit(safeRoute)
+                    }
+                },
+            )
+        }
+    }
 
     fun pushRoute(route: Route) {
-        if (currentRouteFlow.value.last() == route) {
-            log("Provided route is same as the current route. Push event ignored.")
+        if (currentRouteFlow.value == route) {
+            println("Provided route is same as the current route. Push event ignored.")
             return
         }
-        window.history.pushState(null, "", route.path)
-        currentRouteFlow.update { routes -> arrayOf(*routes, route) }
+        window.history.pushState(route, "", route.path)
+        currentRouteFlow.tryEmit(route)
     }
 
-    fun pop() {
-        if (currentRouteFlow.value.size <= 1) {
-            log("Backstack doesn't have enough routes to pop! Pop request ignored.")
-            return
-        }
-        window.history.back()
-        currentRouteFlow.update { routes -> routes.sliceArray(0..<routes.lastIndex) }
-    }
+    fun pop() = window.history.back()
 }
 
 val LocalNavigator = compositionLocalOf<Navigator> {
@@ -102,7 +106,3 @@ private const val COLLECTION = "/collection?list="
 private const val SUBSCRIPTIONS = "/feed/subscriptions"
 private const val PAGE = "/@"
 private const val VIDEO = "/watch?v="
-
-private fun log(message: String) = println("$TAG - $message")
-
-private const val TAG = "Navigator"

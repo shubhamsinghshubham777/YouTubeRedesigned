@@ -2,7 +2,6 @@ package com.google.youtube.pages
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import com.google.youtube.components.layouts.MainLayout
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Navigator
@@ -15,11 +14,16 @@ import kotlinx.browser.window
 @Composable
 fun IndexPage() {
     val context = rememberPageContext()
-    val route = remember(context.route.params) {
-        Route.valueOf(context.route.params.getValue("path"))
+
+    if (!::navigator.isInitialized) {
+        val route = Route.valueOf(context.route.pathQueryAndFragment)
+        navigator = Navigator(initialRoute = route ?: Route.Home)
+        if (route == null) window.history.replaceState(null, "", Route.Home.path)
     }
-    if (route == null) window.history.replaceState(null, "", Route.Home.path)
-    CompositionLocalProvider(LocalNavigator provides Navigator(route ?: Route.Home)) {
+
+    CompositionLocalProvider(LocalNavigator provides navigator) {
         MainLayout()
     }
 }
+
+private lateinit var navigator: Navigator
