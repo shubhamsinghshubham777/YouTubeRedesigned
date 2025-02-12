@@ -20,6 +20,7 @@ import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
+import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.limitTextWithEllipsis
@@ -84,7 +85,7 @@ fun NavRail(
     var hoveredRoute by remember { mutableStateOf<Route?>(null) }
     val isPopupContentHoveredState = remember { mutableStateOf(false) }
 
-    Column(modifier = modifier) {
+    SpacedColumn(spacePx = 2, modifier = modifier) {
         items.forEach { parentItem ->
             val isDropDownOpen = remember { mutableStateOf(false) }
 

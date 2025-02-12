@@ -67,6 +67,7 @@ sealed class Route(val path: String) {
     data object Subscriptions : Route(path = SUBSCRIPTIONS)
     data class Page(val id: String) : Route(path = "$PAGE$id")
     data class Video(val id: String) : Route(path = "$VIDEO$id")
+    data class Search(val query: String) : Route(path = "$SEARCH$query")
 
     companion object {
         fun valueOf(path: String): Route? {
@@ -86,6 +87,7 @@ sealed class Route(val path: String) {
                 path.contains(SUBSCRIPTIONS) -> Subscriptions
                 path.contains(PAGE) -> Page(id = path.substringAfterLast('@'))
                 path.contains(VIDEO) -> Video(id = path.substringAfterLast('='))
+                path.contains(SEARCH) -> Search(query = path.substringAfterLast('='))
                 else -> null
             }
         }
@@ -106,3 +108,4 @@ private const val COLLECTION = "/collection?list="
 private const val SUBSCRIPTIONS = "/feed/subscriptions"
 private const val PAGE = "/@"
 private const val VIDEO = "/watch?v="
+private const val SEARCH = "/results?search_query="

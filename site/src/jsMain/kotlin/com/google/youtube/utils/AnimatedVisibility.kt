@@ -20,6 +20,7 @@ import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.width
+import com.varabyte.kobweb.compose.ui.thenIfNotNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.px
@@ -98,11 +99,9 @@ fun AnimatedVisibility(
             currentOpacity = 0f
         },
         modifier = Modifier
-            .then(
-                currentContentSize?.let { size ->
-                    Modifier.width(size.width.px).height(size.height.px)
-                } ?: Modifier
-            )
+            .thenIfNotNull(currentContentSize) { size ->
+                Modifier.width(size.width.px).height(size.height.px)
+            }
             .opacity(currentOpacity)
             .then(modifier),
         contentAlignment = Alignment.Center,

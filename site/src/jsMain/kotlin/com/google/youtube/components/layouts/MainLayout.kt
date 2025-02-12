@@ -86,6 +86,7 @@ fun MainLayout() {
                     isNavRailExpandedState.value = !isNavRailExpandedState.value
                 },
                 onLogoClick = { navigator.pushRoute(Route.Home) },
+                onSearch = { query -> navigator.pushRoute(Route.Search(query)) },
             )
             Row(modifier = Modifier.fillMaxSize()) {
                 NavRail(
@@ -104,6 +105,7 @@ fun MainLayout() {
                         .fillMaxWidth(100.percent - navRailWidthPx.px)
                         .fillMaxHeight()
                         .overflow(overflowX = Overflow.Scroll, overflowY = Overflow.Hidden)
+                        .hideScrollBar()
                 ) {
                     Crossfade(
                         targetState = currentRoute,
@@ -141,6 +143,7 @@ fun MainLayout() {
                             Route.TVMode -> TVModePage()
                             is Route.Video -> VideoPlayerPage(videoId = animatedRoute.id)
                             Route.WatchLater -> TextBox("Watch Later")
+                            is Route.Search -> TextBox("Searched query: ${animatedRoute.query}")
                         }
                     }
                 }

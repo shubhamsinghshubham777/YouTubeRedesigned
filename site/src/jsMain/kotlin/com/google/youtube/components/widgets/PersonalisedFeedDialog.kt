@@ -5,6 +5,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.youtube.components.widgets.context_menu.TextField
 import com.google.youtube.models.TagData
 import com.google.youtube.utils.Assets
@@ -47,6 +48,46 @@ fun PersonalisedFeedDialog(
     contentPadding: PaddingValues = PaddingValues(24.px),
     onClose: () -> Unit,
 ) {
+    val allTags = remember {
+        mutableStateListOf(
+            TagData("Subscriptions", Assets.Paths.SUBSCRIPTIONS),
+            TagData("Posts", Assets.Paths.POSTS),
+            TagData("Music"),
+            TagData("Tech"),
+            TagData("Design"),
+            TagData("Live"),
+            TagData("Playlists"),
+            TagData("Cats"),
+            TagData("UI/UX Design"),
+            TagData("Electronics"),
+            TagData("Art"),
+            TagData("Tech news"),
+            TagData("Lofi beats"),
+            TagData("UI/UX Redesign"),
+            TagData("Video Games"),
+            TagData("Apple"),
+            TagData("Linux"),
+        )
+    }
+
+    val selectedTags = remember {
+        mutableStateListOf(
+            TagData("Video Games"),
+            TagData("Apple"),
+            TagData("Linux"),
+        )
+    }
+
+    val excludedTags = remember {
+        mutableStateListOf(
+            TagData("Skibidi"),
+            TagData("brainrot"),
+            TagData("rizz"),
+            TagData("Shorts", Assets.Paths.SHORTS),
+            TagData("Fortnite"),
+        )
+    }
+
     Column(
         modifier = Modifier
             .background(Styles.SURFACE_ELEVATED)
@@ -87,30 +128,8 @@ fun PersonalisedFeedDialog(
                     "Enter a comma after a keyword to save it as a tag. Tags can " +
                     "include: topics, content types (e.g., shorts, playlists, etc.), " +
                     "channels, collections, etc.",
-            allTags = arrayOf(
-                TagData("Subscriptions", Assets.Paths.SUBSCRIPTIONS),
-                TagData("Posts", Assets.Paths.POSTS),
-                TagData("Music"),
-                TagData("Tech"),
-                TagData("Design"),
-                TagData("Live"),
-                TagData("Playlists"),
-                TagData("Cats"),
-                TagData("UI/UX Design"),
-                TagData("Electronics"),
-                TagData("Art"),
-                TagData("Tech news"),
-                TagData("Lofi beats"),
-                TagData("UI/UX Redesign"),
-                TagData("Video Games"),
-                TagData("Apple"),
-                TagData("Linux"),
-            ),
-            selectedTags = arrayOf(
-                TagData("Video Games"),
-                TagData("Apple"),
-                TagData("Linux"),
-            ),
+            allTags = allTags,
+            selectedTags = selectedTags,
         )
 
         // Exclude Tags
@@ -122,13 +141,7 @@ fun PersonalisedFeedDialog(
             ),
             title = "Exclude Tags",
             message = "You can prevent certain content or creators from appearing in your feed.",
-            allTags = arrayOf(
-                TagData("Skibidi"),
-                TagData("brainrot"),
-                TagData("rizz"),
-                TagData("Shorts", Assets.Paths.SHORTS),
-                TagData("Fortnite"),
-            ),
+            allTags = excludedTags,
         )
     }
 }
@@ -137,12 +150,11 @@ fun PersonalisedFeedDialog(
 private fun Content(
     title: String,
     message: String,
-    allTags: Array<TagData> = emptyArray(),
-    selectedTags: Array<TagData> = emptyArray(),
+    allTags: SnapshotStateList<TagData>,
+    selectedTags: SnapshotStateList<TagData>? = null,
     modifier: Modifier = Modifier,
 ) {
     val searchQueryState = remember { mutableStateOf("") }
-    val selectedTagsList = remember { mutableStateListOf(*selectedTags) }
 
     Column(
         modifier = Modifier.fillMaxWidth().then(modifier),
@@ -161,7 +173,7 @@ private fun Content(
             allTags
                 .filter { tag -> tag.label.contains(searchQueryState.value, ignoreCase = true) }
                 .forEach { tag ->
-                    val isSelected = selectedTagsList.contains(tag)
+                    val isSelected = selectedTags?.contains(tag) ?: false
                     key(tag.label) {
                         AssetSvgButton(
                             containerColor = if (isSelected) Styles.BACKGROUND_SELECTED else Styles.WHITE,
@@ -173,9 +185,13 @@ private fun Content(
                             isDense = true,
                             isSelected = isSelected,
                             onClick = {
-                                if (!selectedTagsList.contains(tag)) selectedTagsList.add(tag)
+                                if (selectedTags?.contains(tag) != true) selectedTags?.add(tag)
+                                else selectedTags.remove(tag)
                             },
-                            onEndIconClick = { selectedTagsList.remove(tag) },
+                            onEndIconClick = {
+                                allTags.remove(tag)
+                                selectedTags?.remove(tag)
+                            },
                             startIconPath = if (isSelected) Assets.Paths.CHECK else tag.iconPath,
                             text = tag.label,
                             type = AssetSvgButtonType.SelectableChip,

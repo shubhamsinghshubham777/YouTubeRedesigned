@@ -16,6 +16,7 @@ import com.google.youtube.utils.clickable
 import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
+import com.varabyte.kobweb.browser.dom.clearFocus
 import com.varabyte.kobweb.compose.css.Background
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.background
@@ -61,13 +62,16 @@ import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.TextInput
+import org.w3c.dom.HTMLElement
 
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
     onLogoClick: () -> Unit,
     onDrawerButtonClick: () -> Unit,
+    onSearch: (query: String) -> Unit,
 ) {
+    var textInputRef by remember { mutableStateOf<HTMLElement?>(null) }
     val breakpoint = rememberBreakpoint()
 
     var searchQuery by remember { mutableStateOf("") }
@@ -105,9 +109,23 @@ fun TopBar(
                     marginRight(10.px)
                 }
                 TextInput(value = searchQuery) {
+                    ref { element ->
+                        textInputRef = element
+                        onDispose {}
+                    }
                     onBlur { isTextFieldFocused = false }
                     onFocus { isTextFieldFocused = true }
                     onInput { event -> searchQuery = event.value }
+                    onKeyUp { event ->
+                        if (event.key == "Enter") {
+                            if (searchQuery.isNotBlank()) {
+                                onSearch(searchQuery)
+                                searchQuery = ""
+                            }
+                            textInputRef?.clearFocus()
+                        }
+                    }
+                    inputMode("search")
                     placeholder("Search")
                     style {
                         background(Background.None)

@@ -11,7 +11,6 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.UnderlinedToggleText
 import com.google.youtube.models.VideoComment
-import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
@@ -53,7 +52,6 @@ import org.w3c.dom.Element
 fun CommentItem(data: VideoComment) {
     var commentAndRepliesElement by remember { mutableStateOf<Element?>(null) }
     val containerHeight by rememberElementHeightAsState(commentAndRepliesElement)
-    val animatedContainerHeight by animateFloatAsState(containerHeight.toFloat())
     var areRepliesCollapsed by remember { mutableStateOf(true) }
     val animatedReplyCollapseIconRotation by animateFloatAsState(
         if (areRepliesCollapsed) 180f else 0f
@@ -62,7 +60,7 @@ fun CommentItem(data: VideoComment) {
     SpacedRow(spacePx = 12, modifier = Modifier.fillMaxWidth(), centerContentVertically = false) {
         // User Avatar & Expand/Collapse Arrow
         Column(
-            modifier = Modifier.height(animatedContainerHeight.px),
+            modifier = Modifier.height(containerHeight.px),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -105,10 +103,7 @@ fun CommentItem(data: VideoComment) {
             modifier = Modifier.weight(1),
         ) {
             MessageAndControls(data)
-            AnimatedVisibility(
-                isVisible = !areRepliesCollapsed,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+            if (!areRepliesCollapsed) {
                 SpacedColumn(
                     spacePx = 24,
                     modifier = Modifier.fillMaxWidth().padding(top = 24.px),
