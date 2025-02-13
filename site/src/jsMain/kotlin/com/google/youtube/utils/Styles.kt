@@ -37,6 +37,9 @@ object Styles {
     val BLUE_BORDER: Color.Rgb = Color.rgba(130, 191, 255, 0.37f)
     val REPLY_TOGGLE_CONTAINER: Color.Rgb = Color.rgb(46, 37, 39)
     val ELEVATED_BUTTON_CONTAINER: Color.Rgb = WHITE.copyf(alpha = 0.05f)
+    val LIVE_CHAT_CONTAINER: Color.Rgb = Color.rgb(25, 25, 25)
+    val LIVE_CHAT_CONTAINER_BORDER: Color.Rgb = Color.rgb(43, 43, 43)
+    val LIVE_CHAT_USERNAME_DIVIDER: Color.Rgb = Color.rgb(176, 176, 176)
 
     object Gradient {
         val RED_TO_PINK = linearGradient(LinearGradient.Direction.ToRight) {

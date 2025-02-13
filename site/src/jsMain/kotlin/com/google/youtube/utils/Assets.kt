@@ -115,6 +115,7 @@ object Assets {
         const val SHUFFLE = "/icons/ic_shuffle.svg"
         const val SLEEP_TIMER = "/icons/ic_sleep_timer.svg"
         const val SLEEP_TIMER_SELECTED = "/icons/ic_sleep_timer_selected.svg"
+        const val SMILEY = "/icons/ic_smiley.svg"
         const val SORT = "/icons/ic_sort.svg"
         const val SPEED = "/icons/ic_speed.svg"
         const val SPORTS = "/icons/ic_sports.svg"

@@ -4,7 +4,10 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.toArgb
 import com.varabyte.kobweb.browser.dom.observers.ResizeObserver
@@ -52,6 +55,13 @@ fun rememberBreakpointAsState() = produceState(window.breakpointFloor) {
     awaitDispose {
         window.removeEventListener("resize", resizeListener)
     }
+}
+
+// TODO: Use this throughout the codebase
+@Composable
+fun rememberIsLargeBreakpoint(): State<Boolean> {
+    val breakpoint by rememberBreakpointAsState()
+    return remember { derivedStateOf { breakpoint.isGreaterThan(Breakpoint.LG) } }
 }
 
 fun ComposeColor.toKobwebColor(): Color = Color.argb(this.toArgb())

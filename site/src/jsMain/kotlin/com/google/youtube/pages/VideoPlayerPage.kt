@@ -1,6 +1,5 @@
 package com.google.youtube.pages
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -16,6 +15,7 @@ import com.google.youtube.components.widgets.SegmentedButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.UnderlinedToggleText
 import com.google.youtube.components.widgets.comments.CommentsSection
+import com.google.youtube.components.widgets.player.LiveChatSection
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
@@ -31,9 +31,9 @@ import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberBreakpointAsState
 import com.google.youtube.utils.rememberElementWidthAsState
+import com.google.youtube.utils.rememberIsLargeBreakpoint
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.rememberWindowWidthAsState
-import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
@@ -69,7 +69,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.pointerEvents
-import com.varabyte.kobweb.compose.ui.modifiers.rotate
 import com.varabyte.kobweb.compose.ui.modifiers.rowGap
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
@@ -84,7 +83,6 @@ import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.FlexWrap
 import org.jetbrains.compose.web.css.LineStyle
-import org.jetbrains.compose.web.css.deg
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.times
@@ -96,8 +94,7 @@ fun VideoPlayerPage(
     videoId: String,
     modifier: Modifier = Modifier,
 ) {
-    val breakpoint by rememberBreakpointAsState()
-    val isLargeBreakpoint by remember { derivedStateOf { breakpoint.isGreaterThan(Breakpoint.LG) } }
+    val isLargeBreakpoint by rememberIsLargeBreakpoint()
     val isTheaterModeOn = remember { mutableStateOf(false) }
 
     // Segment States
@@ -118,13 +115,6 @@ fun VideoPlayerPage(
         if (isSegmentedContentVisible.value) 473f.coerceAtMost(windowWidth * 0.8f)
         else 0f,
     )
-    val animatedSegmentOpenerRotation by animateFloatAsState(
-        if (isSegmentedContentVisible.value) 180f else 0f
-    )
-    val animatedSegmentOpenerContainerColor by animateColorAsState(
-        if (isSegmentedContentVisible.value) Styles.SURFACE.toComposeColor()
-        else Styles.SURFACE_ELEVATED.toComposeColor()
-    )
     val segmentContent = remember {
         movableContentOf { modifier: Modifier ->
             SegmentedContent(modifier = modifier, state = selectedSegment)
@@ -136,6 +126,7 @@ fun VideoPlayerPage(
             PlayerAndComments(
                 modifier = Modifier.weight(1),
                 isTheaterModeOn = isTheaterModeOn,
+                isSegmentedContentVisible = isSegmentedContentVisible,
                 selectedSegment = selectedSegment,
                 videoId = videoId,
                 segmentedContent = if (!shouldDisplayFixedSegmentContent && isLargeBreakpoint) {
@@ -169,31 +160,21 @@ fun VideoPlayerPage(
                         .clickable(noPointer = true) { isSegmentedContentVisible.value = false }
                 )
             }
-            Box(modifier = Modifier.zIndex(1), contentAlignment = Alignment.CenterEnd) {
-                Row(
+            Row(
+                modifier = Modifier
+                    .background(Styles.SURFACE_ELEVATED)
+                    .borderRadius(12.px)
+                    .height(75.vh)
+                    .margin(left = 12.px)
+                    .overflow { y(Overflow.Scroll) }
+                    .width(animatedFloatingSegmentWidth.px)
+                    .zIndex(1),
+            ) {
+                Box(
                     modifier = Modifier
-                        .background(Styles.SURFACE_ELEVATED)
-                        .borderRadius(12.px)
-                        .height(75.vh)
-                        .margin(left = 12.px)
-                        .overflow { y(Overflow.Scroll) }
-                        .width(animatedFloatingSegmentWidth.px),
-                    content = {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(left = 16.px, top = 16.px, right = 16.px),
-                            content = { segmentContent(Modifier.fillMaxSize()) },
-                        )
-                    },
-                )
-                AssetImageButton(
-                    modifier = Modifier
-                        .rotate(animatedSegmentOpenerRotation.deg)
-                        .margin(right = 4.px),
-                    asset = Assets.Icons.ARROW_LEFT,
-                    containerColor = animatedSegmentOpenerContainerColor.toKobwebColor().toRgb(),
-                    onClick = { isSegmentedContentVisible.value = !isSegmentedContentVisible.value }
+                        .fillMaxSize()
+                        .padding(left = 16.px, top = 16.px, right = 16.px),
+                    content = { segmentContent(Modifier.fillMaxSize()) },
                 )
             }
         }
@@ -205,7 +186,8 @@ private fun SegmentedContent(
     state: MutableState<SegmentedContentType>,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = Modifier.fillMaxSize().noShrink().then(modifier)) {
+    val isLargeBreakpoint by rememberIsLargeBreakpoint()
+    Column(modifier = Modifier.fillMaxSize().then(modifier)) {
         SegmentedButton(
             segments = SegmentedContentType.entries.map { e -> e.label },
             selectedIndex = state.value.ordinal,
@@ -213,7 +195,10 @@ private fun SegmentedContent(
                 state.value = SegmentedContentType.entries.elementAt(index)
             },
         )
-        Crossfade(targetState = state.value) { animatedIndex ->
+        Crossfade(
+            targetState = state.value,
+            modifier = Modifier.fillMaxWidth().weight(1),
+        ) { animatedIndex ->
             when (animatedIndex) {
                 SegmentedContentType.Suggestions -> SpacedColumn(
                     spacePx = 24,
@@ -238,14 +223,18 @@ private fun SegmentedContent(
                     }
                 }
 
-                SegmentedContentType.Transcripts -> TextBox(
-                    modifier = Modifier.fillMaxSize(),
-                    text = "Your transcripts will show here"
-                )
+                SegmentedContentType.Transcripts -> Box(
+                    modifier = Modifier.fillMaxWidth().margin(top = 24.px),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    TextBox(text = "Your transcripts will show here")
+                }
 
-                SegmentedContentType.LiveChat -> TextBox(
-                    modifier = Modifier.fillMaxSize(),
-                    text = "Live Chat"
+                SegmentedContentType.LiveChat -> LiveChatSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(if (isLargeBreakpoint) 84.vh else 65.vh)
+                        .margin(top = 8.px, bottom = 22.px)
                 )
             }
         }
@@ -335,8 +324,10 @@ private fun PlayerAndComments(
     videoId: String,
     selectedSegment: MutableState<SegmentedContentType>,
     isTheaterModeOn: MutableState<Boolean>,
+    isSegmentedContentVisible: MutableState<Boolean>,
     segmentedContent: (@Composable () -> Unit)?,
 ) {
+    val isLargeBreakpoint by rememberIsLargeBreakpoint()
     var isDescriptionBoxExpanded by remember { mutableStateOf(false) }
     var descriptionToggleRef by remember { mutableStateOf<Element?>(null) }
     val descriptionToggleMouseEventState by rememberMouseEventAsState(descriptionToggleRef)
@@ -433,6 +424,12 @@ private fun PlayerAndComments(
                     asset = Assets.Icons.MORE_HORIZONTAL,
                     containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
+                if (!isLargeBreakpoint) {
+                    AssetImageButton(
+                        asset = Assets.Icons.ARROW_LEFT,
+                        containerColor = Styles.ELEVATED_BUTTON_CONTAINER
+                    ) { isSegmentedContentVisible.value = !isSegmentedContentVisible.value }
+                }
             }
         }
 

@@ -48,6 +48,7 @@ fun TextField(
     contentPadding: PaddingValues = PaddingValues(16.px),
     leadingAsset: String? = null,
     showBorder: Boolean = true,
+    onEnterKeyPressed: (() -> Unit)? = null,
     style: StyleScope.() -> Unit = { width(100.percent) },
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -60,6 +61,7 @@ fun TextField(
             onFocus { isFocused = true }
             onBlur { isFocused = false }
         }
+        onEnterKeyPressed?.let { fn -> onKeyUp { event -> if (event.key == "Enter") fn() } }
         style {
             containerColor?.let { bg -> background(bg) } ?: run { background(Background.None) }
             leadingAsset?.let { asset ->

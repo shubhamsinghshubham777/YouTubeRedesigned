@@ -53,9 +53,6 @@ fun CommentItem(data: VideoComment) {
     var commentAndRepliesElement by remember { mutableStateOf<Element?>(null) }
     val containerHeight by rememberElementHeightAsState(commentAndRepliesElement)
     var areRepliesCollapsed by remember { mutableStateOf(true) }
-    val animatedReplyCollapseIconRotation by animateFloatAsState(
-        if (areRepliesCollapsed) 180f else 0f
-    )
 
     SpacedRow(spacePx = 12, modifier = Modifier.fillMaxWidth(), centerContentVertically = false) {
         // User Avatar & Expand/Collapse Arrow
@@ -91,7 +88,7 @@ fun CommentItem(data: VideoComment) {
                         .clickable { areRepliesCollapsed = !areRepliesCollapsed },
                 ) {
                     Image(
-                        modifier = Modifier.rotate(animatedReplyCollapseIconRotation.deg),
+                        modifier = Modifier.rotate(if (areRepliesCollapsed) 180.deg else 0.deg),
                         src = Assets.Icons.DOUBLE_ARROW_UP
                     )
                 }
