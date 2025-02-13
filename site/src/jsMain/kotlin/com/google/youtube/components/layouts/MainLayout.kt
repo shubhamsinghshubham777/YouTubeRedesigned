@@ -14,6 +14,7 @@ import com.google.youtube.components.widgets.PersonalisedFeedDialog
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HistoryPage
 import com.google.youtube.pages.HomePage
+import com.google.youtube.pages.SearchPage
 import com.google.youtube.pages.ShortDetails
 import com.google.youtube.pages.ShortsGrid
 import com.google.youtube.pages.TVModePage
@@ -143,7 +144,7 @@ fun MainLayout() {
                             Route.TVMode -> TVModePage()
                             is Route.Video -> VideoPlayerPage(videoId = animatedRoute.id)
                             Route.WatchLater -> TextBox("Watch Later")
-                            is Route.Search -> TextBox("Searched query: ${animatedRoute.query}")
+                            is Route.Search -> SearchPage(query = animatedRoute.query)
                         }
                     }
                 }

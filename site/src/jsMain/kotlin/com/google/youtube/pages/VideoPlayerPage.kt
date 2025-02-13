@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
+import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.SegmentedButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.UnderlinedToggleText
@@ -471,20 +472,6 @@ private fun PlayerAndComments(
             CommentsSection(modifier = Modifier.weight(1), videoId = videoId)
             segmentedContent?.invoke()
         }
-    }
-}
-
-@Composable
-private fun IconLabel(
-    iconAsset: String,
-    label: String,
-) {
-    SpacedRow(4) {
-        Image(
-            modifier = Modifier.opacity(0.3f),
-            src = iconAsset
-        )
-        TextBox(label)
     }
 }
 

@@ -64,6 +64,12 @@ fun rememberIsLargeBreakpoint(): State<Boolean> {
     return remember { derivedStateOf { breakpoint.isGreaterThan(Breakpoint.LG) } }
 }
 
+@Composable
+fun rememberIsSmallBreakpoint(): State<Boolean> {
+    val breakpoint by rememberBreakpointAsState()
+    return remember { derivedStateOf { breakpoint.isSmallerThan(Breakpoint.MD) } }
+}
+
 fun ComposeColor.toKobwebColor(): Color = Color.argb(this.toArgb())
 
 fun Color.Rgb.toComposeColor(): ComposeColor {

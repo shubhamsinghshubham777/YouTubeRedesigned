@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.IntSize
 import com.google.youtube.components.widgets.ColoredBorderContainer
 import com.google.youtube.components.widgets.FilterRow
 import com.google.youtube.components.widgets.MissedVideosContainer
@@ -92,7 +91,7 @@ private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
             onPositiveCTA = {},
             color = Styles.PURPLE_BORDER,
             contentGapPx = 30,
-            scrollPixels = SUGGESTION_THUMBNAIL_SIZE.width.toDouble(),
+            scrollPixels = Constants.SUGGESTION_THUMBNAIL_SIZE.width.toDouble(),
         ) {
             repeat(4) {
                 VideoThumbnailCard(
@@ -104,7 +103,7 @@ private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
                     views = "150K",
                     daysSinceUploaded = "4 months",
                     duration = "12:07",
-                    size = SUGGESTION_THUMBNAIL_SIZE
+                    size = Constants.SUGGESTION_THUMBNAIL_SIZE
                 )
             }
         }
@@ -142,5 +141,3 @@ private fun MainVideosGrid(modifier: Modifier = Modifier) {
         }
     }
 }
-
-private val SUGGESTION_THUMBNAIL_SIZE = IntSize(width = 332, height = 186)

@@ -127,6 +127,7 @@ fun AssetSvgButton(
         Row(
             ref = ref { elementRef = it },
             modifier = Modifier
+                .borderRadius(borderRadius)
                 .backgroundColor(animatedHighlightColor.toKobwebColor())
                 .fillMaxHeight()
                 .then(
