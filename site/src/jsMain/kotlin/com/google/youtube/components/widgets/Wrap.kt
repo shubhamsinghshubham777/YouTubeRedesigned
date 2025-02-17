@@ -12,15 +12,15 @@ import org.jetbrains.compose.web.css.px
 
 @Composable
 fun Wrap(
-    columnGapPx: Int = 0,
-    rowGapPx: Int = 0,
+    horizontalGapPx: Int = 0,
+    verticalGapPx: Int = 0,
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         modifier = Modifier
             .flexWrap(FlexWrap.Wrap)
-            .gap(rowGap = rowGapPx.px, columnGap = columnGapPx.px)
+            .gap(rowGap = verticalGapPx.px, columnGap = horizontalGapPx.px)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
         content = content,

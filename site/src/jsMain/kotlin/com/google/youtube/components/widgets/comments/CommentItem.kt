@@ -11,23 +11,25 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.UnderlinedToggleText
 import com.google.youtube.models.VideoComment
+import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.clickable
+import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.isSmallerThan
 import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberBreakpointAsState
 import com.google.youtube.utils.rememberElementHeightAsState
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.varabyte.kobweb.compose.css.FontWeight
+import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
-import com.varabyte.kobweb.compose.foundation.layout.Spacer
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
@@ -35,6 +37,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.boxShadow
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.height
+import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.rotate
 import com.varabyte.kobweb.compose.ui.modifiers.size
@@ -53,6 +56,7 @@ fun CommentItem(data: VideoComment) {
     var commentAndRepliesElement by remember { mutableStateOf<Element?>(null) }
     val containerHeight by rememberElementHeightAsState(commentAndRepliesElement)
     var areRepliesCollapsed by remember { mutableStateOf(true) }
+    val animatedArrowRotation by animateFloatAsState(if (areRepliesCollapsed) 180f else 0f)
 
     SpacedRow(spacePx = 12, modifier = Modifier.fillMaxWidth(), centerContentVertically = false) {
         // User Avatar & Expand/Collapse Arrow
@@ -88,7 +92,7 @@ fun CommentItem(data: VideoComment) {
                         .clickable { areRepliesCollapsed = !areRepliesCollapsed },
                 ) {
                     Image(
-                        modifier = Modifier.rotate(if (areRepliesCollapsed) 180.deg else 0.deg),
+                        modifier = Modifier.rotate(animatedArrowRotation.deg),
                         src = Assets.Icons.DOUBLE_ARROW_UP
                     )
                 }
@@ -100,10 +104,12 @@ fun CommentItem(data: VideoComment) {
             modifier = Modifier.weight(1),
         ) {
             MessageAndControls(data)
-            if (!areRepliesCollapsed) {
+            AnimatedVisibility(!areRepliesCollapsed) {
                 SpacedColumn(
                     spacePx = 24,
-                    modifier = Modifier.fillMaxWidth().padding(top = 24.px),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = if (data.replies.isNotEmpty()) 24.px else 0.px),
                 ) {
                     data.replies.forEach { childData -> CommentItem(childData) }
                 }
@@ -137,8 +143,8 @@ private fun MessageAndControls(data: VideoComment) {
                     maxLines = 1,
                     size = 12,
                     text = "${data.timestamp} ago",
+                    modifier = Modifier.weight(1),
                 )
-                Spacer()
                 AssetImageButton(Assets.Icons.MORE) {}
             }
             SpacedColumn(8) {
@@ -156,7 +162,12 @@ private fun MessageAndControls(data: VideoComment) {
                 }
             }
         }
-        SpacedRow(animatedSegmentedButtonsSpacing) {
+        SpacedRow(
+            spacePx = animatedSegmentedButtonsSpacing,
+            modifier = Modifier
+                .overflow(overflowX = Overflow.Scroll, overflowY = Overflow.Hidden)
+                .hideScrollBar(),
+        ) {
             SegmentedButtonPair(
                 assetPathLeft = Assets.Paths.LIKED,
                 assetPathRight = Assets.Paths.DISLIKE,
@@ -179,7 +190,7 @@ private fun MessageAndControls(data: VideoComment) {
                 onClickRight = {},
             )
             if (data.isHearted) {
-                Box(contentAlignment = Alignment.BottomEnd) {
+                Box(modifier = Modifier.noShrink(), contentAlignment = Alignment.BottomEnd) {
                     Image(
                         modifier = Modifier.clip(Circle()).size(22.px),
                         src = getUserThumbnailFromId(data.userId),

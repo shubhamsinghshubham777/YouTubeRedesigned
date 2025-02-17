@@ -1,7 +1,5 @@
 package com.google.youtube.pages
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.IntSize
 import com.google.youtube.components.widgets.AssetSvgButton
+import com.google.youtube.components.widgets.CategoryTab
 import com.google.youtube.components.widgets.RowScrollButtons
 import com.google.youtube.components.widgets.VideoThumbnailCard
 import com.google.youtube.models.ExploreGridCategoryWithVideos
@@ -19,15 +18,12 @@ import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
-import com.google.youtube.utils.clickable
 import com.google.youtube.utils.gridGap
 import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.limitTextWithEllipsis
-import com.google.youtube.utils.noShrink
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.ScrollBehavior
-import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -49,8 +45,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
-import com.varabyte.kobweb.compose.ui.modifiers.size
-import com.varabyte.kobweb.compose.ui.modifiers.userSelect
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.theme.shapes.Circle
@@ -212,34 +206,6 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun CategoryTab(
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-) {
-    val updatedIsSelected = updateTransition(isSelected).currentState
-    val animatedIndicatorHeight by animateFloatAsState(if (updatedIsSelected) 3f else 0f)
-    Box(
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .height(48.px)
-            .noShrink()
-            .padding(leftRight = 16.px)
-            .userSelect(UserSelect.None),
-        contentAlignment = Alignment.Center
-    ) {
-        Box { Text(label) }
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .backgroundImage(Styles.Gradient.RED_TO_PINK)
-                .borderRadius(topLeft = 3.px, topRight = 3.px)
-                .size(width = 25.px, height = animatedIndicatorHeight.px)
-        )
     }
 }
 

@@ -118,4 +118,6 @@ fun VideoThumbnailCard(
 object VideoThumbnailCardDefaults {
     const val WIDTH: Int = 354
     const val HEIGHT: Int = 198
+    // TODO: Remove WIDTH & HEIGHT above in favor of this
+    val SIZE = IntSize(WIDTH, HEIGHT)
 }

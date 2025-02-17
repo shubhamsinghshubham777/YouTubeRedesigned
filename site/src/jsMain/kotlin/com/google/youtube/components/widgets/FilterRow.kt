@@ -66,7 +66,7 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
             filters.forEachIndexed { index, filter ->
                 val isSelected = index == selectedFilterIndex
                 AssetSvgButton(
-                    id = filter.name.replace(' ', '_'),
+                    id = filter.name,
                     type = AssetSvgButtonType.SelectableChip,
                     text = filter.name,
                     startIconPath = filter.iconPath,

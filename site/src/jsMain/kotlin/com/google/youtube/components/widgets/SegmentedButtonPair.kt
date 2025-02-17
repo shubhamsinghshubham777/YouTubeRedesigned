@@ -5,11 +5,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.google.youtube.utils.Constants
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.animatedColor
 import com.google.youtube.utils.clickable
+import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberMouseEventAsState
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -35,6 +37,8 @@ fun SegmentedButtonPair(
     assetColorRight: Color = Styles.WHITE,
     assetPathLeft: String? = null,
     assetPathRight: String? = null,
+    assetLeftStroked: Boolean = false,
+    assetRightStroked: Boolean = false,
     containerColor: Color? = null,
     isDense: Boolean = false,
     isLeftLabelBold: Boolean = false,
@@ -55,6 +59,7 @@ fun SegmentedButtonPair(
         modifier = Modifier
             .background(containerColor)
             .clip(Rect(100.px))
+            .noShrink()
             .userSelect(UserSelect.None),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -69,6 +74,7 @@ fun SegmentedButtonPair(
             SegmentedItem(
                 color = assetColorLeft,
                 iconPath = assetPathLeft,
+                pathStroked = assetLeftStroked,
                 isDense = isDense,
                 isLabelBold = isLeftLabelBold,
                 label = labelLeft,
@@ -86,7 +92,10 @@ fun SegmentedButtonPair(
             Box(
                 modifier = Modifier
                     .background(Styles.WHITE.copyf(alpha = 0.1f))
-                    .size(width = 1.29.px, height = 28.px)
+                    .size(
+                        width = Constants.VERTICAL_DIVIDER_SIZE.width.px,
+                        height = Constants.VERTICAL_DIVIDER_SIZE.height.px,
+                    )
             )
         }
         if (doesRightButtonExist) {
@@ -100,6 +109,7 @@ fun SegmentedButtonPair(
             SegmentedItem(
                 color = assetColorRight,
                 iconPath = assetPathRight,
+                pathStroked = assetRightStroked,
                 isDense = isDense,
                 isLabelBold = isRightLabelBold,
                 label = labelRight,
@@ -119,6 +129,7 @@ fun SegmentedButtonPair(
 private fun SegmentedItem(
     color: Color,
     iconPath: String?,
+    pathStroked: Boolean,
     isDense: Boolean,
     isLabelBold: Boolean,
     label: String?,
@@ -136,7 +147,12 @@ private fun SegmentedItem(
             .then(modifier),
     ) {
         iconPath?.let { path ->
-            AssetSvg(id = "segmented_item_$label", path = path, primaryColor = color)
+            AssetSvg(
+                id = "segmented_item_$label",
+                path = path,
+                primaryColor = color,
+                strokeOnly = pathStroked,
+            )
         }
         label?.let { safeLabel ->
             TextBox(

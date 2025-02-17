@@ -213,6 +213,7 @@ fun Modifier.gridGap(
 
 fun Modifier.noShrink() = then(Modifier.flexShrink(0))
 
+// TODO: Include hover & press highlight logic in it
 fun Modifier.clickable(
     noPointer: Boolean = false,
     onClick: (() -> Unit)? = null,

@@ -173,9 +173,7 @@ private fun NavRailListItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    val uniqueId = remember(item.label) {
-        "${item.label.replace(' ', '_')}_nav_rail_button"
-    }
+    val uniqueId = remember(item.label) { "${item.label}_nav_rail_button" }
     var bgColor by remember { mutableStateOf<Color?>(null) }
     var dropDownBGColor by remember { mutableStateOf(Color.Transparent) }
 

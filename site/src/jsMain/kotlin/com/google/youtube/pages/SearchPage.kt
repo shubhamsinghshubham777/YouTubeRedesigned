@@ -124,7 +124,7 @@ private fun ListCard(details: VideoThumbnailDetails) {
                         text = details.title,
                         weight = FontWeight.Medium,
                     )
-                    Wrap(columnGapPx = 15, rowGapPx = 15) {
+                    Wrap(horizontalGapPx = 15, verticalGapPx = 15) {
                         SpacedRow(24) {
                             IconLabel(iconAsset = Assets.Icons.EYE, label = details.views)
                             details.uploadDate?.let { uploadDate ->
@@ -143,7 +143,7 @@ private fun ListCard(details: VideoThumbnailDetails) {
                             )
                         }
                     }
-                    Wrap(columnGapPx = 16, rowGapPx = 16) {
+                    Wrap(horizontalGapPx = 16, verticalGapPx = 16) {
                         SpacedRow(15) {
                             Image(src = Assets.Icons.USER_AVATAR, width = 28, height = 28)
                             SpacedRow(8) {
@@ -203,7 +203,7 @@ private fun Filters(modifier: Modifier = Modifier) {
     var isLayoutTypeGrid by remember { mutableStateOf(false) }
     var isWatchTypeWatched by remember { mutableStateOf<Boolean?>(null) }
 
-    Wrap(columnGapPx = 8, rowGapPx = 8, modifier = Modifier.fillMaxWidth().then(modifier)) {
+    Wrap(horizontalGapPx = 8, verticalGapPx = 8, modifier = Modifier.fillMaxWidth().then(modifier)) {
         AssetSvgButton(
             endIconPath = Assets.Paths.ARROW_DOWN,
             id = "type_button",
@@ -280,9 +280,9 @@ private fun Filters(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .background(Styles.DIVIDER_LIGHTER)
-                    .height(28.px)
+                    .height(Constants.VERTICAL_DIVIDER_SIZE.height.px)
                     .margin(leftRight = 8.px)
-                    .width(1.29.px)
+                    .width(Constants.VERTICAL_DIVIDER_SIZE.width.px)
             )
             AssetSvgButton(
                 isDense = true,

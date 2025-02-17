@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
 import com.varabyte.kobweb.compose.dom.ref
@@ -33,6 +34,7 @@ fun AnimatedVisibility(
     skipDelay: Boolean = false,
     content: @Composable (isAnimating: State<Boolean>) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val animatedIsVisible = updateTransition(isVisible).currentState
 
     // These states will only be initialised once
@@ -51,7 +53,7 @@ fun AnimatedVisibility(
     val opacityAnimatable = remember { Animatable(0f) }
     val animSpec = remember { tween<Float>(durationMillis = ANIM_DURATION_MILLIS.toInt()) }
 
-    LaunchedEffect(animatedIsVisible) {
+    LaunchedEffect(animatedIsVisible, finalContentSize) {
         finalContentSize?.let { size ->
             when {
                 !isInitialised -> {
@@ -94,9 +96,12 @@ fun AnimatedVisibility(
 
     Box(
         ref = ref { element ->
-            finalContentSize = Size(element.offsetWidth.toFloat(), element.offsetHeight.toFloat())
-            currentContentSize = Size.Zero
-            currentOpacity = 0f
+            coroutineScope.launch {
+                delay(1)
+                finalContentSize = element.getBoundingClientRect().toComposeRect().size
+                currentContentSize = Size.Zero
+                currentOpacity = 0f
+            }
         },
         modifier = Modifier
             .thenIfNotNull(currentContentSize) { size ->

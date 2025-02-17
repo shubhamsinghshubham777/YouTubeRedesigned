@@ -7,6 +7,8 @@ import com.varabyte.kobweb.compose.dom.svg.Defs
 import com.varabyte.kobweb.compose.dom.svg.LinearGradient
 import com.varabyte.kobweb.compose.dom.svg.Path
 import com.varabyte.kobweb.compose.dom.svg.SVGFillRule
+import com.varabyte.kobweb.compose.dom.svg.SVGStrokeLineCap
+import com.varabyte.kobweb.compose.dom.svg.SVGStrokeLineJoin
 import com.varabyte.kobweb.compose.dom.svg.Stop
 import com.varabyte.kobweb.compose.dom.svg.Svg
 import com.varabyte.kobweb.compose.dom.svg.SvgId
@@ -23,6 +25,7 @@ fun AssetSvg(
     size: CSSLengthOrPercentageValue = 24.px,
     primaryColor: CSSColorValue = Styles.WHITE,
     secondaryColor: CSSColorValue = primaryColor,
+    strokeOnly: Boolean = false,
     onClick: (() -> Unit)? = null,
     style: (StyleScope.() -> Unit)? = null,
 ) {
@@ -64,8 +67,15 @@ fun AssetSvg(
         }
         Path {
             d(path)
-            fill(gradientId)
-            fillRule(SVGFillRule.EvenOdd)
+            if (strokeOnly) {
+                stroke(primaryColor)
+                strokeLineCap(SVGStrokeLineCap.Round)
+                strokeLineJoin(SVGStrokeLineJoin.Round)
+                strokeWidth(1.4763)
+            } else {
+                fill(gradientId)
+                fillRule(SVGFillRule.EvenOdd)
+            }
         }
     }
 }

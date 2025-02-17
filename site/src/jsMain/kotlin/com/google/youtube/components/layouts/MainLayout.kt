@@ -17,6 +17,7 @@ import com.google.youtube.pages.HomePage
 import com.google.youtube.pages.SearchPage
 import com.google.youtube.pages.ShortDetails
 import com.google.youtube.pages.ShortsGrid
+import com.google.youtube.pages.SubscriptionsPage
 import com.google.youtube.pages.TVModePage
 import com.google.youtube.pages.VideoPlayerPage
 import com.google.youtube.utils.Constants
@@ -120,7 +121,6 @@ fun MainLayout() {
                     ) { animatedRoute ->
                         when (animatedRoute) {
                             is Route.Collection -> TextBox("Collection (${animatedRoute.id})")
-                            Route.Collections -> TextBox("All Collections")
                             Route.Explore -> ExplorePage(
                                 Modifier.padding(bottom = Constants.CONTENT_PADDING)
                             )
@@ -140,7 +140,10 @@ fun MainLayout() {
                             )
 
                             Route.Shorts -> ShortsGrid(showPersonalisedFeedDialogState)
-                            Route.Subscriptions -> TextBox("Subscriptions")
+                            Route.Collections, Route.Subscriptions -> SubscriptionsPage(
+                                isSubscriptionsCategorySelected = animatedRoute == Route.Subscriptions,
+                            )
+
                             Route.TVMode -> TVModePage()
                             is Route.Video -> VideoPlayerPage(videoId = animatedRoute.id)
                             Route.WatchLater -> TextBox("Watch Later")

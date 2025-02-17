@@ -28,7 +28,7 @@ object Styles {
     val SWITCH_OUTLINE: Color.Rgb = Color.rgb(121, 116, 126)
     val MISSED_VIDEOS_CONTAINER: Color.Rgb = Color.rgb(32, 34, 36)
     val ARROW_BUTTON_CONTAINER: Color.Rgb = Color.rgb(63, 63, 63)
-    val VIDEO_CARD_PRIMARY_TEXT: Color.Rgb = Color.rgb(241, 241, 241)
+    val VIDEO_CARD_PRIMARY_TEXT: Color.Rgb = OFF_WHITE
     val VIDEO_CARD_SECONDARY_TEXT: Color.Rgb = Color.rgb(170, 170, 170)
     val VIDEO_CARD_DURATION_CONTAINER: Color.Rgb = Color.rgba(0, 0, 0, 0.6f)
     val DIVIDER: Color.Rgb = WHITE.copyf(alpha = 0.14f)
