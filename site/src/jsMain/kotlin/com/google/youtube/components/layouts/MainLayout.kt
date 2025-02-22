@@ -15,6 +15,7 @@ import com.google.youtube.pages.CollectionPage
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HistoryPage
 import com.google.youtube.pages.HomePage
+import com.google.youtube.pages.PlaylistsPage
 import com.google.youtube.pages.SearchPage
 import com.google.youtube.pages.ShortDetails
 import com.google.youtube.pages.ShortsGrid
@@ -134,7 +135,7 @@ fun MainLayout() {
                             Route.LikedVideos -> TextBox("Liked Videos")
                             is Route.Page -> TextBox("Channel (${animatedRoute.id})")
                             is Route.Playlist -> TextBox("Playlist (${animatedRoute.id})")
-                            Route.Playlists -> TextBox("All Playlists")
+                            Route.Playlists -> PlaylistsPage()
                             is Route.Short -> ShortDetails(
                                 id = animatedRoute.id,
                                 onBackPressed = navigator::pop,

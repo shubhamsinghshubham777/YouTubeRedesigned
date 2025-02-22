@@ -103,6 +103,7 @@ fun RoundedSearchTextField(
     textState: MutableState<String>,
     hintText: String,
     widthPx: Int = 314,
+    style: (StyleScope.() -> Unit)? = null,
 ) {
     TextField(
         containerColor = Styles.SURFACE_ELEVATED,
@@ -114,5 +115,6 @@ fun RoundedSearchTextField(
     ) {
         borderRadius(24.px)
         width(widthPx.px)
+        style?.invoke(this)
     }
 }
