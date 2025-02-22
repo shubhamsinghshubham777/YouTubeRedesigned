@@ -13,7 +13,7 @@ import org.jetbrains.compose.web.css.px
 @Composable
 fun Wrap(
     horizontalGapPx: Int = 0,
-    verticalGapPx: Int = 0,
+    verticalGapPx: Int = horizontalGapPx,
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {

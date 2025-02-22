@@ -39,11 +39,13 @@ import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.TextInput
+import org.w3c.dom.HTMLInputElement
 
 @Composable
 fun TextField(
     textState: MutableState<String>,
     hintText: String,
+    onElementAvailable: ((HTMLInputElement) -> Unit)? = null,
     containerColor: Color? = null,
     contentPadding: PaddingValues = PaddingValues(16.px),
     leadingAsset: String? = null,
@@ -56,6 +58,12 @@ fun TextField(
         Styles.WHITE.copyf(alpha = if (isFocused) 1f else 0.15f).toComposeColor()
     )
     TextInput(value = textState.value) {
+        onElementAvailable?.let { callback ->
+            ref { element ->
+                callback(element)
+                onDispose {}
+            }
+        }
         onInput { event -> textState.value = event.value }
         if (showBorder) {
             onFocus { isFocused = true }
