@@ -85,7 +85,7 @@ fun NavRail(
     var hoveredRoute by remember { mutableStateOf<Route?>(null) }
     val isPopupContentHoveredState = remember { mutableStateOf(false) }
 
-    SpacedColumn(spacePx = 2, modifier = modifier) {
+    SpacedColumn(spacePx = ITEM_SPACING_PX, modifier = modifier) {
         items.forEach { parentItem ->
             val isDropDownOpen = remember { mutableStateOf(false) }
 
@@ -105,9 +105,14 @@ fun NavRail(
                 parentItem.children?.let { children ->
                     AnimatedVisibility(
                         isVisible = isDropDownOpen.value && isExpandedState.value,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) { isAnimating ->
-                        Column(modifier = Modifier.fillMaxWidth()) {
+                        SpacedColumn(
+                            spacePx = ITEM_SPACING_PX,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(topBottom = ITEM_SPACING_PX.px),
+                        ) {
                             children.forEach { childItem ->
                                 var elementRef: Element? by remember { mutableStateOf(null) }
                                 NavRailListItem(
@@ -527,3 +532,5 @@ private val SampleNavRailItems = listOf(
         ),
     ),
 )
+
+private const val ITEM_SPACING_PX = 2

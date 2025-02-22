@@ -11,6 +11,7 @@ import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.PersonalisedFeedDialog
+import com.google.youtube.pages.CollectionPage
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HistoryPage
 import com.google.youtube.pages.HomePage
@@ -120,7 +121,7 @@ fun MainLayout() {
                         animateTranslationY = false,
                     ) { animatedRoute ->
                         when (animatedRoute) {
-                            is Route.Collection -> TextBox("Collection (${animatedRoute.id})")
+                            is Route.Collection -> CollectionPage(collectionId = animatedRoute.id)
                             Route.Explore -> ExplorePage(
                                 Modifier.padding(bottom = Constants.CONTENT_PADDING)
                             )

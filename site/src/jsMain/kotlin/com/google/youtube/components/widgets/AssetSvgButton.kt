@@ -153,7 +153,7 @@ fun AssetSvgButton(
                         when (updatedButtonType) {
                             AssetSvgButtonType.Button -> when {
                                 endIconPath != null && isDense -> 12f
-                                isDense -> 16f
+                                endIconPath != null -> 16f
                                 else -> 24f
                             }
 

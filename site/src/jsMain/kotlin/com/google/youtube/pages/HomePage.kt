@@ -12,6 +12,7 @@ import com.google.youtube.components.widgets.MissedVideosContainer
 import com.google.youtube.components.widgets.ShortThumbnailCard
 import com.google.youtube.components.widgets.ShortThumbnailCardDefaults
 import com.google.youtube.components.widgets.VideoThumbnailCard
+import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.BasicGrid
@@ -21,6 +22,8 @@ import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.isGreaterThan
+import com.google.youtube.utils.rememberBreakpointAsState
+import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.display
@@ -28,7 +31,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
-import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.fr
 import org.jetbrains.compose.web.css.px
@@ -43,7 +45,22 @@ fun HomePage(showPersonalisedFeedDialogState: MutableState<Boolean>) {
                 .padding(top = 27.px, bottom = 27.px),
         ) {
             MissedVideosContainer(Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT))
-            MainVideosGrid()
+            MainVideosGrid(
+                videos = remember {
+                    List(20) {
+                        VideoThumbnailDetails(
+                            thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
+                            channelAsset = Assets.Icons.USER_AVATAR,
+                            title = "How Websites Learned to Fit Everywhere",
+                            channelName = "Juxtopposed",
+                            isVerified = true,
+                            views = "150K",
+                            daysSinceUploaded = "4 months",
+                            duration = "12:07",
+                        )
+                    }
+                }
+            )
             RecentWatchSuggestions(Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT))
             ShortSuggestions()
         }
@@ -111,32 +128,37 @@ private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun MainVideosGrid(modifier: Modifier = Modifier) {
+fun MainVideosGrid(
+    videos: List<VideoThumbnailDetails>,
+    modifier: Modifier = Modifier,
+    minWidth: CSSLengthOrPercentageNumericValue = 380.px,
+) {
     val navigator = LocalNavigator.current
-    val breakpoint = rememberBreakpoint()
+    val breakpoint by rememberBreakpointAsState()
+
     BasicGrid(
         modifier = Modifier.fillMaxWidth().display(DisplayStyle.Grid).then(modifier),
         columnBuilder = {
             minmax(
-                min = if (breakpoint.isGreaterThan(Breakpoint.MD)) 380.px
+                min = if (breakpoint.isGreaterThan(Breakpoint.MD)) minWidth
                 else Constants.MOBILE_MAX_AVAILABLE_WIDTH.px,
                 max = 1.fr
             )
         },
         gridGap = GridGap(20.px)
     ) {
-        repeat(20) { index ->
+        videos.forEachIndexed { index, item ->
             VideoThumbnailCard(
                 onClick = { navigator.pushRoute(Route.Video(id = index.toString())) },
                 modifier = Modifier.margin(bottom = 45.px),
-                thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                channelAsset = Assets.Icons.USER_AVATAR,
-                title = "How Websites Learned to Fit Everywhere",
-                channelName = "Juxtopposed",
-                isVerified = true,
-                views = "150K",
-                daysSinceUploaded = "4 months",
-                duration = "12:07",
+                thumbnailAsset = item.thumbnailAsset,
+                channelAsset = item.channelAsset,
+                title = item.title,
+                channelName = item.channelName,
+                isVerified = item.isVerified,
+                views = item.views,
+                daysSinceUploaded = item.daysSinceUploaded,
+                duration = item.duration,
             )
         }
     }

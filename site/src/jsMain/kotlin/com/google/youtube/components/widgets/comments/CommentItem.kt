@@ -104,7 +104,7 @@ fun CommentItem(data: VideoComment) {
             modifier = Modifier.weight(1),
         ) {
             MessageAndControls(data)
-            AnimatedVisibility(!areRepliesCollapsed) {
+            AnimatedVisibility(!areRepliesCollapsed, modifier = Modifier.fillMaxWidth()) {
                 SpacedColumn(
                     spacePx = 24,
                     modifier = Modifier
@@ -162,9 +162,12 @@ private fun MessageAndControls(data: VideoComment) {
                 }
             }
         }
+
+        // Controls
         SpacedRow(
             spacePx = animatedSegmentedButtonsSpacing,
             modifier = Modifier
+                .fillMaxWidth()
                 .overflow(overflowX = Overflow.Scroll, overflowY = Overflow.Hidden)
                 .hideScrollBar(),
         ) {
