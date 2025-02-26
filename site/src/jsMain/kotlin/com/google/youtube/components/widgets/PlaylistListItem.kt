@@ -1,19 +1,12 @@
-package com.google.youtube.pages
+package com.google.youtube.components.widgets
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.google.youtube.components.widgets.AssetImageButton
-import com.google.youtube.components.widgets.AssetSvgButton
-import com.google.youtube.components.widgets.AssetSvgButtonType
-import com.google.youtube.components.widgets.IconLabel
-import com.google.youtube.components.widgets.Wrap
-import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.PlaylistItemData
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Constants
@@ -42,44 +35,22 @@ import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.objectFit
 import com.varabyte.kobweb.compose.ui.modifiers.padding
+import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.theme.shapes.Circle
+import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.CSSLengthOrPercentageValue
 import org.jetbrains.compose.web.css.Color
 import org.jetbrains.compose.web.css.DisplayStyle
-import org.jetbrains.compose.web.css.marginLeft
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 
 @Composable
-fun PlaylistsPage() {
-    val isGridModeSelected = remember { mutableStateOf(false) }
-    val searchQueryState = remember { mutableStateOf("") }
-
-    SpacedColumn(spacePx = 28, modifier = Modifier.fillMaxWidth().padding(bottom = 28.px)) {
-        TopBar(isGridModeSelected, searchQueryState)
-        remember {
-            List(10) { index ->
-                PlaylistItemData(
-                    id = "collection_$index",
-                    name = "Redesigns $index",
-                    channelName = "Juxtopposed",
-                    thumbnailImageRef = Assets.Thumbnails.THUMBNAIL_1,
-                    channelImageRef = Assets.Icons.USER_AVATAR,
-                    isChannelVerified = true,
-                    subscriberCount = "288K",
-                    viewsCount = 50,
-                    videosCount = 15,
-                    totalDuration = "2:51:23",
-                )
-            }
-        }.forEach { data ->
-            PlaylistListItem(data)
-        }
-    }
-}
-
-@Composable
-private fun PlaylistListItem(data: PlaylistItemData) {
+fun PlaylistListItem(
+    data: PlaylistItemData,
+    showThumbnailColorPalette: Boolean = true,
+    isEditable: Boolean = false,
+) {
     val navigator = LocalNavigator.current
     val isSmallBreakpoint by rememberIsSmallBreakpoint()
     val content = remember {
@@ -105,11 +76,13 @@ private fun PlaylistListItem(data: PlaylistItemData) {
                             text = data.channelName,
                             modifier = Modifier.margin(left = 7.px)
                         )
-                        Image(
-                            src = Assets.Icons.VERIFIED_BADGE,
-                            width = 15,
-                            height = 15
-                        )
+                        if (data.isChannelVerified) {
+                            Image(
+                                src = Assets.Icons.VERIFIED_BADGE,
+                                width = 15,
+                                height = 15
+                            )
+                        }
                         TextBox(
                             text = "${data.subscriberCount} subscribers",
                             size = 14,
@@ -167,7 +140,7 @@ private fun PlaylistListItem(data: PlaylistItemData) {
                 }
                 AssetImageButton(
                     asset = Assets.Icons.MORE,
-                    modifier = Modifier.margin(top = 9.px),
+                    modifier = Modifier.thenIf(!isEditable) { Modifier.margin(top = 9.px) },
                     onClick = {},
                 )
             }
@@ -179,13 +152,12 @@ private fun PlaylistListItem(data: PlaylistItemData) {
             .clickable { navigator.pushRoute(Route.Playlist(id = data.id)) },
     ) {
         if (isSmallBreakpoint) {
-            SpacedColumn(
-                spacePx = 8,
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            SpacedColumn(spacePx = 8, modifier = Modifier.fillMaxWidth()) {
                 StackedThumbnail(
                     assetRef = Assets.Thumbnails.THUMBNAIL_1,
+                    videosCount = if (isEditable) null else data.videosCount,
                     modifier = Modifier.fillMaxWidth(),
+                    showThumbnailColorPalette = showThumbnailColorPalette,
                 )
                 content()
             }
@@ -195,7 +167,11 @@ private fun PlaylistListItem(data: PlaylistItemData) {
                 modifier = Modifier.fillMaxWidth(),
                 centerContentVertically = false,
             ) {
-                StackedThumbnail(assetRef = Assets.Thumbnails.THUMBNAIL_1)
+                StackedThumbnail(
+                    assetRef = Assets.Thumbnails.THUMBNAIL_1,
+                    videosCount = if (isEditable) null else data.videosCount,
+                    showThumbnailColorPalette = showThumbnailColorPalette,
+                )
                 content()
             }
         }
@@ -205,6 +181,8 @@ private fun PlaylistListItem(data: PlaylistItemData) {
 @Composable
 private fun StackedThumbnail(
     assetRef: String,
+    videosCount: Int?,
+    showThumbnailColorPalette: Boolean,
     modifier: Modifier = Modifier,
     borderRadius: CSSLengthOrPercentageValue = 20.px,
 ) {
@@ -215,31 +193,37 @@ private fun StackedThumbnail(
             .borderRadius(topLeft = borderRadius, topRight = borderRadius)
     }
 
-    LaunchedEffect(assetRef) { paletteColors = generateColorPalette(assetRef) }
+    LaunchedEffect(assetRef, showThumbnailColorPalette) {
+        if (showThumbnailColorPalette) {
+            paletteColors = generateColorPalette(assetRef)
+        }
+    }
 
     SpacedColumn(
         spacePx = 2,
         centerContentHorizontally = true,
         modifier = Modifier.noShrink().then(modifier),
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(85.percent)
-                .then(
-                    paletteColors?.let { colors -> Modifier.background(Color(colors[0])) }
-                        ?: Modifier.display(DisplayStyle.None),
-                )
-                .then(commonModifier)
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(91.percent)
-                .then(
-                    paletteColors?.let { colors -> Modifier.background(Color(colors[1])) }
-                        ?: Modifier.display(DisplayStyle.None),
-                )
-                .then(commonModifier)
-        )
+        if (showThumbnailColorPalette) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(85.percent)
+                    .then(
+                        paletteColors?.let { colors -> Modifier.background(Color(colors[0])) }
+                            ?: Modifier.display(DisplayStyle.None),
+                    )
+                    .then(commonModifier)
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(91.percent)
+                    .then(
+                        paletteColors?.let { colors -> Modifier.background(Color(colors[1])) }
+                            ?: Modifier.display(DisplayStyle.None),
+                    )
+                    .then(commonModifier)
+            )
+        }
         Box(contentAlignment = Alignment.BottomEnd, modifier = Modifier.fillMaxSize()) {
             Image(
                 modifier = Modifier
@@ -252,55 +236,30 @@ private fun StackedThumbnail(
                     .objectFit(ObjectFit.Cover),
                 src = assetRef,
             )
-            SpacedRow(
-                spacePx = 8,
-                modifier = Modifier
-                    .background(Styles.BLACK.copyf(alpha = 0.6f))
-                    .borderRadius(6.px)
-                    .margin(10.px)
-                    .padding(left = 12.px, top = 2.px, right = 8.px, bottom = 2.px),
-            ) {
-                Image(src = Assets.Icons.PLAYLISTS, width = 24, height = 24)
-                TextBox(text = "15", weight = FontWeight.Medium, lineHeight = 15.9)
+            videosCount?.let { count ->
+                SpacedRow(
+                    spacePx = 8,
+                    modifier = Modifier
+                        .background(Styles.BLACK.copyf(alpha = 0.6f))
+                        .borderRadius(6.px)
+                        .margin(10.px)
+                        .padding(left = 12.px, top = 2.px, right = 8.px, bottom = 2.px),
+                ) {
+                    Image(src = Assets.Icons.PLAYLISTS, width = 24, height = 24)
+                    TextBox(
+                        text = count.toString(),
+                        weight = FontWeight.Medium,
+                        lineHeight = 15.9,
+                    )
+                }
+            } ?: run {
+                AssetImageButton(
+                    modifier = Modifier.clip(Circle()).margin(10.px).padding(7.px),
+                    asset = Assets.Icons.EDIT,
+                    containerColor = Styles.BLACK.copyf(alpha = 0.6f),
+                    onClick = {},
+                )
             }
         }
-    }
-}
-
-@Composable
-private fun TopBar(
-    isGridModeSelected: MutableState<Boolean>,
-    searchQueryState: MutableState<String>,
-) {
-    Wrap(modifier = Modifier.fillMaxWidth(), horizontalGapPx = 8) {
-        Box(modifier = Modifier.weight(1)) {
-            AssetSvgButton(
-                id = "sort_by_button",
-                type = AssetSvgButtonType.SelectableChip,
-                secondaryText = "Sort by:",
-                text = "Relevance",
-                isDense = true,
-                endIconPath = Assets.Paths.ARROW_DOWN,
-                onClick = {},
-            )
-        }
-        AssetSvgButton(
-            id = "grid_mode_button",
-            type = AssetSvgButtonType.SelectableChip,
-            startIconPath = Assets.Paths.GRID,
-            isSelected = isGridModeSelected.value,
-            onClick = { isGridModeSelected.value = true },
-        )
-        AssetSvgButton(
-            id = "list_mode_button",
-            type = AssetSvgButtonType.SelectableChip,
-            startIconPath = Assets.Paths.LIST,
-            isSelected = !isGridModeSelected.value,
-            onClick = { isGridModeSelected.value = false },
-        )
-        RoundedSearchTextField(
-            textState = searchQueryState,
-            hintText = "Search playlists"
-        ) { marginLeft(8.px) }
     }
 }

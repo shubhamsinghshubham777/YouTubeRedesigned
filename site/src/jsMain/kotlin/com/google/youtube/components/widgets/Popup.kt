@@ -25,6 +25,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.top
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import kotlinx.browser.document
 import kotlinx.browser.window
+import org.jetbrains.compose.web.attributes.EventsListenerScope
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.px
 import org.w3c.dom.Element
@@ -61,9 +62,12 @@ fun <T> Popup(
         val mouseObserver = { event: Event ->
             with(event as MouseEvent) { mouseCoordinates = clientX to clientY }
         }
-        document.addEventListener(type = EVENT_TYPE_MOUSE_MOVE, callback = mouseObserver)
+        document.addEventListener(type = EventsListenerScope.MOUSEMOVE, callback = mouseObserver)
         onDispose {
-            document.removeEventListener(type = EVENT_TYPE_MOUSE_MOVE, callback = mouseObserver)
+            document.removeEventListener(
+                type = EventsListenerScope.MOUSEMOVE,
+                callback = mouseObserver
+            )
         }
     }
 
@@ -99,5 +103,3 @@ fun <T> Popup(
         }
     }
 }
-
-private const val EVENT_TYPE_MOUSE_MOVE = "mousemove"
