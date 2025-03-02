@@ -85,6 +85,7 @@ private fun ListCard(details: VideoThumbnailDetails) {
             ) {
                 Image(
                     modifier = Modifier
+                        // TODO: Replace with Styles.Shape.CARD.cornerRadius
                         .borderRadius(15.9.px)
                         .then(
                             if (isLargeThumbnail) {

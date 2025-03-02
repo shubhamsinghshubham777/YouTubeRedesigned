@@ -3,10 +3,12 @@ package com.google.youtube
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.google.youtube.utils.Styles
+import com.varabyte.kobweb.compose.css.ScrollBehavior
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.minHeight
+import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
 import com.varabyte.kobweb.core.App
 import com.varabyte.kobweb.silk.SilkApp
 import com.varabyte.kobweb.silk.components.layout.Surface
@@ -25,7 +27,8 @@ import org.w3c.dom.events.KeyboardEvent
 @InitSilk
 fun overrideRootHTMLStyle(ctx: InitSilkContext) {
     ctx.stylesheet.registerStyleBase("html") {
-        Modifier.background(Styles.SURFACE)
+        // TODO: Remove scrollBehavior modifier from throughout the codebase & verify as well
+        Modifier.background(Styles.SURFACE).scrollBehavior(ScrollBehavior.Smooth)
     }
 }
 

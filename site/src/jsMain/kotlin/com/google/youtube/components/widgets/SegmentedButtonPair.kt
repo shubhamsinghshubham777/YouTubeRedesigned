@@ -26,6 +26,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
+import com.varabyte.kobweb.compose.ui.thenIfNotNull
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.px
@@ -45,8 +46,8 @@ fun SegmentedButtonPair(
     isRightLabelBold: Boolean = false,
     labelLeft: String? = null,
     labelRight: String? = null,
-    onClickLeft: () -> Unit,
-    onClickRight: () -> Unit,
+    onClickLeft: (() -> Unit)? = null,
+    onClickRight: (() -> Unit)? = null,
     spacingPx: Int = 14,
 ) {
     val doesLeftButtonExist = remember(labelLeft, assetPathLeft) {
@@ -134,7 +135,7 @@ private fun SegmentedItem(
     isLabelBold: Boolean,
     label: String?,
     modifier: Modifier,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)?,
 ) {
     var elementRef by remember { mutableStateOf<Element?>(null) }
     val animatedContainerColor by rememberMouseEventAsState(elementRef).animatedColor()
@@ -142,7 +143,7 @@ private fun SegmentedItem(
         ref = ref { e -> elementRef = e },
         spacePx = 7,
         modifier = Modifier
-            .background(animatedContainerColor.toKobwebColor())
+            .thenIfNotNull(onClick) { Modifier.background(animatedContainerColor.toKobwebColor()) }
             .clickable(onClick = onClick)
             .then(modifier),
     ) {

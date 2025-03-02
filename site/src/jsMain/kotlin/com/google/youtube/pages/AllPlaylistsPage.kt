@@ -36,7 +36,7 @@ fun AllPlaylistsPage() {
                     channelImageRef = Assets.Icons.USER_AVATAR,
                     isChannelVerified = true,
                     subscriberCount = "288K",
-                    viewsCount = 50,
+                    viewsCount = "50",
                     videosCount = 15,
                     totalDuration = "2:51:23",
                 )

@@ -311,3 +311,108 @@ fun rememberElementHeightAsState(element: Element?) = produceState(
         }
     }
 }
+
+fun addDurations(duration1: String, duration2: String): String {
+    fun parseDuration(duration: String): Triple<Int, Int, Int> {
+        // Reverse to handle varying formats
+        val parts = duration.split(":").map { it.toInt() }.reversed()
+
+        val seconds = parts.getOrElse(0) { 0 }
+        val minutes = parts.getOrElse(1) { 0 }
+        val hours = parts.getOrElse(2) { 0 }
+
+        return Triple(hours, minutes, seconds)
+    }
+
+    fun pad(value: Int): String {
+        return if (value < 10) "0$value" else value.toString()
+    }
+
+    val (h1, m1, s1) = parseDuration(duration1)
+    val (h2, m2, s2) = parseDuration(duration2)
+
+    var totalSeconds = s1 + s2
+    var totalMinutes = m1 + m2 + totalSeconds / 60
+    val totalHours = h1 + h2 + totalMinutes / 60
+
+    totalSeconds %= 60
+    totalMinutes %= 60
+
+    return "${totalHours}:${pad(totalMinutes)}:${pad(totalSeconds)}"
+}
+
+/**
+ * Adds two strings representing numbers with optional ordinal suffixes (K, M, etc.).
+ *
+ * Supported ordinals:
+ * - K (Thousand) - Multiplier 10^3
+ * - M (Million) - Multiplier 10^6
+ * - G (Gillion/Billion - depending on context, here assumed Billion) - Multiplier 10^9
+ *
+ * Case-insensitive ordinals are accepted (k, m, g, etc.).
+ *
+ * If no ordinal is present, it's treated as a regular number.
+ *
+ * @param str1 The first string number with optional ordinal.
+ * @param str2 The second string number with optional ordinal.
+ * @return A string representing the sum, formatted with the largest possible ordinal,
+ *         or just the number if no ordinal is applicable.
+ *         Returns "0" if both inputs are effectively zero or invalid.
+ *         Returns "NaN" if parsing fails and results in NaN.
+ */
+fun addOrdinals(str1: String, str2: String): String {
+    val ordinalMultipliers = mapOf(
+        "K" to 1000.0,
+        "M" to 1000000.0,
+        "G" to 1000000000.0
+    )
+
+    fun parseOrdinalString(ordinalStr: String): Double {
+        val upperCaseStr = ordinalStr.uppercase()
+        var numberString = upperCaseStr
+        var multiplier = 1.0
+
+        for ((suffix, value) in ordinalMultipliers) {
+            if (upperCaseStr.endsWith(suffix)) {
+                numberString = upperCaseStr.substring(0, upperCaseStr.length - suffix.length)
+                multiplier = value
+                break
+            }
+        }
+
+        return numberString.toDoubleOrNull()?.let { it * multiplier } ?: 0.0
+    }
+
+    fun formatOutput(value: Double): String {
+        if (value == 0.0) return "0"
+        if (value.isNaN()) return "NaN"
+
+        val reverseOrdinalMultipliers = ordinalMultipliers.entries.sortedByDescending { it.value }
+
+        for ((suffix, limit) in reverseOrdinalMultipliers) {
+            if (value >= limit) {
+                // Use JavaScript's toFixed via dynamic interop
+                var formattedValue = (value / limit).asDynamic().toFixed(1) as String
+                formattedValue = formattedValue.trimEnd('0').trimEnd('.')
+                return "${formattedValue}${suffix}"
+            }
+        }
+        return value.asDynamic().toFixed(0) as String // Format as integer using toFixed(0)
+    }
+
+    val value1 = parseOrdinalString(str1)
+    val value2 = parseOrdinalString(str2)
+
+    val sum = value1 + value2
+
+    return formatOutput(sum)
+}
+
+// Extension function for String to trim trailing characters (similar to Java's trimEnd)
+private fun String.trimEnd(char: Char): String {
+    var endIndex = this.length - 1
+    while (endIndex >= 0 && this[endIndex] == char) {
+        endIndex--
+    }
+    return substring(0, endIndex + 1)
+}

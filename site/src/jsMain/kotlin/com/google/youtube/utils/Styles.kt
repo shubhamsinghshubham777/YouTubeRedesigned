@@ -68,5 +68,6 @@ object Styles {
 
     object Shape {
         val CARD = Rect(15.9.px)
+        val THUMBNAIL_DURATION_CONTAINER = Rect(6.px)
     }
 }

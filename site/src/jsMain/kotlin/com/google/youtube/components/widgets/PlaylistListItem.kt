@@ -47,7 +47,7 @@ import org.jetbrains.compose.web.css.px
 
 @Composable
 fun PlaylistListItem(
-    data: PlaylistItemData,
+    data: PlaylistItemData?,
     showThumbnailColorPalette: Boolean = true,
     isEditable: Boolean = false,
 ) {
@@ -65,7 +65,7 @@ fun PlaylistListItem(
                     modifier = Modifier.weight(1).margin(top = 9.px),
                 ) {
                     TextBox(
-                        text = data.name,
+                        text = data?.name.orEmpty(),
                         size = 18,
                         weight = FontWeight.Medium,
                         lineHeight = 25,
@@ -73,10 +73,10 @@ fun PlaylistListItem(
                     Wrap(8) {
                         Image(src = Assets.Icons.USER_AVATAR, width = 28, height = 28)
                         TextBox(
-                            text = data.channelName,
+                            text = data?.channelName.orEmpty(),
                             modifier = Modifier.margin(left = 7.px)
                         )
-                        if (data.isChannelVerified) {
+                        if (data?.isChannelVerified == true) {
                             Image(
                                 src = Assets.Icons.VERIFIED_BADGE,
                                 width = 15,
@@ -84,7 +84,7 @@ fun PlaylistListItem(
                             )
                         }
                         TextBox(
-                            text = "${data.subscriberCount} subscribers",
+                            text = "${data?.subscriberCount ?: 0} subscribers",
                             size = 14,
                             color = Styles.VIDEO_CARD_SECONDARY_TEXT
                         )
@@ -92,23 +92,23 @@ fun PlaylistListItem(
                     Wrap(horizontalGapPx = 24, verticalGapPx = 8) {
                         IconLabel(
                             iconAsset = Assets.Icons.EYE,
-                            label = data.viewsCount.toString(),
+                            label = (data?.viewsCount ?: 0).toString(),
                             secondaryLabel = "views",
                         )
                         IconLabel(
                             iconAsset = Assets.Icons.PLAY,
-                            label = data.videosCount.toString(),
+                            label = data?.videosCount.toString(),
                             secondaryLabel = "videos",
                         )
                         IconLabel(
                             iconAsset = Assets.Icons.DURATION,
-                            label = data.totalDuration,
+                            label = data?.totalDuration.orEmpty(),
                             secondaryLabel = "duration",
                         )
                     }
                     Wrap(horizontalGapPx = 15, modifier = Modifier.fillMaxWidth()) {
                         AssetSvgButton(
-                            id = "play_all_button_${data.name}",
+                            id = "play_all_button_${data?.name.orEmpty()}",
                             isDense = true,
                             startIconPath = Assets.Paths.PLAY,
                             text = "Play All",
@@ -116,21 +116,21 @@ fun PlaylistListItem(
                             onClick = {},
                         )
                         AssetSvgButton(
-                            id = "share_button_${data.name}",
+                            id = "share_button_${data?.name.orEmpty()}",
                             isDense = true,
                             startIconPath = Assets.Paths.SHARE,
                             text = "Share",
                             onClick = {},
                         )
                         AssetSvgButton(
-                            id = "add_video_button_${data.name}",
+                            id = "add_video_button_${data?.name.orEmpty()}",
                             isDense = true,
                             startIconPath = Assets.Paths.ADD_SOLO,
                             text = "Add video",
                             onClick = {},
                         )
                         AssetSvgButton(
-                            id = "download_button_${data.name}",
+                            id = "download_button_${data?.name.orEmpty()}",
                             isDense = true,
                             startIconPath = Assets.Paths.DOWNLOAD,
                             text = "Download",
@@ -149,13 +149,13 @@ fun PlaylistListItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { navigator.pushRoute(Route.Playlist(id = data.id)) },
+            .clickable { navigator.pushRoute(Route.Playlist(id = data?.id ?: return@clickable)) },
     ) {
         if (isSmallBreakpoint) {
             SpacedColumn(spacePx = 8, modifier = Modifier.fillMaxWidth()) {
                 StackedThumbnail(
                     assetRef = Assets.Thumbnails.THUMBNAIL_1,
-                    videosCount = if (isEditable) null else data.videosCount,
+                    videosCount = if (isEditable) null else data?.videosCount,
                     modifier = Modifier.fillMaxWidth(),
                     showThumbnailColorPalette = showThumbnailColorPalette,
                 )
@@ -169,7 +169,7 @@ fun PlaylistListItem(
             ) {
                 StackedThumbnail(
                     assetRef = Assets.Thumbnails.THUMBNAIL_1,
-                    videosCount = if (isEditable) null else data.videosCount,
+                    videosCount = if (isEditable) null else data?.videosCount,
                     showThumbnailColorPalette = showThumbnailColorPalette,
                 )
                 content()

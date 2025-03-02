@@ -16,6 +16,7 @@ data class VideoThumbnailDetails(
     val daysSinceUploaded: String,
     val duration: String,
     val likeCount: String? = null,
+    val dislikeCount: String? = null,
     val subscribersCount: String? = null,
     val uploadDate: String? = null,
 )
