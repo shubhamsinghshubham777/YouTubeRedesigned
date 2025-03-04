@@ -12,6 +12,7 @@ import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.PersonalisedFeedDialog
 import com.google.youtube.pages.AllPlaylistsPage
+import com.google.youtube.pages.ChannelPage
 import com.google.youtube.pages.CollectionPage
 import com.google.youtube.pages.ExplorePage
 import com.google.youtube.pages.HistoryPage
@@ -134,7 +135,7 @@ fun MainLayout() {
                             )
 
                             Route.LikedVideos -> TextBox("Liked Videos")
-                            is Route.Page -> TextBox("Channel (${animatedRoute.id})")
+                            is Route.Page -> ChannelPage(id = animatedRoute.id)
                             is Route.Playlist -> PlaylistPage(id = animatedRoute.id)
                             Route.Playlists -> AllPlaylistsPage()
                             is Route.Short -> ShortDetails(

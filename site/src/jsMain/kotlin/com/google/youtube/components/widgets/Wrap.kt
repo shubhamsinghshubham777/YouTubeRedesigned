@@ -2,6 +2,7 @@ package com.google.youtube.components.widgets
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.foundation.layout.RowDefaults
 import com.varabyte.kobweb.compose.foundation.layout.RowScope
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
@@ -14,6 +15,7 @@ import org.jetbrains.compose.web.css.px
 fun Wrap(
     horizontalGapPx: Int = 0,
     verticalGapPx: Int = horizontalGapPx,
+    centerVertically: Boolean = true,
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -22,7 +24,7 @@ fun Wrap(
             .flexWrap(FlexWrap.Wrap)
             .gap(rowGap = verticalGapPx.px, columnGap = horizontalGapPx.px)
             .then(modifier),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = if (centerVertically) Alignment.CenterVertically else RowDefaults.VerticalAlignment,
         content = content,
     )
 }

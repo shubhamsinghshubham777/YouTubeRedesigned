@@ -114,7 +114,7 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
             AssetSvgButton(
                 id = "view_all_button_${details.title}",
                 onClick = {},
-                containerColor = Styles.WHITE.copyf(alpha = 0.05f),
+                containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
             ) {
                 Text("View all")
             }

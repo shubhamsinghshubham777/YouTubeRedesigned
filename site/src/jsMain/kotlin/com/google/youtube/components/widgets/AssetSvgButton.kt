@@ -143,7 +143,7 @@ fun AssetSvgButton(
                             AssetSvgButtonType.Button -> when {
                                 startIconPath != null && isDense -> 12f
                                 startIconPath != null -> 16f
-                                else -> 24f
+                                else -> if (isDense) 12f else 24f
                             }
 
                             else -> if (startIconPath != null || content != null) 12f else 16f
@@ -154,7 +154,7 @@ fun AssetSvgButton(
                             AssetSvgButtonType.Button -> when {
                                 endIconPath != null && isDense -> 12f
                                 endIconPath != null -> 16f
-                                else -> 24f
+                                else -> if (isDense) 12f else 24f
                             }
 
                             else -> {
@@ -203,6 +203,7 @@ fun AssetSvgButton(
                         .fontSize(if (isDense) 14.px else 16.px),
                     horizontalArrangement = Arrangement.spacedBy(4.px)
                 ) {
+                    // TODO: Replace both of them with TextBox
                     secondaryText?.let { safeText ->
                         Box(modifier = Modifier.opacity(0.6f)) { Text(safeText) }
                     }

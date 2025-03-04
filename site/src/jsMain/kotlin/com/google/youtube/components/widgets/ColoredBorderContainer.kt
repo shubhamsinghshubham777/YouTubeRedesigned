@@ -55,6 +55,7 @@ fun ColoredBorderContainer(
     scrollPixels: Double = 300.0,
     content: @Composable RowScope.() -> Unit,
 ) {
+    // TODO: Replace with !rememberIsSmallBreakpoint()
     val isLargeScreen = rememberBreakpoint().isGreaterThan(Breakpoint.SM)
     var scrollableRowElement by remember { mutableStateOf<Element?>(null) }
     val horizontalScrollState = remember { mutableStateOf(HorizontalScrollState.ReachedStart) }

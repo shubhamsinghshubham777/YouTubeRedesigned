@@ -21,7 +21,9 @@ import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Crossfade
+import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.MouseEventState
+import com.google.youtube.utils.Route
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -40,6 +42,7 @@ import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.PointerEvents
+import com.varabyte.kobweb.compose.css.TextDecorationLine
 import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.css.functions.LinearGradient
 import com.varabyte.kobweb.compose.css.functions.linearGradient
@@ -72,6 +75,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.pointerEvents
 import com.varabyte.kobweb.compose.ui.modifiers.rowGap
 import com.varabyte.kobweb.compose.ui.modifiers.size
+import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
 import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
@@ -328,6 +332,7 @@ private fun PlayerAndComments(
     isSegmentedContentVisible: MutableState<Boolean>,
     segmentedContent: (@Composable () -> Unit)?,
 ) {
+    val navigator = LocalNavigator.current
     val isLargeBreakpoint by rememberIsLargeBreakpoint()
     var isDescriptionBoxExpanded by remember { mutableStateOf(false) }
     var descriptionToggleRef by remember { mutableStateOf<Element?>(null) }
@@ -358,7 +363,18 @@ private fun PlayerAndComments(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             SpacedRow(20) {
-                SpacedRow(15) {
+                var channelRowRef by remember { mutableStateOf<Element?>(null) }
+                val isChannelRowHovered =
+                    rememberMouseEventAsState(channelRowRef).value == MouseEventState.Hovered
+
+                SpacedRow(
+                    ref = ref { e -> channelRowRef = e },
+                    spacePx = 15,
+                    modifier = Modifier.clickable {
+                        // TODO: Use real ID here
+                        navigator.pushRoute(Route.Page(id = "juxtopposed"))
+                    }
+                ) {
                     Image(
                         modifier = Modifier.size(46.px).clip(Circle()),
                         src = Assets.Icons.USER_AVATAR,
@@ -366,6 +382,9 @@ private fun PlayerAndComments(
                     SpacedColumn(1.29) {
                         SpacedRow(8) {
                             TextBox(
+                                modifier = Modifier.thenIf(isChannelRowHovered) {
+                                    Modifier.textDecorationLine(TextDecorationLine.Underline)
+                                },
                                 text = "Juxtopposed",
                                 size = 18,
                                 lineHeight = 28.3,

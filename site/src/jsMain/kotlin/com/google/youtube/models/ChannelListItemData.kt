@@ -40,6 +40,8 @@ sealed class ChannelListItemData(
         val dislikeCount: String,
         val likeCount: String,
         val message: String,
+        val postAsset: String? = null,
+        val isPinned: Boolean = false,
     ) : ChannelListItemData(
         channelAsset = channelAsset,
         channelName = channelName,

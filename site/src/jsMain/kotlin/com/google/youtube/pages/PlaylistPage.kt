@@ -262,7 +262,7 @@ private fun SmallListItem(
         SegmentedButtonPair(
             assetPathLeft = Assets.Paths.LIKED,
             assetPathRight = Assets.Paths.DISLIKE,
-            containerColor = Styles.WHITE.copyf(alpha = 0.05f),
+            containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
             isDense = true,
             labelLeft = details.likeCount,
             labelRight = details.dislikeCount,
@@ -320,7 +320,7 @@ private fun LargeListItem(
                         SegmentedButtonPair(
                             assetPathLeft = Assets.Paths.LIKED,
                             assetPathRight = Assets.Paths.DISLIKE,
-                            containerColor = Styles.WHITE.copyf(alpha = 0.05f),
+                            containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                             isDense = true,
                             labelLeft = details.likeCount,
                             labelRight = details.dislikeCount,

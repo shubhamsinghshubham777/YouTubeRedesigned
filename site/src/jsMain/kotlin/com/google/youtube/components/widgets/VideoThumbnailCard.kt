@@ -37,15 +37,15 @@ import org.jetbrains.compose.web.dom.Text
 fun VideoThumbnailCard(
     onClick: (() -> Unit)? = null,
     thumbnailAsset: String,
-    channelAsset: String,
     title: String,
     channelName: String,
     isVerified: Boolean,
     views: String,
     daysSinceUploaded: String,
     duration: String,
-    shape: Shape = Styles.Shape.CARD,
     modifier: Modifier = Modifier,
+    channelAsset: String? = null,
+    shape: Shape = Styles.Shape.CARD,
     size: IntSize? = null,
 ) {
     Column(
@@ -87,7 +87,7 @@ fun VideoThumbnailCard(
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(16.px),
         ) {
-            Image(src = channelAsset, modifier = Modifier.size(48.px))
+            channelAsset?.let { asset -> Image(src = asset, modifier = Modifier.size(48.px)) }
             Column(
                 modifier = Modifier
                     .weight(1)

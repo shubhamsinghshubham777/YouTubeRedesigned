@@ -17,6 +17,8 @@ import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextOverflow
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.css.WordBreak
+import com.varabyte.kobweb.compose.css.overflow
+import com.varabyte.kobweb.compose.css.textOverflow
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.attrsModifier
 import com.varabyte.kobweb.compose.ui.graphics.Color
@@ -26,9 +28,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.onKeyUp
 import com.varabyte.kobweb.compose.ui.modifiers.onScroll
-import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.tabIndex
-import com.varabyte.kobweb.compose.ui.modifiers.textOverflow
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
 import com.varabyte.kobweb.compose.ui.modifiers.wordBreak
 import com.varabyte.kobweb.compose.ui.styleModifier
@@ -38,6 +38,7 @@ import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.breakpoint.breakpointFloor
 import kotlinx.browser.document
 import kotlinx.browser.window
+import org.jetbrains.compose.web.css.StyleScope
 import org.jetbrains.compose.web.css.px
 import org.w3c.dom.DOMRect
 import org.w3c.dom.Element
@@ -184,17 +185,17 @@ fun Modifier.hideScrollBar() = then(
     Modifier.styleModifier { property("scrollbar-width", "none") }
 )
 
+fun StyleScope.limitTextWithEllipsis(maxLines: Int = 1) {
+    property("display", "-webkit-box")
+    property("-webkit-line-clamp", maxLines)
+    property("-webkit-box-orient", "vertical")
+    overflow(Overflow.Hidden)
+    textOverflow(TextOverflow.Ellipsis)
+}
+
 fun Modifier.limitTextWithEllipsis(maxLines: Int = 1, breakLetter: Boolean = true) = then(
     Modifier
-        .attrsModifier {
-            style {
-                property("display", "-webkit-box")
-                property("-webkit-line-clamp", maxLines)
-                property("-webkit-box-orient", "vertical")
-            }
-        }
-        .overflow(Overflow.Hidden)
-        .textOverflow(TextOverflow.Ellipsis)
+        .attrsModifier { style { limitTextWithEllipsis(maxLines) } }
         // TODO: Check if this can be removed for a better experience
         .thenIf(breakLetter) { Modifier.wordBreak(WordBreak.BreakAll) }
 )
