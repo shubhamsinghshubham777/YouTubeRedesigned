@@ -15,6 +15,7 @@ object Assets {
         const val ARROW_UP = "/icons/ic_arrow_up.svg"
         const val AUDIO_CHANNEL = "/icons/ic_audio_channel.svg"
         const val BACKWARD = "/icons/ic_backward.svg"
+        const val BROWSER = "/icons/ic_browser.svg"
         const val CAST = "/icons/ic_cast.svg"
         const val CC = "/icons/ic_cc.svg"
         const val CC_SELECTED = "/icons/ic_cc_selected.svg"
@@ -309,5 +310,15 @@ object Assets {
 
     object Banners {
         const val BANNER_1 = "/banners/banner_1.png"
+    }
+
+    object Social {
+        const val CODEPEN = "/social/ic_codepen.png"
+        const val FIGMA = "/social/ic_figma.png"
+        const val INSTAGRAM = "/social/ic_instagram.png"
+        const val JUXTOPPOSED = "/social/ic_juxtopposed.png"
+        const val REALTIME_COLORS = "/social/ic_realtime_colors.png"
+        const val REDDIT = "/social/ic_reddit.png"
+        const val TWITTER = "/social/ic_twitter.png"
     }
 }

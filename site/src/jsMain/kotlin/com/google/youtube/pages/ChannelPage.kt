@@ -1,7 +1,6 @@
 package com.google.youtube.pages
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +18,8 @@ import com.google.youtube.components.widgets.channel.ChannelShortsPage
 import com.google.youtube.components.widgets.channel.ChannelVideosPage
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Crossfade
+import com.google.youtube.utils.LocalNavigator
+import com.google.youtube.utils.Route
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -58,9 +59,7 @@ import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
-fun ChannelPage(id: String) {
-    val selectedTab = remember { mutableStateOf(Tab.Home) }
-
+fun ChannelPage(id: String, initialTab: ChannelTab?) {
     Column(modifier = Modifier.fillMaxWidth()) {
         // Header
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -92,37 +91,38 @@ fun ChannelPage(id: String) {
         }
 
         // Content
-        Tabs(selectedTab = selectedTab)
+        Tabs(channelId = id, selectedTab = initialTab)
         HorizontalDivider(Styles.DIVIDER)
         Crossfade(
-            targetState = selectedTab.value,
+            targetState = initialTab,
             modifier = Modifier.fillMaxWidth().padding(topBottom = 28.px)
         ) { animatedSelectedTabLabel ->
             when (animatedSelectedTabLabel) {
-                Tab.Home -> ChannelHomePage()
-                Tab.Videos -> ChannelVideosPage()
-                Tab.Shorts -> ChannelShortsPage()
-                Tab.Posts -> ChannelPostsPage()
-                Tab.Playlists -> ChannelPlaylistsPage()
-                Tab.Channels -> ChannelChannelsPage()
-                Tab.About -> ChannelAboutPage()
+                null, ChannelTab.Home -> ChannelHomePage()
+                ChannelTab.Videos -> ChannelVideosPage()
+                ChannelTab.Shorts -> ChannelShortsPage()
+                ChannelTab.Posts -> ChannelPostsPage()
+                ChannelTab.Playlists -> ChannelPlaylistsPage()
+                ChannelTab.Channels -> ChannelChannelsPage()
+                ChannelTab.About -> ChannelAboutPage()
             }
         }
     }
 }
 
 @Composable
-private fun Tabs(selectedTab: MutableState<Tab>) {
+private fun Tabs(channelId: String, selectedTab: ChannelTab?) {
+    val navigator = LocalNavigator.current
     Wrap(
         horizontalGapPx = 23,
         verticalGapPx = 0,
         modifier = Modifier.fillMaxWidth().margin(top = 37.px),
     ) {
-        Tab.entries.forEach { tab ->
+        ChannelTab.entries.forEach { tab ->
             CategoryTab(
                 label = tab.name,
-                isSelected = selectedTab.value == tab,
-                onClick = { selectedTab.value = tab },
+                isSelected = selectedTab == tab,
+                onClick = { navigator.pushRoute(Route.Page(id = channelId, selectedTab = tab)) },
             )
         }
         Spacer()
@@ -160,7 +160,7 @@ private fun RowScope.ChannelDetails() {
             Text("videos • ")
             Span({ style { color(Styles.WHITE) } }) {
                 Text(
-                    with("subscribe for more cats (and design content, of course, along with exciting new UI/UX trends!)") {
+                    with("subscribe for more cats (and design content, of course)\u2028\u2028this is my only channel on YouTube. if you’d like to contact me, use the contact email in channel details.") {
                         if (isChannelDescExpanded.value) this
                         else this.substring(0, 55)
                     } + "${if (!isChannelDescExpanded.value) " ..." else ""} "
@@ -223,6 +223,12 @@ private fun SocialLinks() {
     }
 }
 
-private enum class Tab {
-    Home, Videos, Shorts, Posts, Playlists, Channels, About
+enum class ChannelTab(val label: String) {
+    Home("featured"),
+    Videos("videos"),
+    Shorts("shorts"),
+    Posts("community"),
+    Playlists("playlists"),
+    Channels("channels"),
+    About("about")
 }

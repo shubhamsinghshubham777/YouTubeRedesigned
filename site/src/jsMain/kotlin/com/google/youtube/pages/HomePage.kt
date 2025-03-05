@@ -131,6 +131,7 @@ private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
 fun MainVideosGrid(
     videos: List<VideoThumbnailDetails>,
     modifier: Modifier = Modifier,
+    gridGap: GridGap = GridGap(20.px),
     minWidth: CSSLengthOrPercentageNumericValue = 380.px,
 ) {
     val navigator = LocalNavigator.current
@@ -145,11 +146,12 @@ fun MainVideosGrid(
                 max = 1.fr
             )
         },
-        gridGap = GridGap(20.px)
+        gridGap = gridGap,
     ) {
         videos.forEachIndexed { index, item ->
             VideoThumbnailCard(
                 onClick = { navigator.pushRoute(Route.Video(id = index.toString())) },
+                // TODO: Remove this bottom margin & update all its usages
                 modifier = Modifier.margin(bottom = 45.px),
                 thumbnailAsset = item.thumbnailAsset,
                 channelAsset = item.channelAsset,

@@ -114,6 +114,7 @@ fun MainLayout() {
                         .hideScrollBar()
                 ) {
                     Crossfade(
+                        // TODO: Substring this route to avoid reloading common parts of a page
                         targetState = currentRoute,
                         modifier = Modifier
                             .fillMaxWidth(100.percent - horizontalPaddingState.value.px)
@@ -135,7 +136,11 @@ fun MainLayout() {
                             )
 
                             Route.LikedVideos -> TextBox("Liked Videos")
-                            is Route.Page -> ChannelPage(id = animatedRoute.id)
+                            is Route.Page -> ChannelPage(
+                                id = animatedRoute.id,
+                                initialTab = animatedRoute.selectedTab,
+                            )
+
                             is Route.Playlist -> PlaylistPage(id = animatedRoute.id)
                             Route.Playlists -> AllPlaylistsPage()
                             is Route.Short -> ShortDetails(

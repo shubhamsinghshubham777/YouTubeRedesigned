@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
+import com.google.youtube.pages.ChannelTab
 import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +66,9 @@ sealed class Route(val path: String) {
     data object Collections : Route(path = COLLECTIONS)
     data class Collection(val id: String) : Route(path = "$COLLECTION$id")
     data object Subscriptions : Route(path = SUBSCRIPTIONS)
-    data class Page(val id: String) : Route(path = "$PAGE$id")
+    data class Page(val id: String, val selectedTab: ChannelTab? = null) :
+        Route(path = "$PAGE$id/${selectedTab?.label.orEmpty()}")
+
     data class Video(val id: String) : Route(path = "$VIDEO$id")
     data class Search(val query: String) : Route(path = "$SEARCH$query")
 
@@ -85,7 +88,13 @@ sealed class Route(val path: String) {
                 path.contains(COLLECTIONS) -> Collections
                 path.contains(COLLECTION) -> Collection(id = path.substringAfterLast('='))
                 path.contains(SUBSCRIPTIONS) -> Subscriptions
-                path.contains(PAGE) -> Page(id = path.substringAfterLast('@'))
+                path.contains(PAGE) -> Page(
+                    id = path.substringAfterLast('@').substringBeforeLast('/'),
+                    selectedTab = ChannelTab.entries.firstOrNull { tab ->
+                        tab.label == path.substringAfterLast('/')
+                    } ?: ChannelTab.Home,
+                )
+
                 path.contains(VIDEO) -> Video(id = path.substringAfterLast('='))
                 path.contains(SEARCH) -> Search(query = path.substringAfterLast('='))
                 else -> null

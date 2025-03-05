@@ -13,12 +13,13 @@ import org.jetbrains.compose.web.css.px
 
 // TODO: Use this divider throughout the codebase
 @Composable
-fun VerticalDivider() {
+fun VerticalDivider(modifier: Modifier = Modifier) {
     Box(
         Modifier
             .background(Styles.DIVIDER_LIGHTER)
             .height(Constants.VERTICAL_DIVIDER_SIZE.height.px)
             .width(Constants.VERTICAL_DIVIDER_SIZE.width.px)
             .noShrink()
+            .then(modifier)
     )
 }
