@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import com.google.youtube.components.widgets.AssetSvgButton
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.SpacedColumn

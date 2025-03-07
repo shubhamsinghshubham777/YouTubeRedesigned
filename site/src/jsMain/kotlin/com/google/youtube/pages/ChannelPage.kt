@@ -8,7 +8,7 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.CategoryTab
 import com.google.youtube.components.widgets.HorizontalDivider
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.channel.ChannelAboutPage
 import com.google.youtube.components.widgets.channel.ChannelChannelsPage
 import com.google.youtube.components.widgets.channel.ChannelHomePage

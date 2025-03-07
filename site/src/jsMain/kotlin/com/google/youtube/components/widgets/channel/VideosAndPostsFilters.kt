@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.VerticalDivider
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.utils.Assets
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.height

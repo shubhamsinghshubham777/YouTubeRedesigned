@@ -12,7 +12,7 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.VerticalDivider
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.components.widgets.context_menu.TextField
 import com.google.youtube.models.CollectionChannelItem

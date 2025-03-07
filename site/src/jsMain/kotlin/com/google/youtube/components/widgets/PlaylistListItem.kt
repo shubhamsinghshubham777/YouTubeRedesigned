@@ -17,6 +17,7 @@ import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
+import com.google.youtube.utils.Wrap
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.generateColorPalette
 import com.google.youtube.utils.noShrink

@@ -14,7 +14,7 @@ import com.google.youtube.components.widgets.ThumbnailGrid
 import com.google.youtube.components.widgets.VerticalDivider
 import com.google.youtube.components.widgets.VideoThumbnailCard
 import com.google.youtube.components.widgets.VideoThumbnailCardDefaults
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.ChannelListItemData
 import com.google.youtube.models.VideoThumbnailDetails

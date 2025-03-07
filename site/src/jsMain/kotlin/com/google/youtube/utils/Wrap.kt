@@ -1,4 +1,4 @@
-package com.google.youtube.components.widgets
+package com.google.youtube.utils
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.foundation.layout.Row

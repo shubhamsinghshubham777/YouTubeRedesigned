@@ -11,7 +11,7 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.SegmentedButtonPair
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Constants

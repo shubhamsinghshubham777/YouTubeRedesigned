@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.PlaylistListItem
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.PlaylistItemData
 import com.google.youtube.utils.Assets

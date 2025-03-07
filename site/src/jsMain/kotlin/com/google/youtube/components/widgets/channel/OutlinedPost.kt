@@ -3,7 +3,7 @@ package com.google.youtube.components.widgets.channel
 import androidx.compose.runtime.Composable
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow

@@ -14,7 +14,7 @@ import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.PlaylistListItem
 import com.google.youtube.components.widgets.RadioButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
-import com.google.youtube.components.widgets.Wrap
+import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.PlaylistItemData
 import com.google.youtube.models.VideoThumbnailDetails
