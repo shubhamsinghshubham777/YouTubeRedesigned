@@ -14,7 +14,6 @@ import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.PlaylistListItem
 import com.google.youtube.components.widgets.RadioButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
-import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.PlaylistItemData
 import com.google.youtube.models.VideoThumbnailDetails
@@ -27,6 +26,7 @@ import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
+import com.google.youtube.utils.Wrap
 import com.google.youtube.utils.addDurations
 import com.google.youtube.utils.addOrdinals
 import com.google.youtube.utils.clickable
@@ -425,7 +425,6 @@ private fun getSamplePlaylistPage(
         name = details.title,
         channelName = details.channelName,
         thumbnailImageRef = details.thumbnailAsset,
-        channelImageRef = details.channelAsset,
         isChannelVerified = details.isVerified,
         subscriberCount = details.subscribersCount.orEmpty(),
         viewsCount = detailsList.map { it.views }.reduce(::addOrdinals),

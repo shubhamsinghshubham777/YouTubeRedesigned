@@ -12,14 +12,14 @@ import com.google.youtube.components.widgets.MissedVideosContainer
 import com.google.youtube.components.widgets.ShortThumbnailCard
 import com.google.youtube.components.widgets.ShortThumbnailCardDefaults
 import com.google.youtube.components.widgets.VideoThumbnailCard
+import com.google.youtube.data.FeedProvider
+import com.google.youtube.models.ShortThumbnailDetails
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.GridGap
-import com.google.youtube.utils.LocalNavigator
-import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.rememberBreakpointAsState
@@ -37,6 +37,8 @@ import org.jetbrains.compose.web.css.px
 
 @Composable
 fun HomePage(showPersonalisedFeedDialogState: MutableState<Boolean>) {
+    val feedProvider = remember { FeedProvider() }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         FilterRow(showPersonalisedFeedDialogState = showPersonalisedFeedDialogState)
         Column(
@@ -44,25 +46,16 @@ fun HomePage(showPersonalisedFeedDialogState: MutableState<Boolean>) {
                 .fillMaxWidth()
                 .padding(top = 27.px, bottom = 27.px),
         ) {
-            MissedVideosContainer(Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT))
-            MainVideosGrid(
-                videos = remember {
-                    List(20) {
-                        VideoThumbnailDetails(
-                            thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                            channelAsset = Assets.Icons.USER_AVATAR,
-                            title = "How Websites Learned to Fit Everywhere",
-                            channelName = "Juxtopposed",
-                            isVerified = true,
-                            views = "150K",
-                            daysSinceUploaded = "4 months",
-                            duration = "12:07",
-                        )
-                    }
-                }
+            MissedVideosContainer(
+                modifier = Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT),
+                videos = remember(feedProvider) { feedProvider.getMissedFeed() },
             )
-            RecentWatchSuggestions(Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT))
-            ShortSuggestions()
+            MainVideosGrid(videos = remember(feedProvider) { feedProvider.getNormalFeed() })
+            RecentWatchSuggestions(
+                modifier = Modifier.margin(bottom = HomePageDefaults.SPACE_BETWEEN_CONTENT),
+                videos = remember(feedProvider) { feedProvider.getRecentWatchSuggestedFeed() },
+            )
+            ShortSuggestions(shorts = remember(feedProvider) { feedProvider.getShortsFeed() })
         }
     }
 }
@@ -72,7 +65,7 @@ object HomePageDefaults {
 }
 
 @Composable
-private fun ShortSuggestions(modifier: Modifier = Modifier) {
+private fun ShortSuggestions(modifier: Modifier = Modifier, shorts: List<ShortThumbnailDetails>) {
     var display by remember { mutableStateOf(true) }
     AnimatedVisibility(modifier = Modifier.fillMaxWidth(), isVisible = display) {
         ColoredBorderContainer(
@@ -84,21 +77,16 @@ private fun ShortSuggestions(modifier: Modifier = Modifier) {
             asset = Assets.Icons.SHORTS_SELECTED,
             scrollPixels = ShortThumbnailCardDefaults.SIZE.width.toDouble(),
         ) {
-            repeat(10) {
-                ShortThumbnailCard(
-                    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                    channelName = "DailyDoseOfInternet",
-                    title = "Put this cat in jail",
-                    views = "10M",
-                    daysSinceUploaded = "3 weeks"
-                )
-            }
+            shorts.forEach { short -> ShortThumbnailCard(short) }
         }
     }
 }
 
 @Composable
-private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
+private fun RecentWatchSuggestions(
+    modifier: Modifier = Modifier,
+    videos: List<VideoThumbnailDetails>,
+) {
     var display by remember { mutableStateOf(true) }
     AnimatedVisibility(modifier = Modifier.fillMaxWidth(), isVisible = display) {
         ColoredBorderContainer(
@@ -110,17 +98,10 @@ private fun RecentWatchSuggestions(modifier: Modifier = Modifier) {
             contentGapPx = 30,
             scrollPixels = Constants.SUGGESTION_THUMBNAIL_SIZE.width.toDouble(),
         ) {
-            repeat(4) {
+            videos.forEach { details ->
                 VideoThumbnailCard(
-                    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                    channelAsset = Assets.Icons.USER_AVATAR,
-                    title = "How Websites Learned to Fit Everywhere",
-                    channelName = "Juxtopposed",
-                    isVerified = true,
-                    views = "150K",
-                    daysSinceUploaded = "4 months",
-                    duration = "12:07",
-                    size = Constants.SUGGESTION_THUMBNAIL_SIZE
+                    details = details,
+                    size = Constants.SUGGESTION_THUMBNAIL_SIZE,
                 )
             }
         }
@@ -134,9 +115,7 @@ fun MainVideosGrid(
     gridGap: GridGap = GridGap(20.px),
     minWidth: CSSLengthOrPercentageNumericValue = 380.px,
 ) {
-    val navigator = LocalNavigator.current
     val breakpoint by rememberBreakpointAsState()
-
     BasicGrid(
         modifier = Modifier.fillMaxWidth().display(DisplayStyle.Grid).then(modifier),
         columnBuilder = {
@@ -148,19 +127,11 @@ fun MainVideosGrid(
         },
         gridGap = gridGap,
     ) {
-        videos.forEachIndexed { index, item ->
+        videos.forEach { details ->
             VideoThumbnailCard(
-                onClick = { navigator.pushRoute(Route.Video(id = index.toString())) },
+                details = details,
                 // TODO: Remove this bottom margin & update all its usages
                 modifier = Modifier.margin(bottom = 45.px),
-                thumbnailAsset = item.thumbnailAsset,
-                channelAsset = item.channelAsset,
-                title = item.title,
-                channelName = item.channelName,
-                isVerified = item.isVerified,
-                views = item.views,
-                daysSinceUploaded = item.daysSinceUploaded,
-                duration = item.duration,
             )
         }
     }

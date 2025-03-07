@@ -49,8 +49,9 @@ fun SegmentedContent(
                     repeat(3) {
                         SuggestionSection(
                             author = "Juxtopossed",
-                            videos = List(3) {
+                            videos = List(3) { index ->
                                 VideoThumbnailDetails(
+                                    id = index.toString(),
                                     thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                                     channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
                                     title = "I Redesigned the ENTIRE Spotify UI from Scratch",

@@ -50,7 +50,7 @@ fun MessagePostCard(data: ChannelListItemData.Post) {
         TextBox(
             color = Styles.VIDEO_CARD_SECONDARY_TEXT,
             lineHeight = 26.5,
-            text = "${data.daysAgo} ago",
+            text = "${data.daysSinceUploaded} ago",
         )
         SpacedRow(8) {
             SegmentedButtonPair(

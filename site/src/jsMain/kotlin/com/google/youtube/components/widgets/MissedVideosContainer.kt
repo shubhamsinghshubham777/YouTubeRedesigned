@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.IntSize
+import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.HorizontalScrollState
@@ -37,7 +37,7 @@ import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.Element
 
 @Composable
-fun MissedVideosContainer(modifier: Modifier = Modifier) {
+fun MissedVideosContainer(modifier: Modifier = Modifier, videos: List<VideoThumbnailDetails>) {
     var rowRef by remember { mutableStateOf<Element?>(null) }
     val containerPadding = remember { 30.px }
     var showContainer by remember { mutableStateOf(true) }
@@ -82,20 +82,10 @@ fun MissedVideosContainer(modifier: Modifier = Modifier) {
                         .scrollBehavior(ScrollBehavior.Smooth),
                     horizontalArrangement = Arrangement.spacedBy(VIDEO_THUMBNAIL_CARDS_GAP.px),
                 ) {
-                    repeat(10) {
+                    videos.forEach { videoDetails ->
                         VideoThumbnailCard(
-                            thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                            channelAsset = Assets.Icons.USER_AVATAR,
-                            title = "How Websites Learned to Fit Everywhere",
-                            channelName = "Juxtopposed",
-                            isVerified = true,
-                            views = "150K",
-                            daysSinceUploaded = "4 months",
-                            duration = "12:07",
-                            size = IntSize(
-                                width = VideoThumbnailCardDefaults.WIDTH,
-                                height = VideoThumbnailCardDefaults.HEIGHT,
-                            ),
+                            details = videoDetails,
+                            size = VideoThumbnailCardDefaults.SIZE,
                         )
                     }
                 }
@@ -105,7 +95,7 @@ fun MissedVideosContainer(modifier: Modifier = Modifier) {
                     elementToControl = rowRef,
                     horizontalScrollState = horizontalScrollState,
                     containerPadding = containerPadding,
-                    scrollPixels = VideoThumbnailCardDefaults.WIDTH.plus(VIDEO_THUMBNAIL_CARDS_GAP),
+                    scrollPixels = VideoThumbnailCardDefaults.SIZE.width + VIDEO_THUMBNAIL_CARDS_GAP,
                 )
             }
         }

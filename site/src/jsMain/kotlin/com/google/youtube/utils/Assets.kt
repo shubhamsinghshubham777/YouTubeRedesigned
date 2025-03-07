@@ -1,6 +1,8 @@
 package com.google.youtube.utils
 
+// TODO: Rename this object to Asset
 object Assets {
+    // TODO: Rename this object to Icon
     object Icons {
         const val ADD = "/icons/ic_add.svg"
         const val ADD_SOLO = "/icons/ic_add_solo.svg"
@@ -146,6 +148,7 @@ object Assets {
         const val YOU_SELECTED = "/icons/ic_you_selected.svg"
     }
 
+    // TODO: Rename this object to Path
     object Paths {
         const val ADD_SOLO =
             "M11.25 12.75H6.25C6.0375 12.75 5.85942 12.6781 5.71575 12.5342C5.57192 12.3904 5.5 12.2122 5.5 11.9997C5.5 11.7871 5.57192 11.609 5.71575 11.4655C5.85942 11.3218 6.0375 11.25 6.25 11.25H11.25V6.25C11.25 6.0375 11.3219 5.85942 11.4658 5.71575C11.6096 5.57192 11.7878 5.5 12.0003 5.5C12.2129 5.5 12.391 5.57192 12.5345 5.71575C12.6782 5.85942 12.75 6.0375 12.75 6.25V11.25H17.75C17.9625 11.25 18.1406 11.3219 18.2843 11.4658C18.4281 11.6096 18.5 11.7878 18.5 12.0003C18.5 12.2129 18.4281 12.391 18.2843 12.5345C18.1406 12.6782 17.9625 12.75 17.75 12.75H12.75V17.75C12.75 17.9625 12.6781 18.1406 12.5342 18.2843C12.3904 18.4281 12.2122 18.5 11.9997 18.5C11.7871 18.5 11.609 18.4281 11.4655 18.2843C11.3218 18.1406 11.25 17.9625 11.25 17.75V12.75Z"
@@ -301,6 +304,39 @@ object Assets {
         const val AVATAR_THE_CODING_SLOTH = "/avatars/avatar_the_coding_sloth.png"
         const val AVATAR_THE_CRITICAL_DRINKER = "/avatars/avatar_the_critical_drinker.png"
         const val AVATAR_THE_HUMAN_SPIDER = "/avatars/avatar_the_human_spider.png"
+    }
+
+    object Channel {
+        const val JUXTOPPOSED = "/channel/juxtopposed.png"
+        const val LOFI_GIRL = "/channel/lofi_girl.png"
+        const val WWW = "/channel/www.png"
+        const val RAUL_BLANCO = "/channel/raul_blanco.png"
+        const val TECH_ALTAR = "/channel/tech_altar.png"
+        const val BELUGA = "/channel/beluga.png"
+        const val OK = "/channel/ok.png"
+        const val MUSICOS = "/channel/musicos.png"
+        const val ZOOM_ART_STUDIO = "/channel/zoom_art_studio.png"
+    }
+
+    object Thumbnail {
+        object Feed {
+            const val ALL_AT_ONCE = "/feed/all_at_once.png"
+            const val BITS = "/feed/bits.png"
+            const val BLUR = "/feed/blur.png"
+            const val CAT = "/feed/cat.png"
+            const val CAT_1 = "/feed/cat_1.png"
+            const val CAT_2 = "/feed/cat_2.png"
+            const val COLOR = "/feed/color.png"
+            const val DISCORD = "/feed/discord.png"
+            const val DVD = "/feed/dvd.png"
+            const val EGG = "/feed/egg.png"
+            const val FACE_REVEAL = "/feed/face_reveal.png"
+            const val JOSH = "/feed/josh.png"
+            const val LED = "/feed/led.png"
+            const val LOFI_GIRL = "/feed/lofi_girl.png"
+            const val SHREK = "/feed/shrek.png"
+            const val WE_ARE_DONE = "/feed/we_are_done.png"
+        }
     }
 
     // TODO: Rename this object to Thumbnail

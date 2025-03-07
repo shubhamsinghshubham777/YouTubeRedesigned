@@ -12,8 +12,6 @@ import com.google.youtube.models.ChannelListItemData
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.HorizontalScrollState
-import com.google.youtube.utils.LocalNavigator
-import com.google.youtube.utils.Route
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -79,8 +77,6 @@ fun ChannelHomePage() {
     }
 }
 
-// 134 x 134 photo in post card
-
 @Composable
 private fun ChannelListItemsContainer(
     title: String,
@@ -90,7 +86,6 @@ private fun ChannelListItemsContainer(
     showBorder: Boolean = false,
     onClose: (() -> Unit)? = null,
 ) {
-    val navigator = LocalNavigator.current
     var scrollableRowRef by remember { mutableStateOf<Element?>(null) }
     val horizontalScrollState = remember {
         mutableStateOf(HorizontalScrollState.ReachedStart)
@@ -132,39 +127,25 @@ private fun ChannelListItemsContainer(
                     .overflow { x(Overflow.Scroll) }
                     .scrollBehavior(ScrollBehavior.Smooth),
             ) {
-                items.forEach { item ->
-                    when (item) {
+                items.forEach { data ->
+                    when (data) {
                         is ChannelListItemData.Post -> OutlinedPost(
+                            data = data,
                             modifier = Modifier
                                 .width(
                                     if (showLargePostCards) ITEM_WIDTH_LARGE_PX.px
                                     else ITEM_WIDTH_PX.px
                                 )
                                 .fillMaxHeight(),
-                            text = item.message,
-                            isPinned = item.isPinned,
-                            timeSincePost = "${item.daysAgo} ago",
-                            likeCount = item.likeCount,
                             onLike = {},
-                            dislikeCount = item.dislikeCount,
                             onDislike = {},
-                            commentCount = item.commentCount,
                             onComment = {},
                             onShare = {},
-                            imageAsset = item.postAsset,
                         )
 
                         is ChannelListItemData.Thumbnail -> VideoThumbnailCard(
                             modifier = Modifier.width(ITEM_WIDTH_PX.px).noShrink(),
-                            thumbnailAsset = item.thumbnailAsset,
-                            title = item.videoTitle,
-                            channelName = item.channelName,
-                            isVerified = item.isChannelVerified,
-                            views = item.viewCount,
-                            daysSinceUploaded = item.daysAgo,
-                            duration = item.videoDuration,
-                            // TODO: Make the VideoThumbnailDetails data class carry an `id` as well
-                            onClick = { navigator.pushRoute(Route.Video("wxhdymaizuppmq")) },
+                            details = data.toThumbnailDetails(),
                         )
                     }
                 }
@@ -185,9 +166,11 @@ private const val ITEM_WIDTH_PX = 354.0
 private const val ITEM_WIDTH_LARGE_PX = 487.67
 private val ITEM_MAX_HEIGHT = 326.px
 private val SAMPLE_THUMBNAIL_DATA = ChannelListItemData.Thumbnail(
+    // TODO: Use real data
+    id = "wxhdymaizuppmq",
     channelAsset = Assets.Icons.USER_AVATAR,
     channelName = "Juxtopposed",
-    daysAgo = "1 day",
+    daysSinceUploaded = "1 day",
     isChannelVerified = true,
     subscribersCount = "295K",
     thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
@@ -196,9 +179,11 @@ private val SAMPLE_THUMBNAIL_DATA = ChannelListItemData.Thumbnail(
     viewCount = "120K",
 )
 private val SAMPLE_POST_DATA = ChannelListItemData.Post(
+    // TODO: Use real data
+    id = "wxhdymaizuppmq",
     channelAsset = Assets.Icons.USER_AVATAR,
     channelName = "Juxtopposed",
-    daysAgo = "1 day",
+    daysSinceUploaded = "1 day",
     isChannelVerified = true,
     subscribersCount = "295K",
     commentCount = "1.1K",

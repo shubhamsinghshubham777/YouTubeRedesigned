@@ -22,8 +22,9 @@ fun ChannelVideosPage() {
         MainVideosGrid(
             modifier = Modifier.fillMaxWidth(),
             videos = remember {
-                List(20) {
+                List(20) { index ->
                     VideoThumbnailDetails(
+                        id = index.toString(),
                         thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                         channelAsset = Assets.Icons.USER_AVATAR,
                         title = "How Websites Learned to Fit Everywhere",

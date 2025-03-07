@@ -181,17 +181,7 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
                         .toAttrs { ref { element -> gridElement = element; onDispose {} } }
                 ) {
                     videos?.forEach { details ->
-                        VideoThumbnailCard(
-                            thumbnailAsset = details.thumbnailAsset,
-                            channelAsset = details.channelAsset,
-                            title = details.title,
-                            channelName = details.channelName,
-                            isVerified = details.isVerified,
-                            views = details.views,
-                            daysSinceUploaded = details.daysSinceUploaded,
-                            duration = details.duration,
-                            size = GRID_THUMBNAIL_CARD_SIZE,
-                        )
+                        VideoThumbnailCard(details = details, size = GRID_THUMBNAIL_CARD_SIZE)
                     }
                 }
 
@@ -211,8 +201,9 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
 
 private val containerPadding = 24.px
 
-private val fakeVideoThumbnailDetails: List<VideoThumbnailDetails> = List(20) {
+private val fakeVideoThumbnailDetails: List<VideoThumbnailDetails> = List(20) { index ->
     VideoThumbnailDetails(
+        id = index.toString(),
         thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
         channelAsset = Assets.Icons.USER_AVATAR,
         title = "How Websites Learned to Fit Everywhere",

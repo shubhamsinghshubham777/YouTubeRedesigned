@@ -33,7 +33,6 @@ fun AllPlaylistsPage() {
                     name = "Redesigns $index",
                     channelName = "Juxtopposed",
                     thumbnailImageRef = Assets.Thumbnails.THUMBNAIL_1,
-                    channelImageRef = Assets.Icons.USER_AVATAR,
                     isChannelVerified = true,
                     subscriberCount = "288K",
                     viewsCount = "50",

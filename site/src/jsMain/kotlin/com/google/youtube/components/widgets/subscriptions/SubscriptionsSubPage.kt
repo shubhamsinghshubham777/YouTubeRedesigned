@@ -14,7 +14,6 @@ import com.google.youtube.components.widgets.ThumbnailGrid
 import com.google.youtube.components.widgets.VerticalDivider
 import com.google.youtube.components.widgets.VideoThumbnailCard
 import com.google.youtube.components.widgets.VideoThumbnailCardDefaults
-import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.ChannelListItemData
 import com.google.youtube.models.VideoThumbnailDetails
@@ -26,6 +25,7 @@ import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
+import com.google.youtube.utils.Wrap
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -130,8 +130,9 @@ fun SubscriptionsSubPage() {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     ThumbnailGrid(
                         date = "Today - 15 Nov 2024",
-                        thumbnailDetails = List(3) {
+                        thumbnailDetails = List(3) { index ->
                             VideoThumbnailDetails(
+                                id = index.toString(),
                                 thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                                 channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
                                 title = "Honest Trailers - Shrek",
@@ -145,8 +146,9 @@ fun SubscriptionsSubPage() {
                     )
                     ThumbnailGrid(
                         date = "Yesterday - 14 Nov 2024",
-                        thumbnailDetails = List(1) {
+                        thumbnailDetails = List(1) { index ->
                             VideoThumbnailDetails(
+                                id = index.toString(),
                                 thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                                 channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
                                 title = "Google - Year in Search 2024",
@@ -168,9 +170,10 @@ fun SubscriptionsSubPage() {
                         ChannelListItem(
                             data = listOf(
                                 ChannelListItemData.Thumbnail(
+                                    id = index.toString(),
                                     channelAsset = Assets.Icons.USER_AVATAR,
                                     channelName = "Juxtopposed",
-                                    daysAgo = "1 day",
+                                    daysSinceUploaded = "1 day",
                                     isChannelVerified = true,
                                     subscribersCount = "295K",
                                     thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
@@ -179,9 +182,10 @@ fun SubscriptionsSubPage() {
                                     viewCount = "120K",
                                 ),
                                 ChannelListItemData.Post(
+                                    id = index.toString(),
                                     channelAsset = Assets.Icons.USER_AVATAR,
                                     channelName = "Juxtopposed",
-                                    daysAgo = "1 day",
+                                    daysSinceUploaded = "1 day",
                                     isChannelVerified = true,
                                     subscribersCount = "295K",
                                     commentCount = "1.1K",
@@ -256,15 +260,8 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
                     when (item) {
                         is ChannelListItemData.Post -> MessagePostCard(item)
                         is ChannelListItemData.Thumbnail -> VideoThumbnailCard(
-                            channelAsset = item.channelAsset,
-                            channelName = item.channelName,
-                            daysSinceUploaded = item.daysAgo,
-                            duration = item.videoDuration,
-                            isVerified = item.isChannelVerified,
+                            details = item.toThumbnailDetails(),
                             size = VideoThumbnailCardDefaults.SIZE,
-                            thumbnailAsset = item.thumbnailAsset,
-                            title = item.videoTitle,
-                            views = item.viewCount,
                         )
                     }
                 }

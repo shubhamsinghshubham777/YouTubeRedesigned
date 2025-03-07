@@ -3,12 +3,13 @@ package com.google.youtube.components.widgets.channel
 import androidx.compose.runtime.Composable
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
-import com.google.youtube.utils.Wrap
+import com.google.youtube.models.ChannelListItemData
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
+import com.google.youtube.utils.Wrap
 import com.google.youtube.utils.noShrink
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
@@ -32,19 +33,13 @@ import org.jetbrains.compose.web.css.px
 
 @Composable
 fun OutlinedPost(
-    commentCount: String,
-    dislikeCount: String? = null,
-    imageAsset: String? = null,
-    isPinned: Boolean,
-    likeCount: String,
+    data: ChannelListItemData.Post,
     modifier: Modifier = Modifier,
     onComment: () -> Unit,
     onDislike: () -> Unit,
     onLike: () -> Unit,
     onShare: () -> Unit,
     showImageOnBottom: Boolean = false,
-    text: String,
-    timeSincePost: String,
 ) {
     Column(
         modifier = Modifier
@@ -61,13 +56,13 @@ fun OutlinedPost(
                 lineHeight = 25,
                 modifier = Modifier.weight(1),
                 size = 18,
-                text = text,
+                text = data.message,
                 weight = FontWeight.Medium,
                 color = Styles.OFF_WHITE,
             )
             SpacedRow(spacePx = 8, centerContentVertically = false) {
                 if (!showImageOnBottom) {
-                    imageAsset?.let { asset ->
+                    data.postAsset?.let { asset ->
                         Image(
                             modifier = Modifier
                                 .clip(Rect(4.px))
@@ -79,13 +74,13 @@ fun OutlinedPost(
                         )
                     }
                 }
-                if (isPinned) Image(src = Assets.Icons.PIN_SELECTED, width = 24, height = 24)
+                if (data.isPinned) Image(src = Assets.Icons.PIN_SELECTED, width = 24, height = 24)
                 AssetImageButton(Assets.Icons.MORE) {}
             }
         }
 
         if (showImageOnBottom) {
-            imageAsset?.let { asset ->
+            data.postAsset?.let { asset ->
                 Image(
                     modifier = Modifier
                         .clip(Rect(4.px))
@@ -99,7 +94,7 @@ fun OutlinedPost(
 
         SpacedColumn(spacePx = 16) {
             TextBox(
-                text = timeSincePost,
+                text = "${data.daysSinceUploaded} ago",
                 color = Styles.VIDEO_CARD_SECONDARY_TEXT,
                 lineHeight = 26.5,
             )
@@ -108,8 +103,8 @@ fun OutlinedPost(
                     isDense = true,
                     assetPathLeft = Assets.Paths.LIKED,
                     assetPathRight = Assets.Paths.DISLIKE,
-                    labelLeft = likeCount,
-                    labelRight = dislikeCount,
+                    labelLeft = data.likeCount,
+                    labelRight = data.dislikeCount,
                     onClickLeft = onLike,
                     onClickRight = onDislike,
                     containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
@@ -118,7 +113,7 @@ fun OutlinedPost(
                     isDense = true,
                     assetPathLeft = Assets.Paths.COMMENTS,
                     assetPathRight = Assets.Paths.SHARE,
-                    labelLeft = commentCount,
+                    labelLeft = data.commentCount,
                     onClickLeft = onComment,
                     onClickRight = onShare,
                     containerColor = Styles.ELEVATED_BUTTON_CONTAINER,

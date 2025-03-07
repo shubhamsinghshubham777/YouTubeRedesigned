@@ -44,21 +44,15 @@ fun ChannelPostsPage() {
 @Composable
 private fun PostsList(posts: List<ChannelListItemData.Post>) {
     SpacedColumn(spacePx = 20, modifier = Modifier.fillMaxWidth()) {
-        posts.forEach { item ->
+        posts.forEach { data ->
             OutlinedPost(
-                commentCount = item.commentCount,
-                dislikeCount = item.dislikeCount,
-                imageAsset = item.postAsset,
-                isPinned = item.isPinned,
-                likeCount = item.likeCount,
+                data = data,
                 modifier = Modifier.fillMaxWidth(),
                 onComment = {},
                 onDislike = {},
                 onLike = {},
                 onShare = {},
                 showImageOnBottom = true,
-                text = item.message,
-                timeSincePost = "${item.daysAgo} ago",
             )
         }
     }
@@ -78,30 +72,25 @@ private fun PostsGrid(posts: List<ChannelListItemData.Post>) {
         },
         gridGap = GridGap(17.px, 17.px),
     ) {
-        posts.forEach { item ->
+        posts.forEach { data ->
             OutlinedPost(
                 modifier = Modifier.fillMaxWidth().height(289.px),
-                text = item.message,
-                isPinned = item.isPinned,
-                timeSincePost = "${item.daysAgo} ago",
-                likeCount = item.likeCount,
+                data = data,
                 onLike = {},
-                dislikeCount = item.dislikeCount,
                 onDislike = {},
-                commentCount = item.commentCount,
                 onComment = {},
                 onShare = {},
-                imageAsset = item.postAsset,
             )
         }
     }
 }
 
-private val SAMPLE_POSTS = List(10) {
+private val SAMPLE_POSTS = List(10) { index ->
     ChannelListItemData.Post(
+        id = index.toString(),
         channelAsset = Assets.Icons.USER_AVATAR,
         channelName = "Juxtopposed",
-        daysAgo = "1 day",
+        daysSinceUploaded = "1 day",
         isChannelVerified = true,
         subscribersCount = "295K",
         commentCount = "1.1K",

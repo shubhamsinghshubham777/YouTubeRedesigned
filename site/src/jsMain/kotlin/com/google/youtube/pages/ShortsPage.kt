@@ -11,12 +11,11 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.FilterRow
 import com.google.youtube.components.widgets.ShortThumbnailCard
 import com.google.youtube.components.widgets.ShortThumbnailCardDefaults
+import com.google.youtube.models.ShortThumbnailDetails
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.GridGap
-import com.google.youtube.utils.LocalNavigator
-import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.limitTextWithEllipsis
@@ -50,7 +49,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.justifyItems
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.objectFit
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
@@ -79,10 +77,7 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
-fun ShortsGrid(
-    showPersonalisedFeedDialogState: MutableState<Boolean>,
-) {
-    val navigator = LocalNavigator.current
+fun ShortsGrid(showPersonalisedFeedDialogState: MutableState<Boolean>) {
     Column(modifier = Modifier.fillMaxWidth()) {
         FilterRow(showPersonalisedFeedDialogState = showPersonalisedFeedDialogState)
         BasicGrid(
@@ -95,14 +90,14 @@ fun ShortsGrid(
         ) {
             repeat(20) { index ->
                 ShortThumbnailCard(
-                    modifier = Modifier.onClick {
-                        navigator.pushRoute(Route.Short(id = index.toString()))
-                    },
-                    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                    channelName = "DailyDoseOfInternet",
-                    title = "Put this cat in jail",
-                    views = "10M",
-                    daysSinceUploaded = "3 weeks"
+                    details = ShortThumbnailDetails(
+                        id = index.toString(),
+                        thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
+                        channelName = "DailyDoseOfInternet",
+                        title = "Put this cat in jail",
+                        views = "10M",
+                        daysSinceUploaded = "3 weeks",
+                    ),
                 )
             }
         }

@@ -43,9 +43,7 @@ fun ThumbnailGrid(date: String, thumbnailDetails: List<VideoThumbnailDetails>) {
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(left = DOT_INDICATOR_SIZE / 3)
-    ) {
+    Column(modifier = Modifier.fillMaxWidth().padding(left = DOT_INDICATOR_SIZE / 3)) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(21.px),
             verticalAlignment = Alignment.CenterVertically
@@ -67,14 +65,7 @@ fun ThumbnailGrid(date: String, thumbnailDetails: List<VideoThumbnailDetails>) {
         ) {
             thumbnailDetails.forEach { details ->
                 VideoThumbnailCard(
-                    thumbnailAsset = details.thumbnailAsset,
-                    channelAsset = details.channelAsset,
-                    title = details.title,
-                    channelName = details.channelName,
-                    isVerified = details.isVerified,
-                    views = details.views,
-                    daysSinceUploaded = details.daysSinceUploaded,
-                    duration = details.duration,
+                    details = details,
                     size = IntSize(width = thumbnailWidth, height = 190),
                 )
             }

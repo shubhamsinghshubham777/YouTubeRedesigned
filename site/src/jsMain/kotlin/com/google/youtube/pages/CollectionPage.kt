@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import com.google.youtube.components.widgets.AssetSvgButton
-import com.google.youtube.utils.Wrap
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Assets
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
+import com.google.youtube.utils.Wrap
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import org.jetbrains.compose.web.css.px
@@ -34,8 +34,9 @@ fun CollectionPage(collectionId: String) {
         }
         MainVideosGrid(
             videos = remember {
-                List(20) {
+                List(20) { index ->
                     VideoThumbnailDetails(
+                        id = index.toString(),
                         thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                         channelAsset = Assets.Icons.USER_AVATAR,
                         title = "How Websites Learned to Fit Everywhere",
@@ -58,8 +59,9 @@ private data class CollectionPageData(val name: String, val videos: List<VideoTh
 @Suppress("UNUSED_PARAMETER")
 private fun getCollectionData(id: String) = CollectionPageData(
     name = "Gaming",
-    videos = List(35) {
+    videos = List(35) { index ->
         VideoThumbnailDetails(
+            id = index.toString(),
             thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
             channelAsset = Assets.Icons.USER_AVATAR,
             title = "How Websites Learned to Fit Everywhere",

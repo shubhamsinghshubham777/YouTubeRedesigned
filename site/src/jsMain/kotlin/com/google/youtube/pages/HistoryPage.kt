@@ -150,8 +150,9 @@ fun HistoryPage() {
 
         ThumbnailGrid(
             date = "Today - 15 Nov 2024",
-            thumbnailDetails = List(3) {
+            thumbnailDetails = List(3) { index ->
                 VideoThumbnailDetails(
+                    id = index.toString(),
                     thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                     channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
                     title = "Honest Trailers - Shrek",
@@ -165,8 +166,9 @@ fun HistoryPage() {
         )
         ThumbnailGrid(
             date = "Yesterday - 14 Nov 2024",
-            thumbnailDetails = List(1) {
+            thumbnailDetails = List(1) { index ->
                 VideoThumbnailDetails(
+                    id = index.toString(),
                     thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
                     channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
                     title = "Google - Year in Search 2024",
