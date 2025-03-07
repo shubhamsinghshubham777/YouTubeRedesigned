@@ -69,7 +69,10 @@ fun TextField(
             onFocus { isFocused = true }
             onBlur { isFocused = false }
         }
-        onEnterKeyPressed?.let { fn -> onKeyUp { event -> if (event.key == "Enter") fn() } }
+        onKeyUp { event ->
+            event.stopPropagation()
+            if (event.key == "Enter") onEnterKeyPressed?.invoke()
+        }
         style {
             containerColor?.let { bg -> background(bg) } ?: run { background(Background.None) }
             leadingAsset?.let { asset ->

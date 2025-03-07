@@ -139,8 +139,6 @@ private fun ListCard(details: VideoThumbnailDetails) {
                                 containerColor = Styles.SURFACE_ELEVATED,
                                 isDense = true,
                                 labelLeft = likeCount,
-                                onClickLeft = {},
-                                onClickRight = {},
                             )
                         }
                     }

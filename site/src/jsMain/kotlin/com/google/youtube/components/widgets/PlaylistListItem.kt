@@ -1,5 +1,6 @@
 package com.google.youtube.components.widgets
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,8 +21,10 @@ import com.google.youtube.utils.clickable
 import com.google.youtube.utils.generateColorPalette
 import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberIsSmallBreakpoint
+import com.varabyte.kobweb.browser.dom.observers.ResizeObserver
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
+import com.varabyte.kobweb.compose.dom.disposableRef
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
@@ -34,7 +37,11 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.objectFit
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseEnter
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseLeave
+import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.padding
+import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.theme.shapes.Circle
@@ -44,6 +51,7 @@ import org.jetbrains.compose.web.css.Color
 import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
+import org.w3c.dom.DOMRectReadOnly
 
 @Composable
 fun PlaylistListItem(
@@ -146,11 +154,14 @@ fun PlaylistListItem(
             }
         }
     }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { navigator.pushRoute(Route.Playlist(id = data?.id ?: return@clickable)) },
-    ) {
+    val onViewPlaylist: () -> Unit = remember {
+        {
+            data?.id?.let { id -> navigator.pushRoute(Route.Playlist(id = id)) }
+        }
+    }
+    val onPlayAll: () -> Unit = remember { {} }
+
+    Box(modifier = Modifier.fillMaxWidth().clickable(onClick = onViewPlaylist)) {
         if (isSmallBreakpoint) {
             SpacedColumn(spacePx = 8, modifier = Modifier.fillMaxWidth()) {
                 StackedThumbnail(
@@ -158,6 +169,8 @@ fun PlaylistListItem(
                     videosCount = if (isEditable) null else data?.videosCount,
                     modifier = Modifier.fillMaxWidth(),
                     showThumbnailColorPalette = showThumbnailColorPalette,
+                    onViewPlaylist = if (isEditable) null else onViewPlaylist,
+                    onPlayAll = if (isEditable) null else onPlayAll,
                 )
                 content()
             }
@@ -171,6 +184,8 @@ fun PlaylistListItem(
                     assetRef = Assets.Thumbnails.THUMBNAIL_1,
                     videosCount = if (isEditable) null else data?.videosCount,
                     showThumbnailColorPalette = showThumbnailColorPalette,
+                    onViewPlaylist = if (isEditable) null else onViewPlaylist,
+                    onPlayAll = if (isEditable) null else onPlayAll,
                 )
                 content()
             }
@@ -180,6 +195,8 @@ fun PlaylistListItem(
 
 @Composable
 private fun StackedThumbnail(
+    onViewPlaylist: (() -> Unit)? = null,
+    onPlayAll: (() -> Unit)? = null,
     assetRef: String,
     videosCount: Int?,
     showThumbnailColorPalette: Boolean,
@@ -192,11 +209,13 @@ private fun StackedThumbnail(
             .height(5.px)
             .borderRadius(topLeft = borderRadius, topRight = borderRadius)
     }
+    val showHoveredControls = remember { onViewPlaylist != null && onPlayAll != null }
+    var imageRect by remember { mutableStateOf<DOMRectReadOnly?>(null) }
+    var isImageHovered by remember { mutableStateOf(false) }
+    val hoveredControlsAnimatedOpacity by animateFloatAsState(if (isImageHovered) 1f else 0f)
 
     LaunchedEffect(assetRef, showThumbnailColorPalette) {
-        if (showThumbnailColorPalette) {
-            paletteColors = generateColorPalette(assetRef)
-        }
+        if (showThumbnailColorPalette) { paletteColors = generateColorPalette(assetRef) }
     }
 
     SpacedColumn(
@@ -224,8 +243,30 @@ private fun StackedThumbnail(
                     .then(commonModifier)
             )
         }
-        Box(contentAlignment = Alignment.BottomEnd, modifier = Modifier.fillMaxSize()) {
+        Box(
+            contentAlignment = Alignment.BottomEnd,
+            modifier = Modifier
+                .fillMaxSize()
+                .thenIf(showHoveredControls) {
+                    Modifier
+                        .onMouseEnter { isImageHovered = true }
+                        .onMouseLeave { isImageHovered = false }
+                },
+        ) {
             Image(
+                ref = if (!showHoveredControls) null else disposableRef { e ->
+                    imageRect = e.getBoundingClientRect()
+                    val observer = ResizeObserver { entries ->
+                        entries.firstOrNull()?.let { entry -> imageRect = entry.contentRect }
+                    }
+                    observer.observe(e)
+                    onDispose {
+                        with(observer) {
+                            disconnect()
+                            unobserve(e)
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxSize()
                     .aspectRatio(
@@ -259,6 +300,33 @@ private fun StackedThumbnail(
                     containerColor = Styles.BLACK.copyf(alpha = 0.6f),
                     onClick = {},
                 )
+            }
+            if (showHoveredControls) {
+                imageRect?.let { rect ->
+                    Box(
+                        modifier = Modifier
+                            .background(Styles.BLACK.copyf(alpha = 0.5f))
+                            .borderRadius(borderRadius)
+                            .opacity(hoveredControlsAnimatedOpacity)
+                            .size(width = rect.width.px, height = rect.height.px),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        SpacedRow(15) {
+                            AssetSvgButton(
+                                containerColor = Styles.BLACK.copyf(alpha = 0.4f),
+                                id = "view_playlist_button",
+                                onClick = { onViewPlaylist?.invoke() },
+                                text = "View Playlist",
+                            )
+                            AssetSvgButton(
+                                containerColor = Styles.BLACK.copyf(alpha = 0.4f),
+                                id = "play_all_button",
+                                onClick = { onPlayAll?.invoke() },
+                                text = "Play All",
+                            )
+                        }
+                    }
+                }
             }
         }
     }

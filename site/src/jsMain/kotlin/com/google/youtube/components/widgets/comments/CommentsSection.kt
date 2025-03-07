@@ -1,7 +1,6 @@
 package com.google.youtube.components.widgets.comments
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,8 +14,7 @@ import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.hideScrollBar
-import com.google.youtube.utils.isSmallerThan
-import com.google.youtube.utils.rememberBreakpointAsState
+import com.google.youtube.utils.rememberIsSmallBreakpoint
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.ScrollBehavior
@@ -30,7 +28,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
-import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import org.jetbrains.compose.web.css.px
 import kotlin.math.roundToInt
 
@@ -39,10 +36,7 @@ fun CommentsSection(
     videoId: String,
     modifier: Modifier = Modifier,
 ) {
-    val breakpoint by rememberBreakpointAsState()
-    val isSmallBreakpoint by remember {
-        derivedStateOf { breakpoint.isSmallerThan(Breakpoint.MD) }
-    }
+    val isSmallBreakpoint by rememberIsSmallBreakpoint()
     var selectedCommentType by remember { mutableStateOf(COMMENT_TYPES.first()) }
     val searchQueryState = remember { mutableStateOf("") }
 

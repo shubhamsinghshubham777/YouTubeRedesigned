@@ -11,6 +11,7 @@ import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.PersonalisedFeedDialog
+import com.google.youtube.components.widgets.WorkInProgressSection
 import com.google.youtube.pages.AllPlaylistsPage
 import com.google.youtube.pages.ChannelPage
 import com.google.youtube.pages.CollectionPage
@@ -30,13 +31,13 @@ import com.google.youtube.utils.Dialog
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
-import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.hideScrollBar
 import com.google.youtube.utils.isGreaterThan
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
@@ -126,36 +127,50 @@ fun MainLayout() {
                     ) { animatedRoute ->
                         when (animatedRoute) {
                             is Route.Collection -> CollectionPage(collectionId = animatedRoute.id)
+
                             Route.Explore -> ExplorePage(
                                 Modifier.padding(bottom = Constants.CONTENT_PADDING)
                             )
 
                             Route.History -> HistoryPage()
+
                             Route.Home -> HomePage(
                                 showPersonalisedFeedDialogState = showPersonalisedFeedDialogState,
                             )
 
-                            Route.LikedVideos -> TextBox("Liked Videos")
+
+                            Route.LikedVideos -> WorkInProgressSection(
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+
                             is Route.Page -> ChannelPage(
                                 id = animatedRoute.id,
                                 initialTab = animatedRoute.selectedTab,
                             )
 
                             is Route.Playlist -> PlaylistPage(id = animatedRoute.id)
+
                             Route.Playlists -> AllPlaylistsPage()
+
                             is Route.Short -> ShortDetails(
                                 id = animatedRoute.id,
                                 onBackPressed = navigator::pop,
                             )
 
                             Route.Shorts -> ShortsGrid(showPersonalisedFeedDialogState)
+
                             Route.Collections, Route.Subscriptions -> SubscriptionsPage(
                                 isSubscriptionsCategorySelected = animatedRoute == Route.Subscriptions,
                             )
 
                             Route.TVMode -> TVModePage()
+
                             is Route.Video -> VideoPlayerPage(videoId = animatedRoute.id)
-                            Route.WatchLater -> TextBox("Watch Later")
+
+                            Route.WatchLater -> WorkInProgressSection(
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+
                             is Route.Search -> SearchPage(query = animatedRoute.query)
                         }
                     }

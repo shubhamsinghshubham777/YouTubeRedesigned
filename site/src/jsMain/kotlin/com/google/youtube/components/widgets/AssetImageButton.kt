@@ -21,21 +21,25 @@ import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
-import org.w3c.dom.Element
+import org.w3c.dom.HTMLImageElement
 import com.varabyte.kobweb.compose.ui.graphics.Color.Rgb as KobwebColor
 
 @Composable
 fun AssetImageButton(
     asset: String,
     modifier: Modifier = Modifier,
+    onRefAvailable: ((HTMLImageElement) -> Unit)? = null,
     containerColor: KobwebColor = Colors.Transparent,
     onClick: (() -> Unit)? = null,
 ) {
-    var buttonRef by remember { mutableStateOf<Element?>(null) }
+    var buttonRef by remember { mutableStateOf<HTMLImageElement?>(null) }
     val animatedBackgroundColor by rememberMouseEventAsState(buttonRef).animatedColor(initialColor = containerColor)
 
     Image(
-        ref = ref { e -> buttonRef = e },
+        ref = ref { e ->
+            buttonRef = e
+            onRefAvailable?.invoke(e)
+        },
         modifier = Modifier
             .thenIf(onClick != null) { Modifier.background(animatedBackgroundColor.toKobwebColor()) }
             .borderRadius(100.percent)

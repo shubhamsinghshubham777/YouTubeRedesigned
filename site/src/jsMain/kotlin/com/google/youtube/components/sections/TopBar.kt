@@ -117,6 +117,7 @@ fun TopBar(
                     onFocus { isTextFieldFocused = true }
                     onInput { event -> searchQuery = event.value }
                     onKeyUp { event ->
+                        event.stopPropagation()
                         if (event.key == "Enter") {
                             if (searchQuery.isNotBlank()) {
                                 onSearch(searchQuery)
