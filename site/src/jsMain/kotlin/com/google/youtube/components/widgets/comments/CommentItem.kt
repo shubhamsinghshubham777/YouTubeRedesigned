@@ -12,6 +12,7 @@ import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.UnderlinedToggleText
 import com.google.youtube.models.VideoCommentData
 import com.google.youtube.utils.Asset
+import com.google.youtube.utils.FadeInOut
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -54,12 +55,14 @@ import org.w3c.dom.Element
 fun CommentItem(data: VideoCommentData) {
     var commentAndRepliesElement by remember { mutableStateOf<Element?>(null) }
     val containerHeight by rememberElementHeightAsState(commentAndRepliesElement)
+    val animatedContainerHeight by animateFloatAsState(containerHeight.toFloat())
     var areRepliesCollapsed by remember { mutableStateOf(true) }
+    val animatedArrowBtnRotation by animateFloatAsState(if (areRepliesCollapsed) 180f else 0f)
 
     SpacedRow(spacePx = 12, modifier = Modifier.fillMaxWidth(), centerContentVertically = false) {
         // User Avatar & Expand/Collapse Arrow
         Column(
-            modifier = Modifier.height(containerHeight.px),
+            modifier = Modifier.height(animatedContainerHeight.px),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -87,7 +90,7 @@ fun CommentItem(data: VideoCommentData) {
                         .clickable { areRepliesCollapsed = !areRepliesCollapsed },
                 ) {
                     Image(
-                        modifier = Modifier.rotate(if (areRepliesCollapsed) 180.deg else 0.deg),
+                        modifier = Modifier.rotate(animatedArrowBtnRotation.deg),
                         src = Asset.Icon.DOUBLE_ARROW_UP,
                     )
                 }
@@ -102,7 +105,7 @@ fun CommentItem(data: VideoCommentData) {
                 data = data,
                 onRepliesClick = { areRepliesCollapsed = !areRepliesCollapsed },
             )
-            if (!areRepliesCollapsed) {
+            FadeInOut(!areRepliesCollapsed) {
                 SpacedColumn(
                     spacePx = 24,
                     modifier = Modifier

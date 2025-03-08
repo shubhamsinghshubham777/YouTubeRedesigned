@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
-import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
+import com.google.youtube.components.widgets.context.RoundedSearchTextField
 import com.google.youtube.data.VideoPlayerDataProvider
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
@@ -55,7 +55,7 @@ fun CommentsSection(
                 weight = FontWeight.Medium,
             )
             TextBox(
-                text = "1,587",
+                text = comments.sumOf { it.replies.size }.plus(comments.size).toString(),
                 size = 18,
                 color = Styles.WHITE.copyf(alpha = 0.6f),
             )

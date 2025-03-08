@@ -1,4 +1,4 @@
-package com.google.youtube.components.widgets.context_menu
+package com.google.youtube.components.widgets.context
 
 import com.google.youtube.components.widgets.ContextMenuChild
 import com.google.youtube.utils.Asset

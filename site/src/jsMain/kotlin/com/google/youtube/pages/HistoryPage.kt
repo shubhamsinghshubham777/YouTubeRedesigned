@@ -9,7 +9,7 @@ import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.ThumbnailGrid
-import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
+import com.google.youtube.components.widgets.context.RoundedSearchTextField
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants

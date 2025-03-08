@@ -1,4 +1,4 @@
-package com.google.youtube.components.widgets.context_menu
+package com.google.youtube.components.widgets.context
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.Composable

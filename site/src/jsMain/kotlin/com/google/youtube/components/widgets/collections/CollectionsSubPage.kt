@@ -13,8 +13,8 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.VerticalDivider
 import com.google.youtube.utils.Wrap
-import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
-import com.google.youtube.components.widgets.context_menu.TextField
+import com.google.youtube.components.widgets.context.RoundedSearchTextField
+import com.google.youtube.components.widgets.context.TextField
 import com.google.youtube.models.CollectionChannelItem
 import com.google.youtube.models.CollectionData
 import com.google.youtube.pages.ScrollableSpacedRow

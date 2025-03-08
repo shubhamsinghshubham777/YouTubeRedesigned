@@ -67,6 +67,7 @@ fun SuggestionSection(data: SuggestionSectionData) {
                             .margin(4.px)
                             .padding(leftRight = 4.px, topBottom = 2.px),
                         text = video.duration,
+                        size = 12,
                     )
                 }
                 SpacedColumn(4) {

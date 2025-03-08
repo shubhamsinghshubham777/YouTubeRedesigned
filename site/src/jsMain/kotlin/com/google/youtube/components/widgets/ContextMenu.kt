@@ -55,6 +55,7 @@ fun <T> ContextMenu(
     state: T,
     modifier: Modifier = Modifier,
     isElevated: Boolean = true,
+    directionProvider: (T) -> ContextMenuAnimationDirection = { ContextMenuAnimationDirection.ToLeft },
     content: (T) -> List<ContextMenuChild>,
 ) {
     val heightFromState: (T) -> Float = remember {
@@ -89,6 +90,7 @@ fun <T> ContextMenu(
 
     LaunchedEffect(state) {
         if (state != currentState && contextMenuWidth != 0f) {
+            val direction = directionProvider(state)
             isAnimationRunningState.value = true
             launch {
                 Animatable(initialValue = 0f).animateTo(
@@ -102,7 +104,10 @@ fun <T> ContextMenu(
 
             launch {
                 Animatable(initialValue = 0f).animateTo(
-                    targetValue = -contextMenuWidth,
+                    targetValue = when (direction) {
+                        ContextMenuAnimationDirection.ToLeft -> -contextMenuWidth
+                        ContextMenuAnimationDirection.ToRight -> contextMenuWidth
+                    },
                     animationSpec = animationSpec
                 ) { firstItemTranslationX = value }
             }
@@ -115,7 +120,12 @@ fun <T> ContextMenu(
                     ) { animatedContainerHeight = value }
                 }
 
-                Animatable(initialValue = contextMenuWidth).animateTo(
+                Animatable(
+                    initialValue = when (direction) {
+                        ContextMenuAnimationDirection.ToLeft -> contextMenuWidth
+                        ContextMenuAnimationDirection.ToRight -> -contextMenuWidth
+                    },
+                ).animateTo(
                     targetValue = 0f,
                     animationSpec = animationSpec
                 ) { secondItemTranslationX = value }
@@ -232,7 +242,7 @@ private fun List<ContextMenuChild>.toComposables(
 
                                 is ContextMenuChild.ListItem.TrailingContent.Switch -> Switch(
                                     isSelected = trailingContent.isSelected,
-                                    onSelectionChange = trailingContent.onSelectionChange,
+                                    onSelectionChange = {},
                                     reactToMouseEvents = false,
                                 )
 
@@ -296,10 +306,7 @@ sealed class ContextMenuChild(val heightPx: Int) {
 
             data class Text(val value: String, val showArrow: Boolean = true) : TrailingContent()
 
-            data class Switch(
-                val isSelected: Boolean,
-                val onSelectionChange: (Boolean) -> Unit,
-            ) : TrailingContent()
+            data class Switch(val isSelected: Boolean) : TrailingContent()
         }
 
         companion object {
@@ -313,6 +320,8 @@ sealed class ContextMenuChild(val heightPx: Int) {
     data object HorizontalDivider : ContextMenuChild(heightPx = 1)
     data object VerticalSpacer : ContextMenuChild(heightPx = CONTAINER_PADDING_VERTICAL)
 }
+
+enum class ContextMenuAnimationDirection { ToLeft, ToRight }
 
 private const val CONTAINER_PADDING_HORIZONTAL = 24
 private const val CONTAINER_PADDING_VERTICAL = 10

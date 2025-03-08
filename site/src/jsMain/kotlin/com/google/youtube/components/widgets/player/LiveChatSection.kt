@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.youtube.components.widgets.AssetImageButton
-import com.google.youtube.components.widgets.context_menu.TextField
+import com.google.youtube.components.widgets.context.TextField
 import com.google.youtube.models.LiveChatItemData
 import com.google.youtube.models.colorFromUserId
 import com.google.youtube.utils.Asset
@@ -148,6 +148,7 @@ fun LiveChatSection(modifier: Modifier = Modifier) {
                 .padding(left = 20.px, top = 12.px, right = 24.px, bottom = 16.px),
         ) {
             sampleLiveChat.forEach { chat ->
+                // TODO: Delete this composable and use Span
                 AnnotatedTextRow {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         TextBox(
@@ -210,7 +211,7 @@ fun LiveChatSection(modifier: Modifier = Modifier) {
             if (chatMessageState.value.isNotBlank()) {
                 AssetImageButton(
                     asset = Asset.Icon.ARROW_RIGHT,
-                    containerColor = Styles.PINK_DARKENED,
+                    containerColor = Styles.SURFACE_ELEVATED,
                     onClick = { sendMessage(sampleLiveChat, chatMessageState) },
                 )
             }
