@@ -13,7 +13,7 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.context_menu.TextField
 import com.google.youtube.models.LiveChatItemData
 import com.google.youtube.models.colorFromUserId
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -209,17 +209,17 @@ fun LiveChatSection(modifier: Modifier = Modifier) {
             }
             if (chatMessageState.value.isNotBlank()) {
                 AssetImageButton(
-                    asset = Assets.Icons.ARROW_RIGHT,
+                    asset = Asset.Icon.ARROW_RIGHT,
                     containerColor = Styles.PINK_DARKENED,
                     onClick = { sendMessage(sampleLiveChat, chatMessageState) },
                 )
             }
             AssetImageButton(
-                asset = Assets.Icons.SMILEY,
+                asset = Asset.Icon.SMILEY,
                 modifier = Modifier.opacity(LiveChatSectionDefaults.CTA_OPACITY),
             ) {}
             AssetImageButton(
-                asset = Assets.Icons.MORE,
+                asset = Asset.Icon.MORE,
                 modifier = Modifier.opacity(LiveChatSectionDefaults.CTA_OPACITY),
             ) {}
         }

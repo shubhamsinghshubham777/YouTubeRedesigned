@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.clickable
@@ -172,7 +172,7 @@ fun AssetSvgButton(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val iconPath = when (updatedButtonType) {
-                AssetSvgButtonType.FilterChip -> startIconPath ?: Assets.Paths.CHECK
+                AssetSvgButtonType.FilterChip -> startIconPath ?: Asset.Path.CHECK
                 else -> startIconPath
             }
 

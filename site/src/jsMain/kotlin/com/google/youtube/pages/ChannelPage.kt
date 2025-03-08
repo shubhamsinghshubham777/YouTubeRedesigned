@@ -16,7 +16,7 @@ import com.google.youtube.components.widgets.channel.ChannelPlaylistsPage
 import com.google.youtube.components.widgets.channel.ChannelPostsPage
 import com.google.youtube.components.widgets.channel.ChannelShortsPage
 import com.google.youtube.components.widgets.channel.ChannelVideosPage
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
@@ -66,7 +66,7 @@ fun ChannelPage(id: String, initialTab: ChannelTab?) {
             // Banner
             Image(
                 modifier = Modifier.fillMaxWidth().clip(Rect(22.px)).objectFit(ObjectFit.Cover),
-                src = Assets.Banners.BANNER_1,
+                src = Asset.Banner.BANNER_1,
                 height = 241,
             )
 
@@ -81,7 +81,7 @@ fun ChannelPage(id: String, initialTab: ChannelTab?) {
                         .border(1.px, LineStyle.Solid, Styles.PAGE_THUMBNAIL_BORDER)
                         .borderRadius(80.px)
                         .clip(Circle()),
-                    src = Assets.Icons.USER_AVATAR,
+                    src = Asset.Icon.USER_AVATAR,
                     width = 160,
                     height = 160,
                 )
@@ -126,7 +126,7 @@ private fun Tabs(channelId: String, selectedTab: ChannelTab?) {
             )
         }
         Spacer()
-        AssetImageButton(Assets.Icons.SEARCH_DIM) {}
+        AssetImageButton(Asset.Icon.SEARCH_DIM) {}
     }
 }
 
@@ -145,7 +145,7 @@ private fun RowScope.ChannelDetails() {
     ) {
         SpacedRow(8) {
             TextBox(text = "Juxtopposed", size = 28, lineHeight = 28.4)
-            Image(src = Assets.Icons.VERIFIED_BADGE, width = 16, height = 16)
+            Image(src = Asset.Icon.VERIFIED_BADGE, width = 16, height = 16)
         }
         Span({
             style {
@@ -191,7 +191,7 @@ private fun SocialLinks() {
 
     Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(16.px)) {
         SpacedRow(spacePx = 18, modifier = Modifier.margin(21.px).zIndex(1)) {
-            repeat(4) { Image(src = Assets.Icons.USER_AVATAR, width = 24, height = 24) }
+            repeat(4) { Image(src = Asset.Icon.USER_AVATAR, width = 24, height = 24) }
             Box(
                 modifier = Modifier
                     .border(1.px, LineStyle.Solid, Styles.WHITE.copyf(alpha = 0.24f))
@@ -216,7 +216,7 @@ private fun SocialLinks() {
             AssetSvgButton(
                 id = "subscribe_button",
                 onClick = {},
-                startIconPath = Assets.Paths.NOTIFS,
+                startIconPath = Asset.Path.NOTIFS,
                 text = "Subscribed",
             )
         }

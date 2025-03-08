@@ -19,7 +19,7 @@ import com.google.youtube.models.CollectionChannelItem
 import com.google.youtube.models.CollectionData
 import com.google.youtube.pages.ScrollableSpacedRow
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
@@ -58,7 +58,7 @@ fun CollectionsSubPage() {
                 channelItems = List(8) { index ->
                     CollectionChannelItem(
                         channelId = index.toString(),
-                        avatarAsset = Assets.Icons.USER_AVATAR,
+                        avatarAsset = Asset.Icon.USER_AVATAR,
                         channelName = "Ninja",
                         isVerified = true,
                         subscribersCount = "23.8M",
@@ -108,8 +108,8 @@ fun CollectionsSubPage() {
                                 )
                             }
                             AssetImageButton(
-                                asset = if (isEditable.value) Assets.Icons.CHECK
-                                else Assets.Icons.EDIT,
+                                asset = if (isEditable.value) Asset.Icon.CHECK
+                                else Asset.Icon.EDIT,
                                 modifier = Modifier.opacity(0.6f),
                                 onClick = {
                                     coroutineScope.launch {
@@ -124,7 +124,7 @@ fun CollectionsSubPage() {
                                 id = "add_channel_button_for_${data.name}",
                                 isDense = true,
                                 onClick = {},
-                                startIconPath = Assets.Paths.ADD_SOLO,
+                                startIconPath = Asset.Path.ADD_SOLO,
                                 text = "Add Channel",
                             )
                             AssetSvgButton(
@@ -135,7 +135,7 @@ fun CollectionsSubPage() {
                             )
                         }
                         AssetImageButton(
-                            asset = Assets.Icons.ARROW_DOWN,
+                            asset = Asset.Icon.ARROW_DOWN,
                             modifier = Modifier
                                 .margin(left = 16.px)
                                 .rotate(animatedArrowRotation.deg),
@@ -170,7 +170,7 @@ fun CollectionsSubPage() {
                                                     weight = FontWeight.Medium,
                                                 )
                                                 Image(
-                                                    src = Assets.Icons.VERIFIED_BADGE,
+                                                    src = Asset.Icon.VERIFIED_BADGE,
                                                     width = 15,
                                                     height = 15,
                                                 )
@@ -185,7 +185,7 @@ fun CollectionsSubPage() {
                                     // TODO: Replace with real subscribe button
                                     AssetSvgButton(
                                         id = "subscribe_button",
-                                        startIconPath = Assets.Paths.NOTIFS_SELECTED,
+                                        startIconPath = Asset.Path.NOTIFS_SELECTED,
                                         text = "Subscribed",
                                         onClick = {},
                                     )
@@ -223,7 +223,7 @@ private fun Filters() {
 
     Wrap(horizontalGapPx = 16, modifier = Modifier.fillMaxWidth()) {
         AssetSvgButton(
-            endIconPath = Assets.Paths.ARROW_DOWN,
+            endIconPath = Asset.Path.ARROW_DOWN,
             id = "sort_by_button",
             isDense = true,
             onClick = {},
@@ -238,7 +238,7 @@ private fun Filters() {
             isSelected = isGridLayoutSelected,
             onClick = { isGridLayoutSelected = true },
             type = AssetSvgButtonType.SelectableChip,
-            startIconPath = Assets.Paths.GRID,
+            startIconPath = Asset.Path.GRID,
         )
         AssetSvgButton(
             id = "layout_type_list_button",
@@ -246,7 +246,7 @@ private fun Filters() {
             isSelected = !isGridLayoutSelected,
             onClick = { isGridLayoutSelected = false },
             type = AssetSvgButtonType.SelectableChip,
-            startIconPath = Assets.Paths.LIST,
+            startIconPath = Asset.Path.LIST,
         )
         if (!isSmallBreakpoint) Spacer()
         AssetSvgButton(
@@ -254,7 +254,7 @@ private fun Filters() {
             isDense = true,
             isSelected = false,
             onClick = {},
-            startIconPath = Assets.Paths.COLLECTIONS,
+            startIconPath = Asset.Path.COLLECTIONS,
             text = "New Collection",
         )
         RoundedSearchTextField(textState = searchQueryState, hintText = "Search subscriptions")

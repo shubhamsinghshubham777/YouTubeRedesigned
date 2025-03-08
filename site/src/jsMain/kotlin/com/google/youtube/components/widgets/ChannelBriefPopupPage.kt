@@ -1,7 +1,7 @@
 package com.google.youtube.components.widgets
 
 import androidx.compose.runtime.Composable
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.limitTextWithEllipsis
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -36,7 +36,7 @@ fun ChannelBriefPopupPage(channelId: String) {
         // Image-Name-ID-Duration-Subscribers
         Row(modifier = Modifier.fillMaxWidth(100.percent - containerPaddingHorizontal)) {
             Image(
-                src = Assets.Avatars.AVATAR_JACKSEPTICEYE,
+                src = Asset.Avatar.JACKSEPTICEYE,
                 width = imageSizePx,
                 height = imageSizePx
             )
@@ -58,7 +58,7 @@ fun ChannelBriefPopupPage(channelId: String) {
                             .fontWeight(FontWeight.Medium)
                             .color(Styles.VIDEO_CARD_PRIMARY_TEXT),
                     ) { Text("jackscepticeye") }
-                    Image(Assets.Icons.VERIFIED_BADGE)
+                    Image(Asset.Icon.VERIFIED_BADGE)
                 }
                 Box { Text("@jacksepticeye") }
                 Box(
@@ -70,7 +70,7 @@ fun ChannelBriefPopupPage(channelId: String) {
                 }
             }
 
-            AssetImageButton(Assets.Icons.MORE) {}
+            AssetImageButton(Asset.Icon.MORE) {}
         }
 
         // Action Buttons
@@ -84,8 +84,8 @@ fun ChannelBriefPopupPage(channelId: String) {
             AssetSvgButton(
                 id = "subscribe_button",
                 onClick = {},
-                startIconPath = Assets.Paths.NOTIFS_SELECTED,
-                endIconPath = Assets.Paths.ARROW_DOWN,
+                startIconPath = Asset.Path.NOTIFS_SELECTED,
+                endIconPath = Asset.Path.ARROW_DOWN,
             ) {
                 Text("Subscribed")
             }

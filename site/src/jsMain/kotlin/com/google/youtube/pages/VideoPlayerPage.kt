@@ -63,9 +63,10 @@ fun VideoPlayerPage(
         if (isSegmentedContentVisible.value) 473f.coerceAtMost(windowWidth * 0.8f)
         else 0f,
     )
+
     val segmentContent = remember {
         movableContentOf { modifier: Modifier ->
-            SegmentedContent(modifier = modifier, state = selectedSegment)
+            SegmentedContent(videoId = videoId, state = selectedSegment, modifier = modifier)
         }
     }
 

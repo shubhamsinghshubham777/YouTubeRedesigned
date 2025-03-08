@@ -13,7 +13,7 @@ import com.google.youtube.components.widgets.VideoThumbnailCard
 import com.google.youtube.models.ExploreGridCategoryWithVideos
 import com.google.youtube.models.ExploreGridDetails
 import com.google.youtube.models.VideoThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
@@ -204,8 +204,8 @@ private val containerPadding = 24.px
 private val fakeVideoThumbnailDetails: List<VideoThumbnailDetails> = List(20) { index ->
     VideoThumbnailDetails(
         id = index.toString(),
-        thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-        channelAsset = Assets.Icons.USER_AVATAR,
+        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+        channelAsset = Asset.Icon.USER_AVATAR,
         title = "How Websites Learned to Fit Everywhere",
         channelName = "Juxtopposed",
         isVerified = true,
@@ -217,7 +217,7 @@ private val fakeVideoThumbnailDetails: List<VideoThumbnailDetails> = List(20) { 
 
 private val fakeGridDetails: List<ExploreGridDetails> = listOf(
     ExploreGridDetails(
-        asset = Assets.Icons.TRENDING_SELECTED,
+        asset = Asset.Icon.TRENDING_SELECTED,
         title = "Trending",
         categoriesWithVideos = listOf(
             ExploreGridCategoryWithVideos(label = "Now", videos = fakeVideoThumbnailDetails),
@@ -228,7 +228,7 @@ private val fakeGridDetails: List<ExploreGridDetails> = listOf(
         ),
     ),
     ExploreGridDetails(
-        asset = Assets.Icons.MUSIC_SELECTED,
+        asset = Asset.Icon.MUSIC_SELECTED,
         title = "Music",
         categoriesWithVideos = listOf(
             ExploreGridCategoryWithVideos(
@@ -246,7 +246,7 @@ private val fakeGridDetails: List<ExploreGridDetails> = listOf(
         ),
     ),
     ExploreGridDetails(
-        asset = Assets.Icons.GAMES_SELECTED, title = "Gaming",
+        asset = Asset.Icon.GAMES_SELECTED, title = "Gaming",
         categoriesWithVideos = listOf(
             ExploreGridCategoryWithVideos(videos = fakeVideoThumbnailDetails.subList(0, 10)),
         ),

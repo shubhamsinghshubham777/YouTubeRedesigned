@@ -10,7 +10,7 @@ import com.google.youtube.components.widgets.PlaylistListItem
 import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.PlaylistItemData
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.SpacedColumn
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.ui.Modifier
@@ -32,7 +32,7 @@ fun AllPlaylistsPage() {
                     id = "collection_$index",
                     name = "Redesigns $index",
                     channelName = "Juxtopposed",
-                    thumbnailImageRef = Assets.Thumbnails.THUMBNAIL_1,
+                    thumbnailImageRef = Asset.Thumbnails.THUMBNAIL_1,
                     isChannelVerified = true,
                     subscriberCount = "288K",
                     viewsCount = "50",
@@ -59,21 +59,21 @@ private fun TopBar(
                 secondaryText = "Sort by:",
                 text = "Relevance",
                 isDense = true,
-                endIconPath = Assets.Paths.ARROW_DOWN,
+                endIconPath = Asset.Path.ARROW_DOWN,
                 onClick = {},
             )
         }
         AssetSvgButton(
             id = "grid_mode_button",
             type = AssetSvgButtonType.SelectableChip,
-            startIconPath = Assets.Paths.GRID,
+            startIconPath = Asset.Path.GRID,
             isSelected = isGridModeSelected.value,
             onClick = { isGridModeSelected.value = true },
         )
         AssetSvgButton(
             id = "list_mode_button",
             type = AssetSvgButtonType.SelectableChip,
-            startIconPath = Assets.Paths.LIST,
+            startIconPath = Asset.Path.LIST,
             isSelected = !isGridModeSelected.value,
             onClick = { isGridModeSelected.value = false },
         )

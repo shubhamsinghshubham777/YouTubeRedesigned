@@ -6,7 +6,7 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.VerticalDivider
 import com.google.youtube.utils.Wrap
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
@@ -36,8 +36,8 @@ fun VideosAndPostsFilters(
                 isSelected = layoutTypeState.value == layout,
                 onClick = { layoutTypeState.value = layout },
                 startIconPath = when (layout) {
-                    VideosAndPostsLayoutType.Grid -> Assets.Paths.GRID
-                    VideosAndPostsLayoutType.List -> Assets.Paths.LIST
+                    VideosAndPostsLayoutType.Grid -> Asset.Path.GRID
+                    VideosAndPostsLayoutType.List -> Asset.Path.LIST
                 },
                 type = AssetSvgButtonType.SelectableChip,
             )

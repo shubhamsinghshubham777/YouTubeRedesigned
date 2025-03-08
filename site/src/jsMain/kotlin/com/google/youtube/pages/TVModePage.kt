@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.clickable
@@ -70,7 +70,7 @@ fun TVModePage(borderRadius: CSSLengthOrPercentageNumericValue = 14.px) {
     Box(modifier = Modifier.fillMaxWidth().height(95.percent)) {
         Image(
             modifier = Modifier.borderRadius(borderRadius).fillMaxSize().objectFit(ObjectFit.Cover),
-            src = Assets.Thumbnails.THUMBNAIL_1,
+            src = Asset.Thumbnails.THUMBNAIL_1,
         )
 
         Box(
@@ -119,14 +119,14 @@ fun TVModePage(borderRadius: CSSLengthOrPercentageNumericValue = 14.px) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     modifier = Modifier.size(28.px),
-                    src = Assets.Avatars.AVATAR_JACKSEPTICEYE,
+                    src = Asset.Avatar.JACKSEPTICEYE,
                 )
 
                 Box(modifier = Modifier.margin(left = 16.px, right = 8.px)) {
                     Text("Juxtopposed")
                 }
 
-                Image(Assets.Icons.VERIFIED_BADGE)
+                Image(Asset.Icon.VERIFIED_BADGE)
             }
         }
 
@@ -148,11 +148,11 @@ fun TVModePage(borderRadius: CSSLengthOrPercentageNumericValue = 14.px) {
                 horizontalArrangement = Arrangement.spacedBy(8.px),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AssetImageButton(Assets.Icons.LIST_OF_TOPICS) {}
-                AssetImageButton(Assets.Icons.ARROW_LEFT) {}
+                AssetImageButton(Asset.Icon.LIST_OF_TOPICS) {}
+                AssetImageButton(Asset.Icon.ARROW_LEFT) {}
                 Box { Text("Topic 01 - Entertainment") }
-                AssetImageButton(Assets.Icons.ARROW_RIGHT) {}
-                AssetImageButton(Assets.Icons.VOLUME) {}
+                AssetImageButton(Asset.Icon.ARROW_RIGHT) {}
+                AssetImageButton(Asset.Icon.VOLUME) {}
             }
 
             Spacer()
@@ -162,12 +162,12 @@ fun TVModePage(borderRadius: CSSLengthOrPercentageNumericValue = 14.px) {
                 horizontalArrangement = Arrangement.spacedBy(8.px),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AssetImageButton(Assets.Icons.CC) {}
-                AssetImageButton(Assets.Icons.QUALITY_4K) {}
-                AssetImageButton(Assets.Icons.SETTINGS) {}
-                AssetImageButton(Assets.Icons.PIP) {}
-                AssetImageButton(Assets.Icons.THEATER) {}
-                AssetImageButton(Assets.Icons.FULLSCREEN) {}
+                AssetImageButton(Asset.Icon.CC) {}
+                AssetImageButton(Asset.Icon.QUALITY_4K) {}
+                AssetImageButton(Asset.Icon.SETTINGS) {}
+                AssetImageButton(Asset.Icon.PIP) {}
+                AssetImageButton(Asset.Icon.THEATER) {}
+                AssetImageButton(Asset.Icon.FULLSCREEN) {}
             }
         }
     }

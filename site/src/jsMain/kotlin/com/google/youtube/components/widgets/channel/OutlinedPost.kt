@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.models.ChannelListItemData
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -74,8 +74,8 @@ fun OutlinedPost(
                         )
                     }
                 }
-                if (data.isPinned) Image(src = Assets.Icons.PIN_SELECTED, width = 24, height = 24)
-                AssetImageButton(Assets.Icons.MORE) {}
+                if (data.isPinned) Image(src = Asset.Icon.PIN_SELECTED, width = 24, height = 24)
+                AssetImageButton(Asset.Icon.MORE) {}
             }
         }
 
@@ -101,8 +101,8 @@ fun OutlinedPost(
             Wrap(8) {
                 SegmentedButtonPair(
                     isDense = true,
-                    assetPathLeft = Assets.Paths.LIKED,
-                    assetPathRight = Assets.Paths.DISLIKE,
+                    assetPathLeft = Asset.Path.LIKED,
+                    assetPathRight = Asset.Path.DISLIKE,
                     labelLeft = data.likeCount,
                     labelRight = data.dislikeCount,
                     onClickLeft = onLike,
@@ -111,8 +111,8 @@ fun OutlinedPost(
                 )
                 SegmentedButtonPair(
                     isDense = true,
-                    assetPathLeft = Assets.Paths.COMMENTS,
-                    assetPathRight = Assets.Paths.SHARE,
+                    assetPathLeft = Asset.Path.COMMENTS,
+                    assetPathRight = Asset.Path.SHARE,
                     labelLeft = data.commentCount,
                     onClickLeft = onComment,
                     onClickRight = onShare,

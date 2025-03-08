@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.clickable
@@ -118,7 +118,7 @@ fun SegmentedButton(
                 ) {
                     AssetSvg(
                         id = "segmented_button_check_icon_$index",
-                        path = Assets.Paths.CHECK,
+                        path = Asset.Path.CHECK,
                         primaryColor = animatedContentColor.toKobwebColor(),
                     )
                 }

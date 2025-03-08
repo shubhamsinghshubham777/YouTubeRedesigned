@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.google.youtube.models.ChannelListItemData
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Crossfade
@@ -88,7 +88,7 @@ private fun PostsGrid(posts: List<ChannelListItemData.Post>) {
 private val SAMPLE_POSTS = List(10) { index ->
     ChannelListItemData.Post(
         id = index.toString(),
-        channelAsset = Assets.Icons.USER_AVATAR,
+        channelAsset = Asset.Icon.USER_AVATAR,
         channelName = "Juxtopposed",
         daysSinceUploaded = "1 day",
         isChannelVerified = true,
@@ -97,6 +97,6 @@ private val SAMPLE_POSTS = List(10) { index ->
         dislikeCount = "12",
         likeCount = "2.9K",
         message = "it’s finally time for youtube. what are your biggest issues with it?",
-        postAsset = Assets.Banners.BANNER_1,
+        postAsset = Asset.Banner.BANNER_1,
     )
 }

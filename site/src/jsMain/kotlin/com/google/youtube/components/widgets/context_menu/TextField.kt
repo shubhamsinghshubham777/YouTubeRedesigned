@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.toComposeColor
@@ -112,7 +112,7 @@ fun RoundedSearchTextField(
         containerColor = Styles.SURFACE_ELEVATED,
         contentPadding = PaddingValues(left = 48.px, top = 10.px, right = 16.px, bottom = 10.px),
         hintText = hintText,
-        leadingAsset = Assets.Icons.SEARCH_DIM,
+        leadingAsset = Asset.Icon.SEARCH_DIM,
         textState = textState,
         showBorder = false,
     ) {

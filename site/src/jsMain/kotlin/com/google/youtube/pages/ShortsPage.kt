@@ -12,7 +12,7 @@ import com.google.youtube.components.widgets.FilterRow
 import com.google.youtube.components.widgets.ShortThumbnailCard
 import com.google.youtube.components.widgets.ShortThumbnailCardDefaults
 import com.google.youtube.models.ShortThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.GridGap
@@ -92,7 +92,7 @@ fun ShortsGrid(showPersonalisedFeedDialogState: MutableState<Boolean>) {
                 ShortThumbnailCard(
                     details = ShortThumbnailDetails(
                         id = index.toString(),
-                        thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
+                        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
                         channelName = "DailyDoseOfInternet",
                         title = "Put this cat in jail",
                         views = "10M",
@@ -138,7 +138,7 @@ fun ShortDetails(
                         ) {
                             Image(
                                 modifier = Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
-                                src = Assets.Thumbnails.THUMBNAIL_1,
+                                src = Asset.Thumbnails.THUMBNAIL_1,
                             )
 
                             Box(
@@ -167,7 +167,7 @@ fun ShortDetails(
                                                     .size(46.px)
                                                     .clip(Circle())
                                                     .noShrink(),
-                                                src = Assets.Avatars.AVATAR_JACKSEPTICEYE,
+                                                src = Asset.Avatar.JACKSEPTICEYE,
                                             )
 
                                             Column(
@@ -278,7 +278,7 @@ fun ShortDetails(
 
         Box(modifier = Modifier.margin(if (isSmallBreakpoint) 24.px else 0.px)) {
             AssetImageButton(
-                asset = Assets.Icons.ARROW_LEFT,
+                asset = Asset.Icon.ARROW_LEFT,
                 modifier = Modifier.background(Styles.ARROW_BUTTON_CONTAINER),
                 onClick = onBackPressed
             )
@@ -321,14 +321,14 @@ private fun ShortActions(
                         .padding(if (isShortWindowState.value) 8.px else 16.px),
                     asset = when (action) {
                         ShortAction.Like ->
-                            if (isLiked) Assets.Icons.LIKED_SELECTED else Assets.Icons.LIKED
+                            if (isLiked) Asset.Icon.LIKED_SELECTED else Asset.Icon.LIKED
 
                         ShortAction.Dislike ->
-                            if (isDisliked) Assets.Icons.DISLIKE_SELECTED else Assets.Icons.DISLIKE
+                            if (isDisliked) Asset.Icon.DISLIKE_SELECTED else Asset.Icon.DISLIKE
 
-                        ShortAction.Comment -> Assets.Icons.COMMENTS
-                        ShortAction.Share -> Assets.Icons.SHARE
-                        ShortAction.More -> Assets.Icons.MORE
+                        ShortAction.Comment -> Asset.Icon.COMMENTS
+                        ShortAction.Share -> Asset.Icon.SHARE
+                        ShortAction.More -> Asset.Icon.MORE
                     },
                     onClick = when (action) {
                         ShortAction.Like -> onLike

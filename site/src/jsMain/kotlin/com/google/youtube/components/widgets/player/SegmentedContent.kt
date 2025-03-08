@@ -3,10 +3,10 @@ package com.google.youtube.components.widgets.player
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import com.google.youtube.components.widgets.SegmentedButton
-import com.google.youtube.models.VideoThumbnailDetails
+import com.google.youtube.data.VideoPlayerDataProvider
 import com.google.youtube.pages.SegmentedContentType
-import com.google.youtube.utils.Assets
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.TextBox
@@ -25,10 +25,16 @@ import org.jetbrains.compose.web.css.vh
 
 @Composable
 fun SegmentedContent(
+    videoId: String,
     state: MutableState<SegmentedContentType>,
     modifier: Modifier = Modifier,
 ) {
     val isLargeBreakpoint by rememberIsLargeBreakpoint()
+    val videoPlayerDataProvider = remember { VideoPlayerDataProvider() }
+    val sectionsData = remember(videoPlayerDataProvider, videoId) {
+        videoPlayerDataProvider.getSuggestionsForId(videoId)
+    }
+
     Column(modifier = Modifier.fillMaxSize().then(modifier)) {
         SegmentedButton(
             segments = SegmentedContentType.entries.map { e -> e.label },
@@ -46,24 +52,7 @@ fun SegmentedContent(
                     spacePx = 24,
                     modifier = Modifier.padding(topBottom = 24.px)
                 ) {
-                    repeat(3) {
-                        SuggestionSection(
-                            author = "Juxtopossed",
-                            videos = List(3) { index ->
-                                VideoThumbnailDetails(
-                                    id = index.toString(),
-                                    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                                    channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
-                                    title = "I Redesigned the ENTIRE Spotify UI from Scratch",
-                                    channelName = "Juxtopposed",
-                                    isVerified = true,
-                                    views = "1.7M",
-                                    daysSinceUploaded = "5 months",
-                                    duration = "10:24",
-                                )
-                            }
-                        )
-                    }
+                    sectionsData.forEach { sectionData -> SuggestionSection(sectionData) }
                 }
 
                 SegmentedContentType.Transcripts -> Box(

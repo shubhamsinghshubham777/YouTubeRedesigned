@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvg
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.isGreaterThan
@@ -101,8 +101,8 @@ fun TopBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AssetSvg(
-                    id = Assets.Paths::SEARCH.name,
-                    path = Assets.Paths.SEARCH,
+                    id = Asset.Path::SEARCH.name,
+                    path = Asset.Path.SEARCH,
                     primaryColor = animatedTextFieldContentColor.toKobwebColor(),
                 ) {
                     marginLeft(16.px)
@@ -142,8 +142,8 @@ fun TopBar(
                 }
                 if (searchQuery.isNotEmpty()) {
                     AssetSvg(
-                        id = Assets.Paths::CLOSE.name,
-                        path = Assets.Paths.CLOSE,
+                        id = Asset.Path::CLOSE.name,
+                        path = Asset.Path.CLOSE,
                         primaryColor = Colors.White,
                         onClick = { searchQuery = "" },
                     ) {
@@ -154,8 +154,8 @@ fun TopBar(
                     Box(modifier = Modifier.width(36.px))
                 }
                 AssetSvg(
-                    id = Assets.Paths::MIC.name,
-                    path = Assets.Paths.MIC,
+                    id = Asset.Path::MIC.name,
+                    path = Asset.Path.MIC,
                     primaryColor = animatedTextFieldContentColor.toKobwebColor(),
                     onClick = {}
                 ) {
@@ -172,14 +172,14 @@ fun TopBar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(modifier = Modifier.width(4.px))
-            AssetImageButton(asset = Assets.Icons.MENU, onClick = onDrawerButtonClick)
+            AssetImageButton(asset = Asset.Icon.MENU, onClick = onDrawerButtonClick)
             Box(modifier = Modifier.width(12.px))
             Image(
                 modifier = Modifier
                     .height(44.px)
                     .padding(topBottom = 12.px)
                     .clickable(onClick = onLogoClick),
-                src = Assets.Icons.YOUTUBE_LOGO
+                src = Asset.Icon.YOUTUBE_LOGO
             )
 
             Spacer()
@@ -193,14 +193,14 @@ fun TopBar(
             ) {
                 AssetImageButton(
                     modifier = TopBarSearchButtonStyle.toModifier(),
-                    asset = Assets.Icons.SEARCH
+                    asset = Asset.Icon.SEARCH
                 ) { showSearchBar = true }
-                if (breakpoint isGreaterThan Breakpoint.SM) AssetImageButton(Assets.Icons.ADD) {}
-                AssetImageButton(Assets.Icons.NOTIFS) {}
-                AssetImageButton(Assets.Icons.SETTINGS) {}
+                if (breakpoint isGreaterThan Breakpoint.SM) AssetImageButton(Asset.Icon.ADD) {}
+                AssetImageButton(Asset.Icon.NOTIFS) {}
+                AssetImageButton(Asset.Icon.SETTINGS) {}
                 AssetImageButton(
                     modifier = Modifier.size(48.px),
-                    asset = Assets.Icons.USER_AVATAR
+                    asset = Asset.Icon.USER_AVATAR
                 ) {}
             }
         }
@@ -210,7 +210,7 @@ fun TopBar(
                 modifier = Modifier.zIndex(1).background(Styles.SURFACE).fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AssetImageButton(asset = Assets.Icons.ARROW_LEFT) {
+                AssetImageButton(asset = Asset.Icon.ARROW_LEFT) {
                     showSearchBar = false
                     searchQuery = ""
                 }

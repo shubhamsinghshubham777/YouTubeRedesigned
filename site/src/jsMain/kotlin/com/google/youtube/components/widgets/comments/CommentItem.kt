@@ -10,9 +10,8 @@ import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.UnderlinedToggleText
-import com.google.youtube.models.VideoComment
-import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.models.VideoCommentData
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -52,11 +51,10 @@ import org.jetbrains.compose.web.css.px
 import org.w3c.dom.Element
 
 @Composable
-fun CommentItem(data: VideoComment) {
+fun CommentItem(data: VideoCommentData) {
     var commentAndRepliesElement by remember { mutableStateOf<Element?>(null) }
     val containerHeight by rememberElementHeightAsState(commentAndRepliesElement)
     var areRepliesCollapsed by remember { mutableStateOf(true) }
-    val animatedArrowRotation by animateFloatAsState(if (areRepliesCollapsed) 180f else 0f)
 
     SpacedRow(spacePx = 12, modifier = Modifier.fillMaxWidth(), centerContentVertically = false) {
         // User Avatar & Expand/Collapse Arrow
@@ -65,10 +63,7 @@ fun CommentItem(data: VideoComment) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Image(
-                modifier = Modifier.size(43.px),
-                src = Assets.Icons.USER_AVATAR,
-            )
+            Image(modifier = Modifier.size(43.px), src = data.userAssetRef)
             if (data.replies.isNotEmpty()) {
                 // Vertical Divider
                 Box(
@@ -92,8 +87,8 @@ fun CommentItem(data: VideoComment) {
                         .clickable { areRepliesCollapsed = !areRepliesCollapsed },
                 ) {
                     Image(
-                        modifier = Modifier.rotate(animatedArrowRotation.deg),
-                        src = Assets.Icons.DOUBLE_ARROW_UP
+                        modifier = Modifier.rotate(if (areRepliesCollapsed) 180.deg else 0.deg),
+                        src = Asset.Icon.DOUBLE_ARROW_UP,
                     )
                 }
             }
@@ -103,8 +98,11 @@ fun CommentItem(data: VideoComment) {
             ref = ref { e -> commentAndRepliesElement = e },
             modifier = Modifier.weight(1),
         ) {
-            MessageAndControls(data)
-            AnimatedVisibility(!areRepliesCollapsed, modifier = Modifier.fillMaxWidth()) {
+            MessageAndControls(
+                data = data,
+                onRepliesClick = { areRepliesCollapsed = !areRepliesCollapsed },
+            )
+            if (!areRepliesCollapsed) {
                 SpacedColumn(
                     spacePx = 24,
                     modifier = Modifier
@@ -119,7 +117,7 @@ fun CommentItem(data: VideoComment) {
 }
 
 @Composable
-private fun MessageAndControls(data: VideoComment) {
+private fun MessageAndControls(data: VideoCommentData, onRepliesClick: () -> Unit) {
     val breakpoint by rememberBreakpointAsState()
     val isSmallBreakpoint by remember { derivedStateOf { breakpoint.isSmallerThan(Breakpoint.SM) } }
 
@@ -135,17 +133,17 @@ private fun MessageAndControls(data: VideoComment) {
                 TextBox(
                     maxLines = 1,
                     size = 14,
-                    text = getUsernameFromId(data.userId),
+                    text = data.username,
                     weight = FontWeight.Medium,
                 )
                 TextBox(
                     color = Styles.VIDEO_CARD_SECONDARY_TEXT,
                     maxLines = 1,
                     size = 12,
-                    text = "${data.timestamp} ago",
+                    text = "${data.durationSinceUploaded} ago",
                     modifier = Modifier.weight(1),
                 )
-                AssetImageButton(Assets.Icons.MORE) {}
+                AssetImageButton(Asset.Icon.MORE) {}
             }
             SpacedColumn(8) {
                 TextBox(
@@ -172,8 +170,8 @@ private fun MessageAndControls(data: VideoComment) {
                 .hideScrollBar(),
         ) {
             SegmentedButtonPair(
-                assetPathLeft = Assets.Paths.LIKED,
-                assetPathRight = Assets.Paths.DISLIKE,
+                assetPathLeft = Asset.Path.LIKED,
+                assetPathRight = Asset.Path.DISLIKE,
                 containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 isDense = true,
                 labelLeft = data.likeCount,
@@ -183,37 +181,29 @@ private fun MessageAndControls(data: VideoComment) {
             )
             SegmentedButtonPair(
                 assetColorLeft = Styles.RED_LIGHT,
-                assetPathLeft = if (data.replies.isNotEmpty()) Assets.Paths.COMMENTS else null,
+                assetPathLeft = if (data.replies.isNotEmpty()) Asset.Path.COMMENTS else null,
                 containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 isDense = true,
                 isRightLabelBold = true,
                 labelLeft = if (data.replies.isNotEmpty()) data.replies.size.toString() else null,
                 labelRight = "Reply",
-                onClickLeft = {},
+                onClickLeft = onRepliesClick,
                 onClickRight = {},
             )
             if (data.isHearted) {
                 Box(modifier = Modifier.noShrink(), contentAlignment = Alignment.BottomEnd) {
                     Image(
                         modifier = Modifier.clip(Circle()).size(22.px),
-                        src = getUserThumbnailFromId(data.userId),
+                        src = Asset.Icon.USER_AVATAR,
                     )
                     Image(
                         modifier = Modifier
                             .translate(tx = 6.5.px, ty = 6.px)
                             .size(width = 13.px, height = 12.px),
-                        src = Assets.Icons.HEART,
+                        src = Asset.Icon.HEART,
                     )
                 }
             }
         }
     }
 }
-
-// TODO: Replace this fake function
-private fun getUsernameFromId(userId: String) =
-    if (userId == "0") "@YouTube Enjoyer" else "@CEOofDesign"
-
-// TODO: Replace this fake function
-@Suppress("UNUSED_PARAMETER")
-private fun getUserThumbnailFromId(userId: String) = Assets.Icons.USER_AVATAR

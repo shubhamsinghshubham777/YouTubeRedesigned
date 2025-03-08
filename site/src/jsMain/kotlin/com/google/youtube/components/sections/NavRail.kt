@@ -17,7 +17,7 @@ import com.google.youtube.components.widgets.Popup
 import com.google.youtube.models.NavRailItemData
 import com.google.youtube.models.NavRailListItemIconType
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.SpacedColumn
@@ -336,7 +336,7 @@ private fun NavRailListItem(
                     modifier = Modifier
                         .rotate(animatedDropDownRotation.deg)
                         .userSelect(UserSelect.None),
-                    src = Assets.Icons.ARROW_DOWN
+                    src = Asset.Icon.ARROW_DOWN
                 )
             }
         }
@@ -348,32 +348,32 @@ private val SampleNavRailItems = listOf(
         label = "Home",
         route = Route.Home,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.HOME,
-            activeIconPath = Assets.Paths.HOME_SELECTED
+            inactiveIconPath = Asset.Path.HOME,
+            activeIconPath = Asset.Path.HOME_SELECTED
         )
     ),
     NavRailItemData(
         label = "Explore",
         route = Route.Explore,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.EXPLORE,
-            activeIconPath = Assets.Paths.EXPLORE_SELECTED
+            inactiveIconPath = Asset.Path.EXPLORE,
+            activeIconPath = Asset.Path.EXPLORE_SELECTED
         )
     ),
     NavRailItemData(
         label = "Shorts",
         route = Route.Shorts,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.SHORTS,
-            activeIconPath = Assets.Paths.SHORTS_SELECTED
+            inactiveIconPath = Asset.Path.SHORTS,
+            activeIconPath = Asset.Path.SHORTS_SELECTED
         )
     ),
     NavRailItemData(
         label = "TV Mode",
         route = Route.TVMode,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.TV,
-            activeIconPath = Assets.Paths.TV_SELECTED
+            inactiveIconPath = Asset.Path.TV,
+            activeIconPath = Asset.Path.TV_SELECTED
         ),
         hasBottomDivider = true,
     ),
@@ -381,32 +381,32 @@ private val SampleNavRailItems = listOf(
         label = "History",
         route = Route.History,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.HISTORY,
-            activeIconPath = Assets.Paths.HISTORY_SELECTED
+            inactiveIconPath = Asset.Path.HISTORY,
+            activeIconPath = Asset.Path.HISTORY_SELECTED
         )
     ),
     NavRailItemData(
         label = "Watch Later",
         route = Route.WatchLater,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.WATCH_LATER,
-            activeIconPath = Assets.Paths.WATCH_LATER_SELECTED
+            inactiveIconPath = Asset.Path.WATCH_LATER,
+            activeIconPath = Asset.Path.WATCH_LATER_SELECTED
         )
     ),
     NavRailItemData(
         label = "Liked Videos",
         route = Route.LikedVideos,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.LIKED_VIDEOS,
-            activeIconPath = Assets.Paths.LIKED_VIDEOS_SELECTED
+            inactiveIconPath = Asset.Path.LIKED_VIDEOS,
+            activeIconPath = Asset.Path.LIKED_VIDEOS_SELECTED
         )
     ),
     NavRailItemData(
         label = "Playlists",
         route = Route.Playlists,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.PLAYLISTS,
-            activeIconPath = Assets.Paths.PLAYLISTS_SELECTED,
+            inactiveIconPath = Asset.Path.PLAYLISTS,
+            activeIconPath = Asset.Path.PLAYLISTS_SELECTED,
         ),
         hasBottomDivider = true,
         children = listOf(
@@ -419,8 +419,8 @@ private val SampleNavRailItems = listOf(
         label = "Collections",
         route = Route.Collections,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.COLLECTIONS,
-            activeIconPath = Assets.Paths.COLLECTIONS_SELECTED,
+            inactiveIconPath = Asset.Path.COLLECTIONS,
+            activeIconPath = Asset.Path.COLLECTIONS_SELECTED,
         ),
         children = listOf(
             NavRailItemData(
@@ -442,91 +442,91 @@ private val SampleNavRailItems = listOf(
         label = "Subscriptions",
         route = Route.Subscriptions,
         iconType = NavRailListItemIconType.ToggleableIcons(
-            inactiveIconPath = Assets.Paths.SUBSCRIPTIONS,
-            activeIconPath = Assets.Paths.SUBSCRIPTIONS_SELECTED,
+            inactiveIconPath = Asset.Path.SUBSCRIPTIONS,
+            activeIconPath = Asset.Path.SUBSCRIPTIONS_SELECTED,
         ),
         hasBottomDivider = true,
         children = listOf(
             NavRailItemData(
                 label = "Lofi Girl",
                 route = Route.Page(id = "LofiGirl"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_LOFI_GIRL),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.LOFI_GIRL),
                 count = 2
             ),
             NavRailItemData(
                 label = "Ninja",
                 route = Route.Page(id = "Ninja"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_NINJA),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.NINJA),
                 count = 3
             ),
             NavRailItemData(
                 label = "TechAltar",
                 route = Route.Page(id = "TechAltar"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_TECH_ALTAIR)
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.TECH_ALTAIR)
             ),
             NavRailItemData(
                 label = "The Human Spider",
                 route = Route.Page(id = "TheHumanSpider"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_THE_HUMAN_SPIDER)
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.THE_HUMAN_SPIDER)
             ),
             NavRailItemData(
                 label = "FaceDev",
                 route = Route.Page(id = "FaceDev"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_FACE_DEV)
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.FACE_DEV)
             ),
             NavRailItemData(
                 label = "jacksepticeye",
                 route = Route.Page(id = "JackSepticEye"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_JACKSEPTICEYE),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.JACKSEPTICEYE),
                 count = 1
             ),
             NavRailItemData(
                 label = "jacksfilms",
                 route = Route.Page(id = "JacksFilms"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_JACKSFILMS)
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.JACKSFILMS)
             ),
             NavRailItemData(
                 label = "Screen Junkies",
                 route = Route.Page(id = "ScreenJunkies"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_SCREEN_JUNKIES),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.SCREEN_JUNKIES),
                 count = 8
             ),
             NavRailItemData(
                 label = "Papa Meat",
                 route = Route.Page(id = "PapaMeat"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_PAPA_MEAT),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.PAPA_MEAT),
                 count = 1
             ),
             NavRailItemData(
                 label = "Steam",
                 route = Route.Page(id = "Steam"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_STEAM)
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.STEAM)
             ),
             NavRailItemData(
                 label = "The Critical Drinker",
                 route = Route.Page(id = "TheCriticalDrinker"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_THE_CRITICAL_DRINKER)
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.THE_CRITICAL_DRINKER)
             ),
             NavRailItemData(
                 label = "Hyperplexed",
                 route = Route.Page(id = "Hyperplexed"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_HYPERPLEXED),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.HYPERPLEXED),
                 count = 5
             ),
             NavRailItemData(
                 label = "The Coding Sloth",
                 route = Route.Page(id = "TheCodingSloth"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_THE_CODING_SLOTH)
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.THE_CODING_SLOTH)
             ),
             NavRailItemData(
                 label = "BOG",
                 route = Route.Page(id = "BOG"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_BOG)
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.BOG)
             ),
             NavRailItemData(
                 label = "Cyberpunk 2077",
                 route = Route.Page(id = "Cyberpunk2077"),
-                iconType = NavRailListItemIconType.Image(ref = Assets.Avatars.AVATAR_CYBERPUNK_2077),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.CYBERPUNK_2077),
                 count = 7
             ),
         ),

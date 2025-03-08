@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.youtube.components.widgets.context_menu.TextField
 import com.google.youtube.models.TagData
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
 import com.varabyte.kobweb.compose.css.Overflow
@@ -50,8 +50,8 @@ fun PersonalisedFeedDialog(
 ) {
     val allTags = remember {
         mutableStateListOf(
-            TagData("Subscriptions", Assets.Paths.SUBSCRIPTIONS),
-            TagData("Posts", Assets.Paths.POSTS),
+            TagData("Subscriptions", Asset.Path.SUBSCRIPTIONS),
+            TagData("Posts", Asset.Path.POSTS),
             TagData("Music"),
             TagData("Tech"),
             TagData("Design"),
@@ -83,7 +83,7 @@ fun PersonalisedFeedDialog(
             TagData("Skibidi"),
             TagData("brainrot"),
             TagData("rizz"),
-            TagData("Shorts", Assets.Paths.SHORTS),
+            TagData("Shorts", Asset.Path.SHORTS),
             TagData("Fortnite"),
         )
     }
@@ -106,8 +106,8 @@ fun PersonalisedFeedDialog(
             Box(modifier = Modifier.fontSize(18.px)) { Text("Personalized Feed") }
             Spacer()
             Row(modifier = Modifier.opacity(0.5f)) {
-                AssetImageButton(Assets.Icons.SETTINGS) {}
-                AssetImageButton(Assets.Icons.CLOSE, onClick = onClose)
+                AssetImageButton(Asset.Icon.SETTINGS) {}
+                AssetImageButton(Asset.Icon.CLOSE, onClick = onClose)
             }
         }
 
@@ -178,7 +178,7 @@ private fun Content(
                         AssetSvgButton(
                             containerColor = if (isSelected) Styles.BACKGROUND_SELECTED else Styles.WHITE,
                             contentColor = if (isSelected) Styles.WHITE else Styles.BLACK,
-                            endIconPath = Assets.Paths.CLOSE,
+                            endIconPath = Asset.Path.CLOSE,
                             iconPrimaryColor = if (isSelected) Styles.RED else Styles.BLACK,
                             iconSecondaryColor = if (isSelected) Styles.PINK else null,
                             id = "tag_${tag.label}",
@@ -192,7 +192,7 @@ private fun Content(
                                 allTags.remove(tag)
                                 selectedTags?.remove(tag)
                             },
-                            startIconPath = if (isSelected) Assets.Paths.CHECK else tag.iconPath,
+                            startIconPath = if (isSelected) Asset.Path.CHECK else tag.iconPath,
                             text = tag.label,
                             type = AssetSvgButtonType.SelectableChip,
                         )

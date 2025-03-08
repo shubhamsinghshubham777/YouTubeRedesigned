@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
@@ -67,7 +67,7 @@ fun MissedVideosContainer(modifier: Modifier = Modifier, videos: List<VideoThumb
                         .fontWeight(FontWeight.Medium)
                 ) { Text("In Case You Missed") }
 
-                AssetImageButton(Assets.Icons.CLOSE) { showContainer = false }
+                AssetImageButton(Asset.Icon.CLOSE) { showContainer = false }
             }
 
             Box {

@@ -3,7 +3,7 @@ package com.google.youtube.components.widgets
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntSize
 import com.google.youtube.models.ShortThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
@@ -61,7 +61,7 @@ fun ShortThumbnailCard(
                     .size(width = size.width.px, height = size.height.px),
                 src = details.thumbnailAsset,
             )
-            AssetImageButton(modifier = Modifier.margin(4.px), asset = Assets.Icons.MORE) {}
+            AssetImageButton(modifier = Modifier.margin(4.px), asset = Asset.Icon.MORE) {}
         }
 
         Column(Modifier.color(Styles.VIDEO_CARD_SECONDARY_TEXT)) {

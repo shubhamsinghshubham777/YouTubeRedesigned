@@ -13,7 +13,7 @@ import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.utils.Wrap
 import com.google.youtube.models.VideoThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
@@ -55,8 +55,8 @@ fun SearchPage(query: String) {
             ListCard(
                 details = VideoThumbnailDetails(
                     id = "zryrtkfabzb",
-                    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                    channelAsset = Assets.Icons.USER_AVATAR,
+                    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                    channelAsset = Asset.Icon.USER_AVATAR,
                     title = "Classic Gingerbread Cookies Recipe",
                     channelName = "Irene Magazine",
                     isVerified = true,
@@ -127,15 +127,15 @@ private fun ListCard(details: VideoThumbnailDetails) {
                     )
                     Wrap(horizontalGapPx = 15, verticalGapPx = 15) {
                         SpacedRow(24) {
-                            IconLabel(iconAsset = Assets.Icons.EYE, label = details.views)
+                            IconLabel(iconAsset = Asset.Icon.EYE, label = details.views)
                             details.uploadDate?.let { uploadDate ->
-                                IconLabel(iconAsset = Assets.Icons.DATE, label = uploadDate)
+                                IconLabel(iconAsset = Asset.Icon.DATE, label = uploadDate)
                             }
                         }
                         details.likeCount?.let { likeCount ->
                             SegmentedButtonPair(
-                                assetPathLeft = Assets.Paths.LIKED,
-                                assetPathRight = Assets.Paths.DISLIKE,
+                                assetPathLeft = Asset.Path.LIKED,
+                                assetPathRight = Asset.Path.DISLIKE,
                                 containerColor = Styles.SURFACE_ELEVATED,
                                 isDense = true,
                                 labelLeft = likeCount,
@@ -144,12 +144,12 @@ private fun ListCard(details: VideoThumbnailDetails) {
                     }
                     Wrap(horizontalGapPx = 16, verticalGapPx = 16) {
                         SpacedRow(15) {
-                            Image(src = Assets.Icons.USER_AVATAR, width = 28, height = 28)
+                            Image(src = Asset.Icon.USER_AVATAR, width = 28, height = 28)
                             SpacedRow(8) {
                                 TextBox(text = details.channelName, lineHeight = 28.3)
                                 if (details.isVerified) {
                                     Image(
-                                        src = Assets.Icons.VERIFIED_BADGE,
+                                        src = Asset.Icon.VERIFIED_BADGE,
                                         width = 15,
                                         height = 15
                                     )
@@ -165,7 +165,7 @@ private fun ListCard(details: VideoThumbnailDetails) {
                         }
                     }
                 }
-                AssetImageButton(Assets.Icons.MORE) {}
+                AssetImageButton(Asset.Icon.MORE) {}
             }
         }
     }
@@ -204,7 +204,7 @@ private fun Filters(modifier: Modifier = Modifier) {
 
     Wrap(horizontalGapPx = 8, verticalGapPx = 8, modifier = Modifier.fillMaxWidth().then(modifier)) {
         AssetSvgButton(
-            endIconPath = Assets.Paths.ARROW_DOWN,
+            endIconPath = Asset.Path.ARROW_DOWN,
             id = "type_button",
             isDense = true,
             onClick = {},
@@ -213,7 +213,7 @@ private fun Filters(modifier: Modifier = Modifier) {
             type = AssetSvgButtonType.SelectableChip,
         )
         AssetSvgButton(
-            endIconPath = Assets.Paths.ARROW_DOWN,
+            endIconPath = Asset.Path.ARROW_DOWN,
             id = "upload_date_button",
             isDense = true,
             onClick = {},
@@ -222,7 +222,7 @@ private fun Filters(modifier: Modifier = Modifier) {
             type = AssetSvgButtonType.SelectableChip,
         )
         AssetSvgButton(
-            endIconPath = Assets.Paths.ARROW_DOWN,
+            endIconPath = Asset.Path.ARROW_DOWN,
             id = "duration_button",
             isDense = true,
             onClick = {},
@@ -231,7 +231,7 @@ private fun Filters(modifier: Modifier = Modifier) {
             type = AssetSvgButtonType.SelectableChip,
         )
         AssetSvgButton(
-            endIconPath = Assets.Paths.ARROW_DOWN,
+            endIconPath = Asset.Path.ARROW_DOWN,
             id = "features_button",
             isDense = true,
             onClick = {},
@@ -240,7 +240,7 @@ private fun Filters(modifier: Modifier = Modifier) {
             type = AssetSvgButtonType.SelectableChip,
         )
         AssetSvgButton(
-            endIconPath = Assets.Paths.ARROW_DOWN,
+            endIconPath = Asset.Path.ARROW_DOWN,
             id = "sort_by_button",
             isDense = true,
             onClick = {},
@@ -288,7 +288,7 @@ private fun Filters(modifier: Modifier = Modifier) {
                 id = "layout_type_grid_button",
                 isSelected = isLayoutTypeGrid,
                 onClick = { isLayoutTypeGrid = true },
-                startIconPath = Assets.Paths.GRID,
+                startIconPath = Asset.Path.GRID,
                 type = AssetSvgButtonType.SelectableChip,
             )
             AssetSvgButton(
@@ -296,7 +296,7 @@ private fun Filters(modifier: Modifier = Modifier) {
                 id = "layout_type_list_button",
                 isSelected = !isLayoutTypeGrid,
                 onClick = { isLayoutTypeGrid = false },
-                startIconPath = Assets.Paths.LIST,
+                startIconPath = Asset.Path.LIST,
                 type = AssetSvgButtonType.SelectableChip,
             )
         }

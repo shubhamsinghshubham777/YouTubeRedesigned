@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
@@ -60,7 +60,7 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
                 type = AssetSvgButtonType.SelectableChip,
                 onClick = { showPersonalisedFeedDialogState.value = true },
             ) {
-                Image(src = Assets.Icons.MAGIC_FEED)
+                Image(src = Asset.Icon.MAGIC_FEED)
             }
 
             // Filter Chips
@@ -110,8 +110,8 @@ fun FilterRow(showPersonalisedFeedDialogState: MutableState<Boolean>) {
                     else Alignment.CenterEnd,
                 ) {
                     AssetImageButton(
-                        asset = if (startItem) Assets.Icons.ARROW_LEFT
-                        else Assets.Icons.ARROW_RIGHT,
+                        asset = if (startItem) Asset.Icon.ARROW_LEFT
+                        else Asset.Icon.ARROW_RIGHT,
                         onClick = {
                             rowRef?.scrollBy(x = if (startItem) -200.0 else 200.0, y = 0.0)
                         },
@@ -145,7 +145,7 @@ private val filters = listOf(
     FilterInfo(name = "Electronics"),
     FilterInfo(
         name = SPECIAL_FILTER_NAME,
-        iconPath = Assets.Paths.DYNAMIC,
+        iconPath = Asset.Path.DYNAMIC,
         backgroundColor = Styles.BACKGROUND_SELECTED,
         iconPrimaryColor = Styles.RED,
         iconSecondaryColor = Styles.PINK,

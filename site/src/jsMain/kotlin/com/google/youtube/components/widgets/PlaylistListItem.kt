@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.models.PlaylistItemData
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
@@ -80,14 +80,14 @@ fun PlaylistListItem(
                         lineHeight = 25,
                     )
                     Wrap(8) {
-                        Image(src = Assets.Icons.USER_AVATAR, width = 28, height = 28)
+                        Image(src = Asset.Icon.USER_AVATAR, width = 28, height = 28)
                         TextBox(
                             text = data?.channelName.orEmpty(),
                             modifier = Modifier.margin(left = 7.px)
                         )
                         if (data?.isChannelVerified == true) {
                             Image(
-                                src = Assets.Icons.VERIFIED_BADGE,
+                                src = Asset.Icon.VERIFIED_BADGE,
                                 width = 15,
                                 height = 15
                             )
@@ -100,17 +100,17 @@ fun PlaylistListItem(
                     }
                     Wrap(horizontalGapPx = 24, verticalGapPx = 8) {
                         IconLabel(
-                            iconAsset = Assets.Icons.EYE,
+                            iconAsset = Asset.Icon.EYE,
                             label = (data?.viewsCount ?: 0).toString(),
                             secondaryLabel = "views",
                         )
                         IconLabel(
-                            iconAsset = Assets.Icons.PLAY,
+                            iconAsset = Asset.Icon.PLAY,
                             label = data?.videosCount.toString(),
                             secondaryLabel = "videos",
                         )
                         IconLabel(
-                            iconAsset = Assets.Icons.DURATION,
+                            iconAsset = Asset.Icon.DURATION,
                             label = data?.totalDuration.orEmpty(),
                             secondaryLabel = "duration",
                         )
@@ -119,7 +119,7 @@ fun PlaylistListItem(
                         AssetSvgButton(
                             id = "play_all_button_${data?.name.orEmpty()}",
                             isDense = true,
-                            startIconPath = Assets.Paths.PLAY,
+                            startIconPath = Asset.Path.PLAY,
                             text = "Play All",
                             isSelected = true,
                             onClick = {},
@@ -127,28 +127,28 @@ fun PlaylistListItem(
                         AssetSvgButton(
                             id = "share_button_${data?.name.orEmpty()}",
                             isDense = true,
-                            startIconPath = Assets.Paths.SHARE,
+                            startIconPath = Asset.Path.SHARE,
                             text = "Share",
                             onClick = {},
                         )
                         AssetSvgButton(
                             id = "add_video_button_${data?.name.orEmpty()}",
                             isDense = true,
-                            startIconPath = Assets.Paths.ADD_SOLO,
+                            startIconPath = Asset.Path.ADD_SOLO,
                             text = "Add video",
                             onClick = {},
                         )
                         AssetSvgButton(
                             id = "download_button_${data?.name.orEmpty()}",
                             isDense = true,
-                            startIconPath = Assets.Paths.DOWNLOAD,
+                            startIconPath = Asset.Path.DOWNLOAD,
                             text = "Download",
                             onClick = {},
                         )
                     }
                 }
                 AssetImageButton(
-                    asset = Assets.Icons.MORE,
+                    asset = Asset.Icon.MORE,
                     modifier = Modifier.thenIf(!isEditable) { Modifier.margin(top = 9.px) },
                     onClick = {},
                 )
@@ -166,7 +166,7 @@ fun PlaylistListItem(
         if (isSmallBreakpoint) {
             SpacedColumn(spacePx = 8, modifier = Modifier.fillMaxWidth()) {
                 StackedThumbnail(
-                    assetRef = Assets.Thumbnails.THUMBNAIL_1,
+                    assetRef = Asset.Thumbnails.THUMBNAIL_1,
                     videosCount = if (isEditable) null else data?.videosCount,
                     modifier = Modifier.fillMaxWidth(),
                     showThumbnailColorPalette = showThumbnailColorPalette,
@@ -182,7 +182,7 @@ fun PlaylistListItem(
                 centerContentVertically = false,
             ) {
                 StackedThumbnail(
-                    assetRef = Assets.Thumbnails.THUMBNAIL_1,
+                    assetRef = Asset.Thumbnails.THUMBNAIL_1,
                     videosCount = if (isEditable) null else data?.videosCount,
                     showThumbnailColorPalette = showThumbnailColorPalette,
                     onViewPlaylist = if (isEditable) null else onViewPlaylist,
@@ -287,7 +287,7 @@ private fun StackedThumbnail(
                         .margin(10.px)
                         .padding(left = 12.px, top = 2.px, right = 8.px, bottom = 2.px),
                 ) {
-                    Image(src = Assets.Icons.PLAYLISTS, width = 24, height = 24)
+                    Image(src = Asset.Icon.PLAYLISTS, width = 24, height = 24)
                     TextBox(
                         text = count.toString(),
                         weight = FontWeight.Medium,
@@ -297,7 +297,7 @@ private fun StackedThumbnail(
             } ?: run {
                 AssetImageButton(
                     modifier = Modifier.clip(Circle()).margin(10.px).padding(7.px),
-                    asset = Assets.Icons.EDIT,
+                    asset = Asset.Icon.EDIT,
                     containerColor = Styles.BLACK.copyf(alpha = 0.6f),
                     onClick = {},
                 )

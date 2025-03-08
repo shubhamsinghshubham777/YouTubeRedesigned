@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
-import com.google.youtube.models.VideoComment
+import com.google.youtube.data.VideoPlayerDataProvider
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -39,6 +39,12 @@ fun CommentsSection(
     val isSmallBreakpoint by rememberIsSmallBreakpoint()
     var selectedCommentType by remember { mutableStateOf(COMMENT_TYPES.first()) }
     val searchQueryState = remember { mutableStateOf("") }
+
+    // Data States
+    val videoPlayerDataProvider = remember { VideoPlayerDataProvider() }
+    val comments = remember(videoPlayerDataProvider, videoId) {
+        videoPlayerDataProvider.getCommentsForId(videoId)
+    }
 
     SpacedColumn(spacePx = 24, modifier = modifier) {
         // Title
@@ -90,32 +96,7 @@ fun CommentsSection(
 
         // Comments
         SpacedColumn(spacePx = 25, modifier = Modifier.fillMaxWidth().padding(20.px)) {
-            repeat(5) {
-                CommentItem(
-                    VideoComment(
-                        commentId = "0",
-                        dislikeCount = "12",
-                        isHearted = true,
-                        likeCount = "10K",
-                        message = "woah I like this redesign",
-                        replies = List(3) { index ->
-                            VideoComment(
-                                commentId = "1",
-                                dislikeCount = "6",
-                                isHearted = false,
-                                likeCount = "10K",
-                                message = if (index % 2 == 0) "I like it too"
-                                else "bro likes the redesign",
-                                replies = emptyList(),
-                                timestamp = "${index + 1} days",
-                                userId = "1",
-                            )
-                        },
-                        timestamp = "4 days",
-                        userId = "0",
-                    )
-                )
-            }
+            comments.forEach { commentData -> CommentItem(data = commentData) }
         }
     }
 }

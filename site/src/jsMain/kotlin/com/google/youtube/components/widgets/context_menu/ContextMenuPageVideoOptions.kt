@@ -1,20 +1,15 @@
 package com.google.youtube.components.widgets.context_menu
 
-import com.google.youtube.utils.Assets
 import com.google.youtube.components.widgets.ContextMenuChild
+import com.google.youtube.utils.Asset
 
 val ContextMenuPageVideoOptions = listOf(
     ContextMenuChild.ListItem(
         text = "More Options",
         leadingContent = ContextMenuChild.ListItem
             .LeadingContent
-            .Asset(
-                path = Assets.Paths.FILTER,
-                hasHalfOpacity = true
-            ),
-        trailingContent = ContextMenuChild.ListItem
-            .TrailingContent
-            .Arrow,
+            .Asset(path = Asset.Path.FILTER, hasHalfOpacity = true),
+        trailingContent = ContextMenuChild.ListItem.TrailingContent.Arrow,
         isTopItem = true,
         onClick = {}
     ),
@@ -24,37 +19,25 @@ val ContextMenuPageVideoOptions = listOf(
         leadingContent = ContextMenuChild.ListItem
             .LeadingContent
             .Asset(
-                path = Assets.Paths.SLEEP_TIMER,
+                path = Asset.Path.SLEEP_TIMER,
                 hasHalfOpacity = true
             ),
         text = "Sleep Timer",
-        trailingContent = ContextMenuChild.ListItem
-            .TrailingContent
-            .Text(value = "OFF"),
+        trailingContent = ContextMenuChild.ListItem.TrailingContent.Text(value = "OFF"),
     ),
     ContextMenuChild.ListItem(
         leadingContent = ContextMenuChild.ListItem
             .LeadingContent
-            .Asset(
-                path = Assets.Paths.CC,
-                hasHalfOpacity = true
-            ),
+            .Asset(path = Asset.Path.CC, hasHalfOpacity = true),
         text = "Subtitles",
-        trailingContent = ContextMenuChild.ListItem
-            .TrailingContent
-            .Text(value = "OFF"),
+        trailingContent = ContextMenuChild.ListItem.TrailingContent.Text(value = "OFF"),
     ),
     ContextMenuChild.ListItem(
         leadingContent = ContextMenuChild.ListItem
             .LeadingContent
-            .Asset(
-                path = Assets.Paths.SPEED,
-                hasHalfOpacity = true
-            ),
+            .Asset(path = Asset.Path.SPEED, hasHalfOpacity = true),
         text = "Playback speed",
-        trailingContent = ContextMenuChild.ListItem
-            .TrailingContent
-            .Text(value = "1x"),
+        trailingContent = ContextMenuChild.ListItem.TrailingContent.Text(value = "1x"),
     ),
     ContextMenuChild.VerticalSpacer,
 )

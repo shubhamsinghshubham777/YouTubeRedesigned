@@ -12,8 +12,9 @@ import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.UnderlinedToggleText
 import com.google.youtube.components.widgets.comments.CommentsSection
+import com.google.youtube.data.VideoPlayerDataProvider
 import com.google.youtube.pages.SegmentedContentType
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Route
@@ -67,19 +68,30 @@ fun PlayerAndComments(
 ) {
     val navigator = LocalNavigator.current
     val isLargeBreakpoint by rememberIsLargeBreakpoint()
+
     var isDescriptionBoxExpanded by remember { mutableStateOf(false) }
     var descriptionToggleRef by remember { mutableStateOf<Element?>(null) }
     val descriptionToggleMouseEventState by rememberMouseEventAsState(descriptionToggleRef)
 
+    // Data States
+    val videoPlayerDataProvider = remember { VideoPlayerDataProvider() }
+    val videoDetails = remember(videoPlayerDataProvider, videoId) {
+        videoPlayerDataProvider.getVideoDetailsForId(videoId)
+    }
+
     Column(modifier = modifier) {
-        VideoPlayer(isTheaterModeOn = isTheaterModeOn, selectedSegment = selectedSegment)
+        VideoPlayer(
+            videoId = videoId,
+            isTheaterModeOn = isTheaterModeOn,
+            selectedSegment = selectedSegment,
+        )
 
         Box(modifier = Modifier.height(13.px))
 
         TextBox(
             maxLines = 2,
             size = 20,
-            text = "I Redesigned the ENTIRE YouTube UI from Scratch",
+            text = videoDetails.title,
             weight = FontWeight.SemiBold,
         )
         Box(modifier = Modifier.height(12.5.px))
@@ -104,13 +116,12 @@ fun PlayerAndComments(
                     ref = ref { e -> channelRowRef = e },
                     spacePx = 15,
                     modifier = Modifier.clickable {
-                        // TODO: Use real ID here
-                        navigator.pushRoute(Route.Page(id = "juxtopposed"))
+                        navigator.pushRoute(Route.Page(id = videoDetails.channelId))
                     }
                 ) {
                     Image(
                         modifier = Modifier.size(46.px).clip(Circle()),
-                        src = Assets.Icons.USER_AVATAR,
+                        src = videoDetails.channelAsset,
                     )
                     SpacedColumn(1.29) {
                         SpacedRow(8) {
@@ -118,15 +129,15 @@ fun PlayerAndComments(
                                 modifier = Modifier.thenIf(isChannelRowHovered) {
                                     Modifier.textDecorationLine(TextDecorationLine.Underline)
                                 },
-                                text = "Juxtopposed",
+                                text = videoDetails.channelName,
                                 size = 18,
                                 lineHeight = 28.3,
                                 weight = FontWeight.Medium,
                             )
-                            Image(src = Assets.Icons.VERIFIED_BADGE)
+                            Image(src = Asset.Icon.VERIFIED_BADGE)
                         }
                         TextBox(
-                            text = "288K subscribers",
+                            text = "${videoDetails.subscribersCount} subscribers",
                             size = 14,
                             color = Styles.VIDEO_CARD_SECONDARY_TEXT,
                         )
@@ -141,8 +152,8 @@ fun PlayerAndComments(
                 )
             }
             SpacedRow(24) {
-                IconLabel(iconAsset = Assets.Icons.EYE, label = "120K")
-                IconLabel(iconAsset = Assets.Icons.DATE, label = "12 Nov 24")
+                IconLabel(iconAsset = Asset.Icon.EYE, label = videoDetails.viewCount)
+                IconLabel(iconAsset = Asset.Icon.DATE, label = videoDetails.uploadDate)
             }
             SpacedRow(
                 spacePx = 10,
@@ -152,34 +163,34 @@ fun PlayerAndComments(
                     .rowGap(16.px)
             ) {
                 SegmentedButtonPair(
-                    assetPathLeft = Assets.Paths.LIKED,
-                    assetPathRight = Assets.Paths.DISLIKE,
+                    assetPathLeft = Asset.Path.LIKED,
+                    assetPathRight = Asset.Path.DISLIKE,
                     containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                     isLeftLabelBold = true,
-                    labelLeft = "20K",
-                    labelRight = "100",
+                    labelLeft = videoDetails.likeCount,
+                    labelRight = videoDetails.dislikeCount,
                     onClickLeft = {},
                     onClickRight = {},
                 )
                 AssetImageButton(
-                    asset = Assets.Icons.SHARE,
+                    asset = Asset.Icon.SHARE,
                     containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
                 AssetImageButton(
-                    asset = Assets.Icons.ADD_TO_PLAYLIST,
+                    asset = Asset.Icon.ADD_TO_PLAYLIST,
                     containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
                 AssetImageButton(
-                    asset = Assets.Icons.WATCH_LATER,
+                    asset = Asset.Icon.WATCH_LATER,
                     containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
                 AssetImageButton(
-                    asset = Assets.Icons.MORE_HORIZONTAL,
+                    asset = Asset.Icon.MORE_HORIZONTAL,
                     containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                 ) {}
                 if (!isLargeBreakpoint) {
                     AssetImageButton(
-                        asset = Assets.Icons.ARROW_LEFT,
+                        asset = Asset.Icon.ARROW_LEFT,
                         containerColor = Styles.ELEVATED_BUTTON_CONTAINER
                     ) { isSegmentedContentVisible.value = !isSegmentedContentVisible.value }
                 }
@@ -199,9 +210,7 @@ fun PlayerAndComments(
         ) {
             SpacedColumn(16) {
                 TextBox(
-                    text = "I tried to redesign YouTube's UI and make it more user-friendly." +
-                            "\n\nHope you enjoy!\n\nSubscribe to my YouTube channel for more " +
-                            "updates.",
+                    text = videoDetails.description,
                     maxLines = if (isDescriptionBoxExpanded) null else 3,
                 )
                 UnderlinedToggleText(

@@ -10,7 +10,7 @@ import com.google.youtube.components.widgets.RowScrollButtons
 import com.google.youtube.components.widgets.VideoThumbnailCard
 import com.google.youtube.models.ChannelListItemData
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
@@ -112,7 +112,7 @@ private fun ChannelListItemsContainer(
                 size = 24,
             )
             onClose?.let { callback ->
-                AssetImageButton(asset = Assets.Icons.CLOSE, onClick = callback)
+                AssetImageButton(asset = Asset.Icon.CLOSE, onClick = callback)
             }
         }
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -168,12 +168,12 @@ private val ITEM_MAX_HEIGHT = 326.px
 private val SAMPLE_THUMBNAIL_DATA = ChannelListItemData.Thumbnail(
     // TODO: Use real data
     id = "wxhdymaizuppmq",
-    channelAsset = Assets.Icons.USER_AVATAR,
+    channelAsset = Asset.Icon.USER_AVATAR,
     channelName = "Juxtopposed",
     daysSinceUploaded = "1 day",
     isChannelVerified = true,
     subscribersCount = "295K",
-    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
+    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
     videoDuration = "12:07",
     videoTitle = "I Redesigned the ENTIRE YouTube UI from Scratch",
     viewCount = "120K",
@@ -181,7 +181,7 @@ private val SAMPLE_THUMBNAIL_DATA = ChannelListItemData.Thumbnail(
 private val SAMPLE_POST_DATA = ChannelListItemData.Post(
     // TODO: Use real data
     id = "wxhdymaizuppmq",
-    channelAsset = Assets.Icons.USER_AVATAR,
+    channelAsset = Asset.Icon.USER_AVATAR,
     channelName = "Juxtopposed",
     daysSinceUploaded = "1 day",
     isChannelVerified = true,

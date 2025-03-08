@@ -3,7 +3,7 @@ package com.google.youtube.components.widgets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
@@ -76,7 +76,7 @@ fun BoxScope.RowScrollButtons(
                 }
             ) {
                 AssetImageButton(
-                    if (startItem) Assets.Icons.ARROW_LEFT else Assets.Icons.ARROW_RIGHT,
+                    if (startItem) Asset.Icon.ARROW_LEFT else Asset.Icon.ARROW_RIGHT,
                     modifier = Modifier
                         .margin(
                             left = buttonPadding.left,

@@ -13,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.MouseEventState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.clickable
@@ -204,7 +204,7 @@ private fun List<ContextMenuChild>.toComposables(
                                         leadingContent.path
 
                                     is ContextMenuChild.ListItem.LeadingContent.Check ->
-                                        if (leadingContent.isChecked) Assets.Paths.CHECK
+                                        if (leadingContent.isChecked) Asset.Path.CHECK
                                         else ContextMenuChild.ListItem.EMPTY_SPACE
                                 },
                                 primaryColor = Styles.WHITE.copyf(
@@ -226,7 +226,7 @@ private fun List<ContextMenuChild>.toComposables(
                             when (trailingContent) {
                                 ContextMenuChild.ListItem.TrailingContent.Arrow -> AssetSvg(
                                     id = arrowId,
-                                    path = Assets.Paths.ARROW_RIGHT,
+                                    path = Asset.Path.ARROW_RIGHT,
                                     primaryColor = Styles.WHITE.copyf(alpha = 0.5f)
                                 )
 
@@ -247,7 +247,7 @@ private fun List<ContextMenuChild>.toComposables(
                                     if (trailingContent.showArrow) {
                                         AssetSvg(
                                             id = arrowId,
-                                            path = Assets.Paths.ARROW_RIGHT,
+                                            path = Asset.Path.ARROW_RIGHT,
                                             primaryColor = Styles.WHITE.copyf(alpha = 0.5f)
                                         )
                                     }

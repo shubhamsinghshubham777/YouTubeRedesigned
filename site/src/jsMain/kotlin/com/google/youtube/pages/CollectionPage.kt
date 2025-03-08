@@ -5,7 +5,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.models.VideoThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -37,8 +37,8 @@ fun CollectionPage(collectionId: String) {
                 List(20) { index ->
                     VideoThumbnailDetails(
                         id = index.toString(),
-                        thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                        channelAsset = Assets.Icons.USER_AVATAR,
+                        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                        channelAsset = Asset.Icon.USER_AVATAR,
                         title = "How Websites Learned to Fit Everywhere",
                         channelName = "Juxtopposed",
                         isVerified = true,
@@ -62,8 +62,8 @@ private fun getCollectionData(id: String) = CollectionPageData(
     videos = List(35) { index ->
         VideoThumbnailDetails(
             id = index.toString(),
-            thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-            channelAsset = Assets.Icons.USER_AVATAR,
+            thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+            channelAsset = Asset.Icon.USER_AVATAR,
             title = "How Websites Learned to Fit Everywhere",
             channelName = "Juxtopposed",
             isVerified = true,

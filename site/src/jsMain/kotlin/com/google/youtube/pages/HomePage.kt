@@ -16,7 +16,7 @@ import com.google.youtube.data.FeedProvider
 import com.google.youtube.models.ShortThumbnailDetails
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.GridGap
@@ -74,7 +74,7 @@ private fun ShortSuggestions(modifier: Modifier = Modifier, shorts: List<ShortTh
             onNegativeCTA = { display = false },
             onPositiveCTA = {},
             color = Styles.BLUE_BORDER,
-            asset = Assets.Icons.SHORTS_SELECTED,
+            asset = Asset.Icon.SHORTS_SELECTED,
             scrollPixels = ShortThumbnailCardDefaults.SIZE.width.toDouble(),
         ) {
             shorts.forEach { short -> ShortThumbnailCard(short) }

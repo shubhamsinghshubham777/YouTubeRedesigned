@@ -3,12 +3,13 @@ package com.google.youtube.components.widgets
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntSize
 import com.google.youtube.models.VideoThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.clickable
 import com.varabyte.kobweb.compose.css.FontWeight
+import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.UserSelect
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.lineHeight
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.objectFit
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
@@ -65,7 +67,9 @@ fun VideoThumbnailCard(
             contentAlignment = Alignment.BottomEnd,
         ) {
             Image(
-                modifier = Modifier.thenIf(size == null) { Modifier.fillMaxSize() },
+                modifier = Modifier
+                    .thenIf(size == null) { Modifier.fillMaxSize() }
+                    .objectFit(ObjectFit.Cover),
                 src = details.thumbnailAsset,
                 width = size?.width,
                 height = size?.height,
@@ -103,11 +107,11 @@ fun VideoThumbnailCard(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(details.channelName)
-                    if (details.isVerified) Image(Assets.Icons.VERIFIED_BADGE)
+                    if (details.isVerified) Image(Asset.Icon.VERIFIED_BADGE)
                 }
                 Row { Text("${details.views} views • ${details.daysSinceUploaded} ago") }
             }
-            AssetImageButton(Assets.Icons.MORE) {}
+            AssetImageButton(Asset.Icon.MORE) {}
         }
     }
 }

@@ -149,6 +149,7 @@ private fun SegmentedItem(
     ) {
         iconPath?.let { path ->
             AssetSvg(
+                // TODO: This logic is faulty because multiple items can have the same label, fix it
                 id = "segmented_item_$label",
                 path = path,
                 primaryColor = color,

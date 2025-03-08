@@ -19,7 +19,7 @@ import com.google.youtube.models.ChannelListItemData
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.pages.ScrollableSpacedRow
 import com.google.youtube.utils.AnimatedVisibility
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
@@ -54,7 +54,7 @@ fun SubscriptionsSubPage() {
             horizontalGapPx = 8,
         ) {
             AssetSvgButton(
-                endIconPath = Assets.Paths.ARROW_DOWN,
+                endIconPath = Asset.Path.ARROW_DOWN,
                 id = "view_as_button",
                 isDense = true,
                 isSelected = false,
@@ -85,13 +85,13 @@ fun SubscriptionsSubPage() {
                         onClick = {},
                         text = if (label == "Date Range") "All" else label,
                         type = AssetSvgButtonType.SelectableChip,
-                        startIconPath = if (label == "Date Range") Assets.Paths.DATE_RANGE else null,
+                        startIconPath = if (label == "Date Range") Asset.Path.DATE_RANGE else null,
                         secondaryText = if (label == "Date Range") label else null,
                     )
                 }
             } else {
                 AssetSvgButton(
-                    endIconPath = Assets.Paths.ARROW_DOWN,
+                    endIconPath = Asset.Path.ARROW_DOWN,
                     id = "sort_by_button",
                     isDense = true,
                     isSelected = false,
@@ -108,7 +108,7 @@ fun SubscriptionsSubPage() {
                 isSelected = viewAsTimeline.value,
                 onClick = { viewAsTimeline.value = true },
                 type = AssetSvgButtonType.SelectableChip,
-                startIconPath = Assets.Paths.GRID,
+                startIconPath = Asset.Path.GRID,
             )
             AssetSvgButton(
                 id = "layout_type_list_button",
@@ -116,7 +116,7 @@ fun SubscriptionsSubPage() {
                 isSelected = !viewAsTimeline.value,
                 onClick = { viewAsTimeline.value = false },
                 type = AssetSvgButtonType.SelectableChip,
-                startIconPath = Assets.Paths.LIST,
+                startIconPath = Asset.Path.LIST,
             )
             Spacer()
             RoundedSearchTextField(textState = searchQueryState, hintText = "Search subscriptions")
@@ -133,8 +133,8 @@ fun SubscriptionsSubPage() {
                         thumbnailDetails = List(3) { index ->
                             VideoThumbnailDetails(
                                 id = index.toString(),
-                                thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                                channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
+                                thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                                channelAsset = Asset.Avatar.JACKSEPTICEYE,
                                 title = "Honest Trailers - Shrek",
                                 channelName = "Screen Junkies",
                                 isVerified = true,
@@ -149,8 +149,8 @@ fun SubscriptionsSubPage() {
                         thumbnailDetails = List(1) { index ->
                             VideoThumbnailDetails(
                                 id = index.toString(),
-                                thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                                channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
+                                thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                                channelAsset = Asset.Avatar.JACKSEPTICEYE,
                                 title = "Google - Year in Search 2024",
                                 channelName = "Google",
                                 isVerified = true,
@@ -171,19 +171,19 @@ fun SubscriptionsSubPage() {
                             data = listOf(
                                 ChannelListItemData.Thumbnail(
                                     id = index.toString(),
-                                    channelAsset = Assets.Icons.USER_AVATAR,
+                                    channelAsset = Asset.Icon.USER_AVATAR,
                                     channelName = "Juxtopposed",
                                     daysSinceUploaded = "1 day",
                                     isChannelVerified = true,
                                     subscribersCount = "295K",
-                                    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
+                                    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
                                     videoDuration = "12:07",
                                     videoTitle = "I Redesigned the ENTIRE YouTube UI from Scratch",
                                     viewCount = "120K",
                                 ),
                                 ChannelListItemData.Post(
                                     id = index.toString(),
-                                    channelAsset = Assets.Icons.USER_AVATAR,
+                                    channelAsset = Asset.Icon.USER_AVATAR,
                                     channelName = "Juxtopposed",
                                     daysSinceUploaded = "1 day",
                                     isChannelVerified = true,
@@ -228,7 +228,7 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
                             weight = FontWeight.Medium,
                         )
                         if (data.first().isChannelVerified) {
-                            Image(src = Assets.Icons.VERIFIED_BADGE, width = 15, height = 15)
+                            Image(src = Asset.Icon.VERIFIED_BADGE, width = 15, height = 15)
                         }
                     }
                     TextBox(
@@ -243,12 +243,12 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
                 AssetSvgButton(
                     id = "list_item_subscribe_button_${data.first().channelName}",
                     onClick = {},
-                    startIconPath = Assets.Paths.NOTIFS_SELECTED,
+                    startIconPath = Asset.Path.NOTIFS_SELECTED,
                 ) {
                     Text("Subscribed")
                 }
                 AssetImageButton(
-                    asset = Assets.Icons.ARROW_DOWN,
+                    asset = Asset.Icon.ARROW_DOWN,
                     modifier = Modifier.rotate(animatedArrowRotation.deg)
                 ) { isExpanded = !isExpanded }
             }

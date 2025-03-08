@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetSvgButton
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -71,27 +71,27 @@ private fun DescriptionAndLinks(modifier: Modifier = Modifier) {
         SpacedColumn(30) {
             TitleText("Links")
             Link(
-                imageSrc = Assets.Social.TWITTER,
+                imageSrc = Asset.Social.TWITTER,
                 label = "x dot com //tweet me something",
                 url = "x.com/juxtopposed",
             )
             Link(
-                imageSrc = Assets.Social.JUXTOPPOSED,
+                imageSrc = Asset.Social.JUXTOPPOSED,
                 label = "personal site //links n stuff",
                 url = "juxtopposed.com",
             )
             Link(
-                imageSrc = Assets.Social.REALTIME_COLORS,
+                imageSrc = Asset.Social.REALTIME_COLORS,
                 label = "Realtime Colors //color design",
                 url = "realtimecolors.com",
             )
             Link(
-                imageSrc = Assets.Social.FIGMA,
+                imageSrc = Asset.Social.FIGMA,
                 label = "figma //design files",
                 url = "figma.com/@juxtopposed",
             )
             Link(
-                imageSrc = Assets.Social.CODEPEN,
+                imageSrc = Asset.Social.CODEPEN,
                 label = "codepen //check my code",
                 url = "codepen.io/Juxtopposed",
             )
@@ -132,21 +132,21 @@ private fun ChannelDetails(modifier: Modifier = Modifier) {
         TitleText("Channel Details")
         SpacedColumn(20) {
             ListItem(
-                asset = Assets.Icons.MAIL,
+                asset = Asset.Icon.MAIL,
                 label = if (isEmailHidden) "Click to view" else "juxtopposed@gmail.com",
                 onClick = { isEmailHidden = !isEmailHidden },
             )
-            ListItem(asset = Assets.Icons.EYE, label = "10,631,163 views")
-            ListItem(asset = Assets.Icons.INFO, label = "Joined August 25, 2022")
-            ListItem(asset = Assets.Icons.BROWSER, label = "United States")
+            ListItem(asset = Asset.Icon.EYE, label = "10,631,163 views")
+            ListItem(asset = Asset.Icon.INFO, label = "Joined August 25, 2022")
+            ListItem(asset = Asset.Icon.BROWSER, label = "United States")
             ListItem(
-                asset = Assets.Icons.LINK,
+                asset = Asset.Icon.LINK,
                 label = "www.youtube.com/@juxtopposed",
                 onClick = { window.open("https://www.youtube.com/@juxtopposed") },
             )
             AssetSvgButton(
                 id = "share_channel_button",
-                startIconPath = Assets.Paths.SHARE,
+                startIconPath = Asset.Path.SHARE,
                 text = "Share Channel",
                 onClick = {},
             )

@@ -1,24 +1,18 @@
 package com.google.youtube.components.widgets.player
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.google.youtube.models.VideoThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.models.SuggestionSectionData
+import com.google.youtube.utils.Asset
+import com.google.youtube.utils.LocalNavigator
+import com.google.youtube.utils.Route
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
-import com.google.youtube.utils.animatedColor
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.noShrink
-import com.google.youtube.utils.rememberMouseEventAsState
-import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
-import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Alignment
@@ -35,27 +29,25 @@ import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.px
-import org.w3c.dom.Element
 
 @Composable
-fun SuggestionSection(author: String, videos: List<VideoThumbnailDetails>) {
+fun SuggestionSection(data: SuggestionSectionData) {
+    val navigator = LocalNavigator.current
+
     SpacedColumn(spacePx = 14, modifier = Modifier.fillMaxWidth()) {
         TextBox(
             modifier = Modifier.margin(bottom = 2.px),
-            text = "From $author",
+            text = data.title,
             size = 14,
         )
-        videos.forEach { video ->
-            var rowRef by remember { mutableStateOf<Element?>(null) }
-            val animatedContainerColor by rememberMouseEventAsState(rowRef).animatedColor()
+        data.videos.forEach { video ->
             SpacedRow(
-                ref = ref { e -> rowRef = e },
                 spacePx = 8,
                 modifier = Modifier
                     .borderRadius(8.px)
                     .fillMaxWidth()
-                    .background(animatedContainerColor.toKobwebColor())
-                    .clickable {},
+                    .clickable { navigator.pushRoute(Route.Video(id = video.id)) },
+                centerContentVertically = false,
             ) {
                 Box(
                     modifier = Modifier
@@ -97,7 +89,7 @@ fun SuggestionSection(author: String, videos: List<VideoThumbnailDetails>) {
                             if (video.isVerified) {
                                 Image(
                                     modifier = Modifier.size(12.px),
-                                    src = Assets.Icons.VERIFIED_BADGE,
+                                    src = Asset.Icon.VERIFIED_BADGE,
                                 )
                             }
                         }

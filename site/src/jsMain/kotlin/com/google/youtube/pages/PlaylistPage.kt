@@ -17,7 +17,7 @@ import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.PlaylistItemData
 import com.google.youtube.models.VideoThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.ReorderableList
 import com.google.youtube.utils.ReorderableListItem
@@ -74,14 +74,14 @@ fun PlaylistPage(id: String) {
         List(10) { index ->
             VideoThumbnailDetails(
                 id = "axcpum${index}wldq",
-                channelAsset = Assets.Icons.USER_AVATAR,
+                channelAsset = Asset.Icon.USER_AVATAR,
                 channelName = "Juxtopposed",
                 daysSinceUploaded = "1 day",
                 duration = "12:07",
                 uploadDate = "10 Dec 2024",
                 isVerified = true,
                 subscribersCount = "295K",
-                thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
+                thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
                 title = "I Redesigned the ENTIRE YouTube UI from Scratch",
                 views = "120K",
                 likeCount = "20K",
@@ -128,7 +128,7 @@ fun PlaylistPage(id: String) {
                     secondaryText = "Sort by:",
                     text = "Relevance",
                     isDense = true,
-                    endIconPath = Assets.Paths.ARROW_DOWN,
+                    endIconPath = Asset.Path.ARROW_DOWN,
                     onClick = {},
                 )
             }
@@ -136,7 +136,7 @@ fun PlaylistPage(id: String) {
                 AssetSvgButton(
                     id = "grid_mode_button",
                     type = AssetSvgButtonType.SelectableChip,
-                    startIconPath = Assets.Paths.GRID,
+                    startIconPath = Asset.Path.GRID,
                     isSelected = isGridModeSelected.value,
                     onClick = { isGridModeSelected.value = true },
                 )
@@ -144,7 +144,7 @@ fun PlaylistPage(id: String) {
                     AssetSvgButton(
                         id = "list_mode_button",
                         type = AssetSvgButtonType.SelectableChip,
-                        startIconPath = Assets.Paths.LIST,
+                        startIconPath = Asset.Path.LIST,
                         isSelected = !isGridModeSelected.value,
                         onClick = { isGridModeSelected.value = false },
                     )
@@ -209,7 +209,7 @@ fun PlaylistPage(id: String) {
 private fun GrabHandle() {
     Image(
         modifier = Modifier.cursor(Cursor.Grab),
-        src = Assets.Icons.DRAG_HANDLE,
+        src = Asset.Icon.DRAG_HANDLE,
         width = 24,
         height = 24
     )
@@ -250,18 +250,18 @@ private fun SmallListItem(
                     isTouchDevice = isTouchDevice,
                     handle = handle,
                 )
-                IconLabel(Assets.Icons.EYE, details.views)
+                IconLabel(Asset.Icon.EYE, details.views)
             }
             Box(modifier = Modifier.margin(left = 9.px)) {
-                IconLabel(Assets.Icons.DATE, details.uploadDate.orEmpty())
+                IconLabel(Asset.Icon.DATE, details.uploadDate.orEmpty())
             }
         }
 
         ChannelInfo(details)
 
         SegmentedButtonPair(
-            assetPathLeft = Assets.Paths.LIKED,
-            assetPathRight = Assets.Paths.DISLIKE,
+            assetPathLeft = Asset.Path.LIKED,
+            assetPathRight = Asset.Path.DISLIKE,
             containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
             isDense = true,
             labelLeft = details.likeCount,
@@ -312,14 +312,14 @@ private fun LargeListItem(
 
                     Wrap(15) {
                         SpacedRow(15) {
-                            IconLabel(Assets.Icons.EYE, details.views)
+                            IconLabel(Asset.Icon.EYE, details.views)
                             Box(modifier = Modifier.margin(left = 9.px)) {
-                                IconLabel(Assets.Icons.DATE, details.uploadDate.orEmpty())
+                                IconLabel(Asset.Icon.DATE, details.uploadDate.orEmpty())
                             }
                         }
                         SegmentedButtonPair(
-                            assetPathLeft = Assets.Paths.LIKED,
-                            assetPathRight = Assets.Paths.DISLIKE,
+                            assetPathLeft = Asset.Path.LIKED,
+                            assetPathRight = Asset.Path.DISLIKE,
                             containerColor = Styles.ELEVATED_BUTTON_CONTAINER,
                             isDense = true,
                             labelLeft = details.likeCount,
@@ -330,7 +330,7 @@ private fun LargeListItem(
                     ChannelInfo(details)
                 }
 
-                AssetImageButton(Assets.Icons.MORE) {}
+                AssetImageButton(Asset.Icon.MORE) {}
             }
         }
     }
@@ -343,13 +343,13 @@ private fun ChannelInfo(details: VideoThumbnailDetails) {
             modifier = Modifier
                 .clip(Circle())
                 .margin(right = 7.px),
-            src = Assets.Icons.USER_AVATAR,
+            src = Asset.Icon.USER_AVATAR,
             width = 28,
             height = 28,
         )
         TextBox(text = details.channelName)
         if (details.isVerified) {
-            Image(src = Assets.Icons.VERIFIED_BADGE, width = 15, height = 15)
+            Image(src = Asset.Icon.VERIFIED_BADGE, width = 15, height = 15)
         }
         TextBox(
             text = "${details.subscribersCount} subscribers",

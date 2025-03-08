@@ -11,7 +11,7 @@ import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.ThumbnailGrid
 import com.google.youtube.components.widgets.context_menu.RoundedSearchTextField
 import com.google.youtube.models.VideoThumbnailDetails
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.hideScrollBar
@@ -153,8 +153,8 @@ fun HistoryPage() {
             thumbnailDetails = List(3) { index ->
                 VideoThumbnailDetails(
                     id = index.toString(),
-                    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                    channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
+                    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                    channelAsset = Asset.Avatar.JACKSEPTICEYE,
                     title = "Honest Trailers - Shrek",
                     channelName = "Screen Junkies",
                     isVerified = true,
@@ -169,8 +169,8 @@ fun HistoryPage() {
             thumbnailDetails = List(1) { index ->
                 VideoThumbnailDetails(
                     id = index.toString(),
-                    thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                    channelAsset = Assets.Avatars.AVATAR_JACKSEPTICEYE,
+                    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                    channelAsset = Asset.Avatar.JACKSEPTICEYE,
                     title = "Google - Year in Search 2024",
                     channelName = "Google",
                     isVerified = true,
@@ -195,7 +195,7 @@ private enum class HistoryFilter(
     Divider,
     Newest,
     Oldest,
-    DateRange(iconPath = Assets.Paths.DATE_RANGE),
-    GridView(iconPath = Assets.Paths.GRID, iconOnly = true),
-    ListView(iconPath = Assets.Paths.LIST, iconOnly = true)
+    DateRange(iconPath = Asset.Path.DATE_RANGE),
+    GridView(iconPath = Asset.Path.GRID, iconOnly = true),
+    ListView(iconPath = Asset.Path.LIST, iconOnly = true)
 }

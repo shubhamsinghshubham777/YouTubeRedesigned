@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.models.ChannelListItemData
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
@@ -45,7 +45,7 @@ fun MessagePostCard(data: ChannelListItemData.Post) {
                 text = data.message,
                 weight = FontWeight.Medium,
             )
-            AssetImageButton(Assets.Icons.MORE) {}
+            AssetImageButton(Asset.Icon.MORE) {}
         }
         TextBox(
             color = Styles.VIDEO_CARD_SECONDARY_TEXT,
@@ -55,9 +55,9 @@ fun MessagePostCard(data: ChannelListItemData.Post) {
         SpacedRow(8) {
             SegmentedButtonPair(
                 isDense = true,
-                assetPathLeft = Assets.Paths.LIKED,
+                assetPathLeft = Asset.Path.LIKED,
                 labelLeft = data.likeCount,
-                assetPathRight = Assets.Paths.DISLIKE,
+                assetPathRight = Asset.Path.DISLIKE,
                 labelRight = data.dislikeCount,
                 onClickLeft = {},
                 onClickRight = {},
@@ -65,9 +65,9 @@ fun MessagePostCard(data: ChannelListItemData.Post) {
             )
             SegmentedButtonPair(
                 isDense = true,
-                assetPathLeft = Assets.Paths.COMMENTS,
+                assetPathLeft = Asset.Path.COMMENTS,
                 labelLeft = data.commentCount,
-                assetPathRight = Assets.Paths.SHARE,
+                assetPathRight = Asset.Path.SHARE,
                 onClickLeft = {},
                 onClickRight = {},
                 containerColor = Styles.SURFACE_ELEVATED,

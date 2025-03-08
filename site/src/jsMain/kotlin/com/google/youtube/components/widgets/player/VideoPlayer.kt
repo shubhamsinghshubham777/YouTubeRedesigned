@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.pages.SegmentedContentType
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.rememberElementWidthAsState
@@ -65,6 +65,7 @@ import org.w3c.dom.events.KeyboardEvent
 
 @Composable
 fun VideoPlayer(
+    videoId: String,
     isTheaterModeOn: MutableState<Boolean>,
     selectedSegment: MutableState<SegmentedContentType>,
 ) {
@@ -190,6 +191,8 @@ fun VideoPlayer(
         }
     }
 
+    LaunchedEffect(videoId) { htmlVideoPlayerRef?.currentTime = 0.0 }
+
     Box(
         ref = ref { r -> parentBoxRef = r },
         modifier = Modifier
@@ -254,11 +257,11 @@ fun VideoPlayer(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AssetImageButton(
-                    asset = if (isPlaying) Assets.Icons.PAUSE else Assets.Icons.PLAY,
+                    asset = if (isPlaying) Asset.Icon.PAUSE else Asset.Icon.PLAY,
                     onClick = togglePlayPause,
                 )
 
-                AssetImageButton(Assets.Icons.NEXT) {}
+                AssetImageButton(Asset.Icon.NEXT) {}
 
                 SpacedRow(
                     spacePx = 8,
@@ -267,7 +270,7 @@ fun VideoPlayer(
                         .onMouseLeave { isVolumeBarHovered = false },
                 ) {
                     AssetImageButton(
-                        asset = Assets.Icons.VOLUME,
+                        asset = Asset.Icon.VOLUME,
                         modifier = Modifier.opacity(animatedVolBtnOpacity),
                         onClick = toggleMute,
                     )
@@ -281,17 +284,17 @@ fun VideoPlayer(
 
                 if (displayCCButton) {
                     AssetImageButton(
-                        asset = if (isCCEnabled) Assets.Icons.CC_SELECTED else Assets.Icons.CC,
+                        asset = if (isCCEnabled) Asset.Icon.CC_SELECTED else Asset.Icon.CC,
                         onRefAvailable = { ccBtnRef = it },
                     ) { isCCEnabled = !isCCEnabled }
 
                     ccBtnRef?.let { Tooltip(ElementTarget.of(it), "Closed Captions (C)") }
                 }
 
-                if (displayQualityButton) AssetImageButton(Assets.Icons.QUALITY_4K)
+                if (displayQualityButton) AssetImageButton(Asset.Icon.QUALITY_4K)
 
                 AssetImageButton(
-                    asset = Assets.Icons.SETTINGS,
+                    asset = Asset.Icon.SETTINGS,
                     onRefAvailable = { settingsBtnRef = it }
                 ) {}
 
@@ -299,7 +302,7 @@ fun VideoPlayer(
 
                 if (displayChatButton) {
                     AssetImageButton(
-                        asset = Assets.Icons.CHAT,
+                        asset = Asset.Icon.CHAT,
                         onRefAvailable = { liveChatBtnRef = it },
                     ) {
                         isTheaterModeOn.value = false
@@ -309,19 +312,19 @@ fun VideoPlayer(
                     liveChatBtnRef?.let { Tooltip(ElementTarget.of(it), "Live Chat") }
                 }
 
-                if (displayPIPButton) AssetImageButton(Assets.Icons.PIP) {}
+                if (displayPIPButton) AssetImageButton(Asset.Icon.PIP) {}
 
                 if (isLargeBreakpoint && !isFullScreenEnabled) {
                     AssetImageButton(
-                        asset = if (isTheaterModeOn.value) Assets.Icons.THEATER
-                        else Assets.Icons.THEATER_SELECTED,
+                        asset = if (isTheaterModeOn.value) Asset.Icon.THEATER
+                        else Asset.Icon.THEATER_SELECTED,
                         onClick = { isTheaterModeOn.value = !isTheaterModeOn.value },
                     )
                 }
 
                 AssetImageButton(
-                    asset = if (isFullScreenEnabled) Assets.Icons.FULLSCREEN_SELECTED
-                    else Assets.Icons.FULLSCREEN,
+                    asset = if (isFullScreenEnabled) Asset.Icon.FULLSCREEN_SELECTED
+                    else Asset.Icon.FULLSCREEN,
                     onClick = toggleFullScreen,
                 )
             }

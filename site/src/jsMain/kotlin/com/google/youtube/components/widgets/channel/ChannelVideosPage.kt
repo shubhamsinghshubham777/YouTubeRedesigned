@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.pages.MainVideosGrid
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.GridGap
 import com.google.youtube.utils.SpacedColumn
 import com.varabyte.kobweb.compose.ui.Modifier
@@ -25,8 +25,8 @@ fun ChannelVideosPage() {
                 List(20) { index ->
                     VideoThumbnailDetails(
                         id = index.toString(),
-                        thumbnailAsset = Assets.Thumbnails.THUMBNAIL_1,
-                        channelAsset = Assets.Icons.USER_AVATAR,
+                        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                        channelAsset = Asset.Icon.USER_AVATAR,
                         title = "How Websites Learned to Fit Everywhere",
                         channelName = "Juxtopposed",
                         isVerified = true,

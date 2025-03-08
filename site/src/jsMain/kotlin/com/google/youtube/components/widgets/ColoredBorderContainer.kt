@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.google.youtube.utils.Assets
+import com.google.youtube.utils.Asset
 import com.google.youtube.utils.HorizontalScrollState
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.bindScrollState
@@ -96,14 +96,14 @@ fun ColoredBorderContainer(
                     id = "negative_cta_$title",
                     text = if (isLargeScreen) "Not interested" else null,
                     isDense = true,
-                    startIconPath = Assets.Paths.CLOSE,
+                    startIconPath = Asset.Path.CLOSE,
                     onClick = onNegativeCTA,
                 )
                 AssetSvgButton(
                     id = "positive_cta_$title",
                     text = if (isLargeScreen) "Show me more" else null,
                     isDense = true,
-                    startIconPath = Assets.Paths.LIKED,
+                    startIconPath = Asset.Path.LIKED,
                     onClick = onPositiveCTA,
                     containerColor = color,
                 )
