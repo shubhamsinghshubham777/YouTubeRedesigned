@@ -50,7 +50,6 @@ fun VideoThumbnailCard(
     Column(
         modifier = Modifier
             .clickable { navigator.pushRoute(Route.Video(id = details.id)) }
-            .clip(shape)
             .thenIf(size != null) { Modifier.maxWidth(size!!.width.px) }
             .userSelect(UserSelect.None)
             .then(modifier),

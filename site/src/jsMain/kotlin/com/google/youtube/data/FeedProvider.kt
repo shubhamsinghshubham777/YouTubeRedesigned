@@ -41,4 +41,41 @@ class FeedProvider {
             }
         }.flatten()
     }
+
+    fun getTrendingNowFeed(): List<VideoThumbnailDetails> {
+        return List(2) {
+            IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
+                details.id == "z2mk17WERTDF" ||
+                        details.id == "p9cj53QYUIOP" ||
+                        details.id == "b4hv86ASDFGH" ||
+                        details.id == "m1rg20ZXCVBN" ||
+                        details.id == "x7fq94LKJHGF" ||
+                        details.id == "s6wd38MNBVCX" ||
+                        details.id == "g3yn71POIUYT" ||
+                        details.id == "a5le65HGFDSA"
+            }
+        }.flatten()
+    }
+
+    fun getNewMusicFeed(): List<VideoThumbnailDetails> {
+        return List(2) {
+            IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
+                details.id == "v8uz49NBVCXS" ||
+                        details.id == "q1ij72TREWQA" ||
+                        details.id == "f5ok36YUIOPL" ||
+                        details.id == "c3pn81LKJHGF"
+            }
+        }.flatten()
+    }
+
+    fun getGamingFeed(): List<VideoThumbnailDetails> {
+        return List(2) {
+            IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
+                details.id == "l6ey25ASDFGHJ" ||
+                        details.id == "n7da60QWERTYU" ||
+                        details.id == "j2wt98HJKLZXC" ||
+                        details.id == "d4sg57MNBVCXZ"
+            }
+        }.flatten()
+    }
 }

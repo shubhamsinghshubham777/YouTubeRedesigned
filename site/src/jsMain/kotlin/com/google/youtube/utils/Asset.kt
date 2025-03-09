@@ -328,7 +328,11 @@ object Asset {
     object Channel {
         const val BELUGA = "/channel/beluga.png"
         const val BOG = "/channel/bog.jpg"
+        const val BRAWL_STARS = "/channel/brawl_stars.png"
+        const val CLIX = "/channel/clix.png"
+        const val COLDPLAY = "/channel/coldplay.png"
         const val DAVE_2D = "/channel/dave_2d.jpg"
+        const val ETHAN_CHLEBOWSKI = "/channel/ethan_chlebowski.png"
         const val JUXTOPPOSED = "/channel/juxtopposed.png"
         const val LOFI_GIRL = "/channel/lofi_girl.png"
         const val MAN_CARRYING_THING = "/channel/man_carrying_thing.jpg"
@@ -336,9 +340,13 @@ object Asset {
         const val MUSICOS = "/channel/musicos.png"
         const val OK = "/channel/ok.png"
         const val RAUL_BLANCO = "/channel/raul_blanco.png"
+        const val RED_LETTER_MEDIA = "/channel/red_letter_media.png"
+        const val ROSE = "/channel/rose.png"
+        const val RYAN_TRAHAN = "/channel/ryan_trahan.png"
         const val TECH_ALTAR = "/channel/tech_altar.png"
         const val THE_GAME_THEORISTS = "/channel/the_game_theorists.jpg"
         const val VAPING_CAT = "/channel/vaping_cat.jpg"
+        const val VICE_GRIP_GARAGE = "/channel/vice_grip_garage.png"
         const val VSAUCE = "/channel/vsauce.jpg"
         const val WWW = "/channel/www.png"
         const val ZOOM_ART_STUDIO = "/channel/zoom_art_studio.png"
@@ -375,6 +383,25 @@ object Asset {
             const val SPOTIFY = "/suggestion/spotify.png"
             const val TRUTH_ABOUT_LAPTOPS = "/suggestion/truth_about_laptops.png"
             const val YOUTUBERS_MUSIC = "/suggestion/youtubers_music.png"
+        }
+
+        object Trending {
+            const val ANANTA_TRAILER = "/trending/ananta_trailer.png"
+            const val BAD_BUNNY = "/trending/bad_bunny.png"
+            const val BOOTING_UP = "/trending/booting_up.png"
+            const val BRAWL_AND_BEYOND = "/trending/brawl_and_beyond.png"
+            const val COLDPLAY = "/trending/coldplay.png"
+            const val CYBERPUNK = "/trending/cyberpunk.png"
+            const val EAT_IT = "/trending/eat_it.png"
+            const val EXPENSIVE_BUTTER = "/trending/expensive_butter.png"
+            const val GALAXY_QUEST = "/trending/galaxy_quest.png"
+            const val JORJA_SMITH = "/trending/jorja_smith.png"
+            const val JUICE_WRLD = "/trending/juice_wrld.png"
+            const val LOCKED_UP = "/trending/locked_up.png"
+            const val OG_FORTNITE = "/trending/og_fortnite.png"
+            const val ROSE_TOXIC = "/trending/rose_toxic.png"
+            const val SIMS_5 = "/trending/sims_5.png"
+            const val YESTERDAY_WORLD = "/trending/yesterday_world.png"
         }
     }
 

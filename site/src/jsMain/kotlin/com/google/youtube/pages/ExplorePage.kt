@@ -10,9 +10,9 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.CategoryTab
 import com.google.youtube.components.widgets.RowScrollButtons
 import com.google.youtube.components.widgets.VideoThumbnailCard
+import com.google.youtube.data.FeedProvider
 import com.google.youtube.models.ExploreGridCategoryWithVideos
 import com.google.youtube.models.ExploreGridDetails
-import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.HorizontalScrollState
@@ -61,13 +61,46 @@ import org.w3c.dom.INSTANT
 import org.w3c.dom.ScrollToOptions
 
 @Composable
-fun ExplorePage(
-    modifier: Modifier = Modifier,
-    grids: List<ExploreGridDetails> = fakeGridDetails,
-) {
+fun ExplorePage(modifier: Modifier = Modifier) {
+    val feedProvider = remember { FeedProvider() }
+
+    val grids = remember(feedProvider) {
+        val trendingNowFeed = feedProvider.getTrendingNowFeed()
+        val musicFeed = feedProvider.getNewMusicFeed()
+
+        listOf(
+            ExploreGridDetails(
+                asset = Asset.Icon.TRENDING_SELECTED,
+                title = "Trending",
+                categoriesWithVideos = listOf(
+                    ExploreGridCategoryWithVideos("Now", trendingNowFeed),
+                    ExploreGridCategoryWithVideos("Music", trendingNowFeed.shuffled()),
+                    ExploreGridCategoryWithVideos("Gaming", trendingNowFeed.shuffled()),
+                    ExploreGridCategoryWithVideos("Movies", trendingNowFeed.shuffled()),
+                    ExploreGridCategoryWithVideos("Shorts", trendingNowFeed.shuffled()),
+                ),
+            ),
+            ExploreGridDetails(
+                asset = Asset.Icon.MUSIC_SELECTED,
+                title = "Music",
+                categoriesWithVideos = listOf(
+                    ExploreGridCategoryWithVideos("New", musicFeed),
+                    ExploreGridCategoryWithVideos("Playlists", musicFeed.shuffled()),
+                    ExploreGridCategoryWithVideos("Top Charts", musicFeed.shuffled()),
+                ),
+            ),
+            ExploreGridDetails(
+                asset = Asset.Icon.GAMES_SELECTED, title = "Gaming",
+                categoriesWithVideos = listOf(
+                    ExploreGridCategoryWithVideos(videos = feedProvider.getGamingFeed()),
+                ),
+            ),
+        )
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth().then(modifier),
-        verticalArrangement = Arrangement.spacedBy(containerPadding),
+        verticalArrangement = Arrangement.spacedBy(CONTAINER_PADDING),
     ) {
         grids.forEach { details -> ExploreGridSection(details) }
     }
@@ -84,14 +117,14 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
             .fillMaxWidth()
             .border(1.px, LineStyle.Solid, Styles.DIVIDER)
             .borderRadius(24.px)
-            .padding(topBottom = containerPadding),
+            .padding(topBottom = CONTAINER_PADDING),
         verticalArrangement = Arrangement.spacedBy(27.px)
     ) {
         // Header
         Row(
-            modifier = Modifier.padding(leftRight = containerPadding).fillMaxWidth(),
+            modifier = Modifier.padding(leftRight = CONTAINER_PADDING).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(containerPadding),
+            horizontalArrangement = Arrangement.spacedBy(CONTAINER_PADDING),
         ) {
             Image(
                 modifier = Modifier
@@ -171,7 +204,7 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
                         .hideScrollBar()
                         .display(DisplayStyle.Grid)
                         .overflow { x(Overflow.Auto) }
-                        .padding(leftRight = containerPadding)
+                        .padding(leftRight = CONTAINER_PADDING)
                         .gridAutoColumns { size(GRID_THUMBNAIL_CARD_SIZE.width.px) }
                         .gridAutoFlow(GridAutoFlow.Column)
                         .gridTemplateRows {
@@ -189,7 +222,7 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
                 RowScrollButtons(
                     elementToControl = gridElement,
                     horizontalScrollState = horizontalScrollState,
-                    containerPadding = containerPadding,
+                    containerPadding = CONTAINER_PADDING,
                     scrollPixels = (GRID_THUMBNAIL_CARD_SIZE.width + GRID_ITEMS_GAP).toDouble(),
                     centerVertically = true,
                     gradientColor = Styles.SURFACE,
@@ -199,59 +232,6 @@ private fun ExploreGridSection(details: ExploreGridDetails) {
     }
 }
 
-private val containerPadding = 24.px
-
-private val fakeVideoThumbnailDetails: List<VideoThumbnailDetails> = List(20) { index ->
-    VideoThumbnailDetails(
-        id = index.toString(),
-        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-        channelAsset = Asset.Icon.USER_AVATAR,
-        title = "How Websites Learned to Fit Everywhere",
-        channelName = "Juxtopposed",
-        isVerified = true,
-        views = "150K",
-        daysSinceUploaded = "4 months",
-        duration = "12:07",
-    )
-}
-
-private val fakeGridDetails: List<ExploreGridDetails> = listOf(
-    ExploreGridDetails(
-        asset = Asset.Icon.TRENDING_SELECTED,
-        title = "Trending",
-        categoriesWithVideos = listOf(
-            ExploreGridCategoryWithVideos(label = "Now", videos = fakeVideoThumbnailDetails),
-            ExploreGridCategoryWithVideos(label = "Music", videos = fakeVideoThumbnailDetails),
-            ExploreGridCategoryWithVideos(label = "Gaming", videos = fakeVideoThumbnailDetails),
-            ExploreGridCategoryWithVideos(label = "Movies", videos = fakeVideoThumbnailDetails),
-            ExploreGridCategoryWithVideos(label = "Shorts", videos = fakeVideoThumbnailDetails),
-        ),
-    ),
-    ExploreGridDetails(
-        asset = Asset.Icon.MUSIC_SELECTED,
-        title = "Music",
-        categoriesWithVideos = listOf(
-            ExploreGridCategoryWithVideos(
-                label = "New",
-                videos = fakeVideoThumbnailDetails.subList(0, 10)
-            ),
-            ExploreGridCategoryWithVideos(
-                label = "Playlists",
-                videos = fakeVideoThumbnailDetails.subList(0, 10)
-            ),
-            ExploreGridCategoryWithVideos(
-                label = "Top Charts",
-                videos = fakeVideoThumbnailDetails.subList(0, 10)
-            ),
-        ),
-    ),
-    ExploreGridDetails(
-        asset = Asset.Icon.GAMES_SELECTED, title = "Gaming",
-        categoriesWithVideos = listOf(
-            ExploreGridCategoryWithVideos(videos = fakeVideoThumbnailDetails.subList(0, 10)),
-        ),
-    ),
-)
-
+private val CONTAINER_PADDING = 24.px
 private val GRID_THUMBNAIL_CARD_SIZE = IntSize(width = 344, height = 192)
 private const val GRID_ITEMS_GAP = 20
