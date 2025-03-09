@@ -280,8 +280,8 @@ fun VideoPlayer(
                         state = selectedPopupPage,
                         directionProvider = { page ->
                             when (page) {
-                                VideoOptionPage.Main -> ContextMenuAnimationDirection.ToLeft
-                                VideoOptionPage.MoreOptions -> ContextMenuAnimationDirection.ToRight
+                                VideoOptionPage.Main -> ContextMenuAnimationDirection.ToRight
+                                VideoOptionPage.MoreOptions -> ContextMenuAnimationDirection.ToLeft
                             }
                         },
                     ) { page ->
@@ -463,7 +463,7 @@ fun VideoPlayer(
                         )
                     }
 
-                    if (displayChatButton) {
+                    if (displayChatButton && !isFullScreenEnabled) {
                         AssetImageButton(
                             asset = Asset.Icon.CHAT,
                             onRefAvailable = { liveChatBtnRef = it },

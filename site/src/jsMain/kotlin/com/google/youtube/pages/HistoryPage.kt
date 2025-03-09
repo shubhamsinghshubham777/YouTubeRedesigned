@@ -10,6 +10,7 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.ThumbnailGrid
 import com.google.youtube.components.widgets.context.RoundedSearchTextField
+import com.google.youtube.models.ThumbnailGridData
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants
@@ -149,36 +150,40 @@ fun HistoryPage() {
         }
 
         ThumbnailGrid(
-            date = "Today - 15 Nov 2024",
-            thumbnailDetails = List(3) { index ->
-                VideoThumbnailDetails(
-                    id = index.toString(),
-                    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                    channelAsset = Asset.Avatar.JACKSEPTICEYE,
-                    title = "Honest Trailers - Shrek",
-                    channelName = "Screen Junkies",
-                    isVerified = true,
-                    views = "6.3M",
-                    daysSinceUploaded = "7 years",
-                    duration = "12:07",
-                )
-            }
+            data = ThumbnailGridData(
+                date = "Today - 15 Nov 2024",
+                thumbnailDetails = List(3) { index ->
+                    VideoThumbnailDetails(
+                        id = index.toString(),
+                        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                        channelAsset = Asset.Avatar.JACKSEPTICEYE,
+                        title = "Honest Trailers - Shrek",
+                        channelName = "Screen Junkies",
+                        isVerified = true,
+                        views = "6.3M",
+                        daysSinceUploaded = "7 years",
+                        duration = "12:07",
+                    )
+                }
+            )
         )
         ThumbnailGrid(
-            date = "Yesterday - 14 Nov 2024",
-            thumbnailDetails = List(1) { index ->
-                VideoThumbnailDetails(
-                    id = index.toString(),
-                    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                    channelAsset = Asset.Avatar.JACKSEPTICEYE,
-                    title = "Google - Year in Search 2024",
-                    channelName = "Google",
-                    isVerified = true,
-                    views = "5.2M",
-                    daysSinceUploaded = "1 day",
-                    duration = "12:07",
-                )
-            }
+            data = ThumbnailGridData(
+                date = "Yesterday - 14 Nov 2024",
+                thumbnailDetails = List(1) { index ->
+                    VideoThumbnailDetails(
+                        id = index.toString(),
+                        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
+                        channelAsset = Asset.Avatar.JACKSEPTICEYE,
+                        title = "Google - Year in Search 2024",
+                        channelName = "Google",
+                        isVerified = true,
+                        views = "5.2M",
+                        daysSinceUploaded = "1 day",
+                        duration = "12:07",
+                    )
+                }
+            )
         )
     }
 }

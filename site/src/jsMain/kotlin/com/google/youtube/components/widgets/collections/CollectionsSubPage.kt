@@ -12,22 +12,25 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.VerticalDivider
-import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.context.RoundedSearchTextField
 import com.google.youtube.components.widgets.context.TextField
-import com.google.youtube.models.CollectionChannelItem
-import com.google.youtube.models.CollectionData
+import com.google.youtube.data.CollectionsDataProvider
 import com.google.youtube.pages.ScrollableSpacedRow
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Asset
+import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.PaddingValues
+import com.google.youtube.utils.Route
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
+import com.google.youtube.utils.Wrap
+import com.google.youtube.utils.clickable
 import com.google.youtube.utils.noShrink
 import com.google.youtube.utils.rememberIsSmallBreakpoint
 import com.varabyte.kobweb.compose.css.FontWeight
+import com.varabyte.kobweb.compose.css.TextDecorationLine
 import com.varabyte.kobweb.compose.css.fontWeight
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Spacer
@@ -35,10 +38,16 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseEnter
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseLeave
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.rotate
+import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
+import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.theme.shapes.Circle
+import com.varabyte.kobweb.silk.theme.shapes.clip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,37 +60,28 @@ import org.w3c.dom.HTMLElement
 
 @Composable
 fun CollectionsSubPage() {
-    val sampleData = remember {
-        List(3) {
-            CollectionData(
-                name = "Gaming",
-                channelItems = List(8) { index ->
-                    CollectionChannelItem(
-                        channelId = index.toString(),
-                        avatarAsset = Asset.Icon.USER_AVATAR,
-                        channelName = "Ninja",
-                        isVerified = true,
-                        subscribersCount = "23.8M",
-                        isSubscribed = true,
-                    )
-                }
-            )
-        }
-    }
+    val navigator = LocalNavigator.current
+    val collectionsDataProvider = remember { CollectionsDataProvider() }
+    val collectionsData = remember { collectionsDataProvider.getCollections() }
 
     Column(modifier = Modifier.fillMaxWidth().padding(top = 40.px)) {
         Filters()
         SpacedColumn(spacePx = 35, modifier = Modifier.fillMaxWidth().padding(topBottom = 47.px)) {
-            sampleData.forEachIndexed { index, data ->
-                var isContentVisible by remember { mutableStateOf(index == 0) }
-                val animatedArrowRotation by animateFloatAsState(if (isContentVisible) 180f else 0f)
+            collectionsData.forEach { data ->
+                var isRowExpanded by remember { mutableStateOf(true) }
+                val animatedArrowRotation by animateFloatAsState(if (isRowExpanded) 180f else 0f)
                 val nameState = remember { mutableStateOf(data.name) }
                 val isEditable = remember { mutableStateOf(false) }
                 var textFieldRef by remember { mutableStateOf<HTMLElement?>(null) }
                 val coroutineScope = rememberCoroutineScope()
 
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    Wrap(modifier = Modifier.fillMaxWidth(), verticalGapPx = 8) {
+                    Wrap(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { isRowExpanded = !isRowExpanded },
+                        verticalGapPx = 8,
+                    ) {
                         SpacedRow(4) {
                             if (isEditable.value) {
                                 TextField(
@@ -139,12 +139,11 @@ fun CollectionsSubPage() {
                             modifier = Modifier
                                 .margin(left = 16.px)
                                 .rotate(animatedArrowRotation.deg),
-                            onClick = { isContentVisible = !isContentVisible },
                         )
                     }
 
                     AnimatedVisibility(
-                        isVisible = isContentVisible,
+                        isVisible = isRowExpanded,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         ScrollableSpacedRow(
@@ -153,16 +152,38 @@ fun CollectionsSubPage() {
                             modifier = Modifier.padding(top = 16.px),
                         ) {
                             data.channelItems.forEach { item ->
+                                var isChannelNameHovered by remember { mutableStateOf(false) }
+
                                 SpacedColumn(
                                     spacePx = 20,
                                     modifier = Modifier.noShrink().padding(leftRight = 10.px),
                                     centerContentHorizontally = true,
                                 ) {
-                                    SpacedColumn(spacePx = 16, centerContentHorizontally = true) {
-                                        Image(src = item.avatarAsset, width = 46, height = 46)
+                                    SpacedColumn(
+                                        spacePx = 16,
+                                        centerContentHorizontally = true,
+                                        modifier = Modifier
+                                            .clickable {
+                                                navigator.pushRoute(Route.Page(id = item.channelId))
+                                            }
+                                            .onMouseEnter { isChannelNameHovered = true }
+                                            .onMouseLeave { isChannelNameHovered = false }
+                                    ) {
+                                        Image(
+                                            modifier = Modifier.clip(Circle()),
+                                            src = item.avatarAsset,
+                                            width = 46,
+                                            height = 46,
+                                        )
                                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                             SpacedRow(8) {
                                                 TextBox(
+                                                    modifier = Modifier
+                                                        .thenIf(isChannelNameHovered) {
+                                                            Modifier.textDecorationLine(
+                                                                TextDecorationLine.Underline
+                                                            )
+                                                        },
                                                     text = item.channelName,
                                                     size = 18,
                                                     maxLines = 1,

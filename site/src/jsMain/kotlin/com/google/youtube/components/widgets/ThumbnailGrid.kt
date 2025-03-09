@@ -3,7 +3,7 @@ package com.google.youtube.components.widgets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.IntSize
-import com.google.youtube.models.VideoThumbnailDetails
+import com.google.youtube.models.ThumbnailGridData
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.GridGap
@@ -34,7 +34,7 @@ import org.jetbrains.compose.web.css.unaryMinus
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
-fun ThumbnailGrid(date: String, thumbnailDetails: List<VideoThumbnailDetails>) {
+fun ThumbnailGrid(data: ThumbnailGridData) {
     val breakpoint = rememberBreakpoint()
     val thumbnailWidth = remember(breakpoint) {
         when {
@@ -50,9 +50,9 @@ fun ThumbnailGrid(date: String, thumbnailDetails: List<VideoThumbnailDetails>) {
         ) {
             DotIndicator(
                 modifier = Modifier.translateX(-DOT_INDICATOR_SIZE / 3),
-                isActive = date.contains("Today")
+                isActive = data.date.contains("Today"),
             )
-            Box { Text(date) }
+            Box { Text(data.date) }
         }
 
         BasicGrid(
@@ -60,10 +60,10 @@ fun ThumbnailGrid(date: String, thumbnailDetails: List<VideoThumbnailDetails>) {
                 .borderLeft(3.px, LineStyle.Solid, Styles.DIVIDER)
                 .fillMaxWidth()
                 .padding(left = CONTAINER_PADDING_LEFT.px, top = 24.px, bottom = 72.px),
-            gridGap = GridGap(x = 19.px),
+            gridGap = GridGap(x = 19.px, y = 48.px),
             columnBuilder = { size(thumbnailWidth.px) },
         ) {
-            thumbnailDetails.forEach { details ->
+            data.thumbnailDetails.forEach { details ->
                 VideoThumbnailCard(
                     details = details,
                     size = IntSize(width = thumbnailWidth, height = 190),

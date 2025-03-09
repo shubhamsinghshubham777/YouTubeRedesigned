@@ -15,8 +15,8 @@ import com.google.youtube.components.widgets.VerticalDivider
 import com.google.youtube.components.widgets.VideoThumbnailCard
 import com.google.youtube.components.widgets.VideoThumbnailCardDefaults
 import com.google.youtube.components.widgets.context.RoundedSearchTextField
+import com.google.youtube.data.SubscriptionsDataProvider
 import com.google.youtube.models.ChannelListItemData
-import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.pages.ScrollableSpacedRow
 import com.google.youtube.utils.AnimatedVisibility
 import com.google.youtube.utils.Asset
@@ -26,6 +26,7 @@ import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.Wrap
+import com.google.youtube.utils.clickable
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -37,6 +38,8 @@ import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.rotate
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.theme.shapes.Circle
+import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.deg
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Text
@@ -44,8 +47,15 @@ import org.jetbrains.compose.web.dom.Text
 @Composable
 fun SubscriptionsSubPage() {
     val searchQueryState = remember { mutableStateOf("") }
-    val viewAsTimeline = remember { mutableStateOf(false) }
+    val viewAsTimeline = remember { mutableStateOf(true) }
     var selectedFilter by remember { mutableStateOf("All") }
+    val subscriptionsDataProvider = remember { SubscriptionsDataProvider() }
+    val timelineData = remember(subscriptionsDataProvider) {
+        subscriptionsDataProvider.getDataByTimeline()
+    }
+    val channelData = remember(subscriptionsDataProvider) {
+        subscriptionsDataProvider.getDataByChannel()
+    }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Wrap(
@@ -128,74 +138,15 @@ fun SubscriptionsSubPage() {
         ) { isTimelineMode ->
             if (isTimelineMode) {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    ThumbnailGrid(
-                        date = "Today - 15 Nov 2024",
-                        thumbnailDetails = List(3) { index ->
-                            VideoThumbnailDetails(
-                                id = index.toString(),
-                                thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                                channelAsset = Asset.Avatar.JACKSEPTICEYE,
-                                title = "Honest Trailers - Shrek",
-                                channelName = "Screen Junkies",
-                                isVerified = true,
-                                views = "6.3M",
-                                daysSinceUploaded = "7 years",
-                                duration = "12:07",
-                            )
-                        }
-                    )
-                    ThumbnailGrid(
-                        date = "Yesterday - 14 Nov 2024",
-                        thumbnailDetails = List(1) { index ->
-                            VideoThumbnailDetails(
-                                id = index.toString(),
-                                thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                                channelAsset = Asset.Avatar.JACKSEPTICEYE,
-                                title = "Google - Year in Search 2024",
-                                channelName = "Google",
-                                isVerified = true,
-                                views = "5.2M",
-                                daysSinceUploaded = "1 day",
-                                duration = "12:07",
-                            )
-                        }
-                    )
+                    timelineData.forEach { data -> ThumbnailGrid(data = data) }
                 }
             } else {
                 SpacedColumn(
                     spacePx = 40,
                     modifier = Modifier.fillMaxWidth().padding(bottom = 40.px),
                 ) {
-                    repeat(3) { index ->
-                        ChannelListItem(
-                            data = listOf(
-                                ChannelListItemData.Thumbnail(
-                                    id = index.toString(),
-                                    channelAsset = Asset.Icon.USER_AVATAR,
-                                    channelName = "Juxtopposed",
-                                    daysSinceUploaded = "1 day",
-                                    isChannelVerified = true,
-                                    subscribersCount = "295K",
-                                    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                                    videoDuration = "12:07",
-                                    videoTitle = "I Redesigned the ENTIRE YouTube UI from Scratch",
-                                    viewCount = "120K",
-                                ),
-                                ChannelListItemData.Post(
-                                    id = index.toString(),
-                                    channelAsset = Asset.Icon.USER_AVATAR,
-                                    channelName = "Juxtopposed",
-                                    daysSinceUploaded = "1 day",
-                                    isChannelVerified = true,
-                                    subscribersCount = "295K",
-                                    commentCount = "1.1K",
-                                    dislikeCount = "12",
-                                    likeCount = "2.9K",
-                                    message = "it’s finally time for youtube. what are your biggest issues with it?",
-                                ),
-                            ),
-                            initialIsExpanded = index == 0,
-                        )
+                    channelData.forEachIndexed { index, data ->
+                        ChannelListItem(data = data, initialIsExpanded = index == 0)
                         if (index != 2) HorizontalDivider()
                     }
                 }
@@ -213,12 +164,17 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Wrap(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().clickable { isExpanded = !isExpanded },
             horizontalGapPx = 16,
-            verticalGapPx = 16
+            verticalGapPx = 16,
         ) {
             SpacedRow(15) {
-                Image(src = data.first().channelAsset, width = 46, height = 46)
+                Image(
+                    modifier = Modifier.clip(Circle()),
+                    src = data.first().channelAsset,
+                    width = 46,
+                    height = 46,
+                )
                 Column {
                     SpacedRow(8) {
                         TextBox(
@@ -250,12 +206,12 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
                 AssetImageButton(
                     asset = Asset.Icon.ARROW_DOWN,
                     modifier = Modifier.rotate(animatedArrowRotation.deg)
-                ) { isExpanded = !isExpanded }
+                )
             }
         }
 
         AnimatedVisibility(isVisible = isExpanded, modifier = Modifier.fillMaxWidth()) {
-            ScrollableSpacedRow {
+            ScrollableSpacedRow(showScrollButtons = true) {
                 data.forEach { item ->
                     when (item) {
                         is ChannelListItemData.Post -> MessagePostCard(item)

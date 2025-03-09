@@ -14,7 +14,7 @@ class VideoPlayerDataProvider {
                 videos = IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
                     details.id == "o8zj46LKJHGF" ||
                             details.id == "u2qm13POIUYT" ||
-                            details.id == "d9vn87ASDFGH"
+                            details.id == "p3va17HYCEF"
                 },
             ),
             SuggestionSectionData(

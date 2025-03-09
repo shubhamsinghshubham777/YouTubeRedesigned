@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.google.youtube.pages.ChannelTab
 import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
@@ -48,7 +48,7 @@ class Navigator(private val initialRoute: Route) : CoroutineScope {
     fun pop() = window.history.back()
 }
 
-val LocalNavigator = compositionLocalOf<Navigator> {
+val LocalNavigator = staticCompositionLocalOf<Navigator> {
     error("Please override the compositionLocal with a Navigator object!")
 }
 
