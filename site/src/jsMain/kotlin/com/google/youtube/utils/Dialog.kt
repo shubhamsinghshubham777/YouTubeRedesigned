@@ -13,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.util.lerp
 import com.varabyte.kobweb.compose.foundation.layout.Box
-import com.varabyte.kobweb.compose.foundation.layout.BoxScope
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.background
@@ -23,6 +22,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.position
 import com.varabyte.kobweb.compose.ui.modifiers.scale
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.top
+import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.thenIfNotNull
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.Position
@@ -37,11 +37,14 @@ fun Dialog(
     isDisplayed: Boolean,
     modifier: Modifier = Modifier,
     onDismissed: (() -> Unit)? = null,
-    content: @Composable BoxScope.() -> Unit,
+    contentAlignment: Alignment = Alignment.Center,
+    scrimDimFactor: Float = 0.5f,
+    animationDurationMillis: Int = 220,
+    content: @Composable () -> Unit,
 ) {
     var displayContent by remember { mutableStateOf(isDisplayed) }
     var animatedBackdropColor by remember {
-        mutableStateOf(Color.Black.copy(alpha = if (isDisplayed) 0.5f else 0f))
+        mutableStateOf(Color.Black.copy(alpha = if (isDisplayed) scrimDimFactor else 0f))
     }
     var animatedContentOpacity by remember { mutableFloatStateOf(if (isDisplayed) 1f else 0f) }
     var animatedContentScale by remember { mutableStateOf(1f) }
@@ -51,13 +54,13 @@ fun Dialog(
             displayContent = true
 
             Animatable(initialValue = Color.Black.copy(alpha = 0f)).animateTo(
-                targetValue = Color.Black.copy(alpha = 0.5f),
-                animationSpec = tween()
+                targetValue = Color.Black.copy(alpha = scrimDimFactor),
+                animationSpec = tween(durationMillis = animationDurationMillis),
             ) { animatedBackdropColor = value }
 
             androidx.compose.animation.core.Animatable(initialValue = 0f).animateTo(
                 targetValue = 1f,
-                animationSpec = tween()
+                animationSpec = tween(durationMillis = animationDurationMillis),
             ) {
                 animatedContentOpacity = value
                 animatedContentScale = lerp(start = 0.97f, stop = 1f, fraction = value)
@@ -65,15 +68,15 @@ fun Dialog(
         } else if (displayContent) {
             androidx.compose.animation.core.Animatable(initialValue = 1f).animateTo(
                 targetValue = 0f,
-                animationSpec = tween()
+                animationSpec = tween(durationMillis = animationDurationMillis),
             ) {
                 animatedContentOpacity = value
                 animatedContentScale = lerp(start = 1f, stop = 0.97f, fraction = 1 - value)
             }
 
-            Animatable(initialValue = Color.Black.copy(alpha = 0.5f)).animateTo(
+            Animatable(initialValue = Color.Black.copy(alpha = scrimDimFactor)).animateTo(
                 targetValue = Color.Black.copy(alpha = 0f),
-                animationSpec = tween()
+                animationSpec = tween(durationMillis = animationDurationMillis),
             ) {
                 animatedBackdropColor = value
             }
@@ -101,8 +104,9 @@ fun Dialog(
                 }
                 .position(Position.Fixed)
                 .top(0.px)
+                .zIndex(1)
                 .then(modifier),
-            contentAlignment = Alignment.Center,
+            contentAlignment = contentAlignment,
             content = {
                 Box(
                     modifier = Modifier
@@ -110,7 +114,7 @@ fun Dialog(
                         .opacity(animatedContentOpacity)
                         .scale(animatedContentScale),
                     contentAlignment = Alignment.Center,
-                    content = content
+                    content = { content() },
                 )
             },
         )

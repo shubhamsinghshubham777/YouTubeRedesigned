@@ -33,7 +33,9 @@ class VideoPlayerDataProvider {
     }
 
     fun getVideoDetailsForId(id: String): VideoDetails {
-        val details = IN_MEMORY_THUMBNAIL_DETAILS.first { it.id == id }
+        val details = IN_MEMORY_THUMBNAIL_DETAILS.firstOrNull { it.id == id }
+            ?: IN_MEMORY_THUMBNAIL_DETAILS.first()
+
         return VideoDetails(
             id = details.id,
             title = details.title,

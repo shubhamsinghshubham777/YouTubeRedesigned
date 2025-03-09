@@ -20,6 +20,7 @@ import com.google.youtube.components.widgets.context.ContextMenuPage
 import com.google.youtube.components.widgets.context.VideoOptionPage
 import com.google.youtube.pages.SegmentedContentType
 import com.google.youtube.utils.Asset
+import com.google.youtube.utils.Constants
 import com.google.youtube.utils.FadeInOut
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
@@ -358,7 +359,7 @@ fun VideoPlayer(
                         Tooltip(
                             target = ElementTarget.of(it),
                             text = "${if (isPlaying) "Pause" else "Play"} (Space / k)",
-                            showDelayMs = POPUP_SHOW_DELAY_MS,
+                            showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                         )
                     }
 
@@ -371,7 +372,7 @@ fun VideoPlayer(
                         Tooltip(
                             target = ElementTarget.of(it),
                             text = "Next",
-                            showDelayMs = POPUP_SHOW_DELAY_MS,
+                            showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                         )
                     }
 
@@ -391,7 +392,7 @@ fun VideoPlayer(
                             Tooltip(
                                 target = ElementTarget.of(it),
                                 text = "${if (volume == 0f) "Unmute" else "Mute"} (m)",
-                                showDelayMs = POPUP_SHOW_DELAY_MS,
+                                showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                             )
                         }
                         VolumeSlider(
@@ -414,7 +415,7 @@ fun VideoPlayer(
                             Tooltip(
                                 target = ElementTarget.of(it),
                                 text = "Closed Captions (c)",
-                                showDelayMs = POPUP_SHOW_DELAY_MS,
+                                showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                             )
                         }
                     }
@@ -440,7 +441,7 @@ fun VideoPlayer(
                             Tooltip(
                                 target = ElementTarget.of(it),
                                 text = "Quality",
-                                showDelayMs = POPUP_SHOW_DELAY_MS,
+                                showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                             )
                         }
                     }
@@ -458,7 +459,7 @@ fun VideoPlayer(
                         Tooltip(
                             target = ElementTarget.of(it),
                             text = "Settings",
-                            showDelayMs = POPUP_SHOW_DELAY_MS,
+                            showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                         )
                     }
 
@@ -475,7 +476,7 @@ fun VideoPlayer(
                             Tooltip(
                                 target = ElementTarget.of(it),
                                 text = "Live Chat",
-                                showDelayMs = POPUP_SHOW_DELAY_MS,
+                                showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                             )
                         }
                     }
@@ -490,7 +491,7 @@ fun VideoPlayer(
                             Tooltip(
                                 target = ElementTarget.of(it),
                                 text = "Picture-in-Picture mode",
-                                showDelayMs = POPUP_SHOW_DELAY_MS,
+                                showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                             )
                         }
                     }
@@ -507,7 +508,7 @@ fun VideoPlayer(
                             Tooltip(
                                 target = ElementTarget.of(it),
                                 text = "Theater Mode${if (isTheaterModeOn.value) " Off" else " On"} (t)",
-                                showDelayMs = POPUP_SHOW_DELAY_MS,
+                                showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                             )
                         }
                     }
@@ -523,7 +524,7 @@ fun VideoPlayer(
                         Tooltip(
                             target = ElementTarget.of(it),
                             text = "Fullscreen (f)",
-                            showDelayMs = POPUP_SHOW_DELAY_MS,
+                            showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
                         )
                     }
                 }
@@ -534,5 +535,3 @@ fun VideoPlayer(
 
 enum class VideoQuality { P144, P240, P360, P480, P720, P1080, P4K }
 private enum class PopupType { VideoOptions, QualityOptions }
-
-private const val POPUP_SHOW_DELAY_MS = 500

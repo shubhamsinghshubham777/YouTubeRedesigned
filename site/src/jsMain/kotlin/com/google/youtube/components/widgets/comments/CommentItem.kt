@@ -105,7 +105,7 @@ fun CommentItem(data: VideoCommentData) {
                 data = data,
                 onRepliesClick = { areRepliesCollapsed = !areRepliesCollapsed },
             )
-            FadeInOut(!areRepliesCollapsed) {
+            FadeInOut(isVisible = !areRepliesCollapsed, modifier = Modifier.fillMaxWidth()) {
                 SpacedColumn(
                     spacePx = 24,
                     modifier = Modifier

@@ -42,6 +42,7 @@ object Styles {
     val LIVE_CHAT_USERNAME_DIVIDER: Color.Rgb = Color.rgb(176, 176, 176)
     val PAGE_THUMBNAIL_BORDER: Color.Rgb = Color.rgb(61, 61, 61)
     val LINK_BLUE: Color.Rgb = Color.rgb(126, 153, 255)
+    val RED_NOTIFICATION_TITLE_ACCENT: Color.Rgb = Color.rgb(254, 77, 117)
 
     object Gradient {
         val RED_TO_PINK = linearGradient(LinearGradient.Direction.ToRight) {

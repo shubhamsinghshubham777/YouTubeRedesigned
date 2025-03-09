@@ -11,11 +11,13 @@ import androidx.compose.ui.graphics.Color
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvg
 import com.google.youtube.utils.Asset
+import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
+import com.varabyte.kobweb.browser.dom.ElementTarget
 import com.varabyte.kobweb.browser.dom.clearFocus
 import com.varabyte.kobweb.compose.css.Background
 import com.varabyte.kobweb.compose.css.Cursor
@@ -42,6 +44,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.overlay.Tooltip
 import com.varabyte.kobweb.silk.style.CssStyle
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.style.toModifier
@@ -69,8 +72,10 @@ fun TopBar(
     modifier: Modifier = Modifier,
     onLogoClick: () -> Unit,
     onDrawerButtonClick: () -> Unit,
+    onOpenNotificationPanel: () -> Unit,
     onSearch: (query: String) -> Unit,
 ) {
+    var notificationBtnRef by remember { mutableStateOf<HTMLElement?>(null) }
     var textInputRef by remember { mutableStateOf<HTMLElement?>(null) }
     val breakpoint = rememberBreakpoint()
 
@@ -195,12 +200,28 @@ fun TopBar(
                     modifier = TopBarSearchButtonStyle.toModifier(),
                     asset = Asset.Icon.SEARCH
                 ) { showSearchBar = true }
+
                 if (breakpoint isGreaterThan Breakpoint.SM) AssetImageButton(Asset.Icon.ADD) {}
-                AssetImageButton(Asset.Icon.NOTIFS) {}
+
+                AssetImageButton(
+                    asset = Asset.Icon.NOTIFS,
+                    onRefAvailable = { notificationBtnRef = it },
+                    onClick = onOpenNotificationPanel,
+                )
+
+                notificationBtnRef?.let {
+                    Tooltip(
+                        target = ElementTarget.of(it),
+                        text = "Notifications",
+                        showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
+                    )
+                }
+
                 AssetImageButton(Asset.Icon.SETTINGS) {}
+
                 AssetImageButton(
                     modifier = Modifier.size(48.px),
-                    asset = Asset.Icon.USER_AVATAR
+                    asset = Asset.Avatar.JUXTOPPOSED,
                 ) {}
             }
         }

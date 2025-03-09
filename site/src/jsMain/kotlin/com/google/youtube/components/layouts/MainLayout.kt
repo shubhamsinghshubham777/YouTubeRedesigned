@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import com.google.youtube.components.sections.NavRail
 import com.google.youtube.components.sections.TopBar
 import com.google.youtube.components.sections.TopBarDefaults
+import com.google.youtube.components.widgets.NotificationPanel
 import com.google.youtube.components.widgets.PersonalisedFeedDialog
 import com.google.youtube.components.widgets.WorkInProgressSection
 import com.google.youtube.pages.AllPlaylistsPage
@@ -29,6 +30,7 @@ import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.Dialog
 import com.google.youtube.utils.LocalNavigator
+import com.google.youtube.utils.LocalNotificationPanelManager
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.hideScrollBar
@@ -64,6 +66,7 @@ import org.jetbrains.compose.web.css.vh
 @Composable
 fun MainLayout() {
     val navigator = LocalNavigator.current
+    val notificationPanelManager = LocalNotificationPanelManager.current
     val currentRoute by navigator.currentRouteState
     val breakpoint = rememberBreakpoint()
     val isLargeBreakpoint by remember(breakpoint) {
@@ -89,10 +92,11 @@ fun MainLayout() {
                     .position(Position.Sticky)
                     .top(0.px)
                     .zIndex(1),
+                onLogoClick = { navigator.pushRoute(Route.Home) },
                 onDrawerButtonClick = {
                     isNavRailExpandedState.value = !isNavRailExpandedState.value
                 },
-                onLogoClick = { navigator.pushRoute(Route.Home) },
+                onOpenNotificationPanel = notificationPanelManager::open,
                 onSearch = { query -> navigator.pushRoute(Route.Search(query)) },
             )
             Row(modifier = Modifier.fillMaxSize()) {
@@ -179,13 +183,20 @@ fun MainLayout() {
         }
 
         Dialog(
-            modifier = Modifier.zIndex(1),
             isDisplayed = showPersonalisedFeedDialogState.value,
-            onDismissed = { showPersonalisedFeedDialogState.value = false }
-        ) {
-            PersonalisedFeedDialog(
-                onClose = { showPersonalisedFeedDialogState.value = false }
-            )
-        }
+            onDismissed = { showPersonalisedFeedDialogState.value = false },
+            content = {
+                PersonalisedFeedDialog(onClose = { showPersonalisedFeedDialogState.value = false })
+            },
+        )
+
+        Dialog(
+            modifier = Modifier.fillMaxSize().padding(top = 64.px, right = 16.px),
+            isDisplayed = notificationPanelManager.isOpen,
+            scrimDimFactor = 0.1f,
+            contentAlignment = Alignment.TopEnd,
+            onDismissed = notificationPanelManager::close,
+            content = { NotificationPanel() },
+        )
     }
 }
