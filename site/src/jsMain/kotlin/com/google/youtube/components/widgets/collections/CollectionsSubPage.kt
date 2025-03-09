@@ -130,7 +130,7 @@ fun CollectionsSubPage() {
                             AssetSvgButton(
                                 id = "view_collection_button_for_${data.name}",
                                 isDense = true,
-                                onClick = {},
+                                onClick = { navigator.pushRoute(Route.Collection(id = data.id)) },
                                 text = "View Collection",
                             )
                         }

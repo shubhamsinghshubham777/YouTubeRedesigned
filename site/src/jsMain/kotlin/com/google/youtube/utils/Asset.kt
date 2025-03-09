@@ -368,6 +368,18 @@ object Asset {
     }
 
     object Thumbnail {
+        object Collection {
+            const val ANSWER_HIS_CALL = "/collection/answer_his_call.png"
+            const val BALLISTIC = "/collection/ballistic.png"
+            const val HELLDIVERS = "/collection/helldivers.png"
+            const val INDIANA_JONES = "/collection/indiana_jones.png"
+            const val INTERGALACTIC = "/collection/intergalactic.png"
+            const val MAFIA_TRAILER = "/collection/mafia_trailer.png"
+            const val OFFICIAL_TRAILER = "/collection/official_trailer.png"
+            const val RUSTY_RABBIT = "/collection/rusty_rabbit.png"
+            const val WEAPONS = "/collection/weapons.png"
+        }
+
         object Feed {
             const val ALL_AT_ONCE = "/feed/all_at_once.png"
             const val BITS = "/feed/bits.png"

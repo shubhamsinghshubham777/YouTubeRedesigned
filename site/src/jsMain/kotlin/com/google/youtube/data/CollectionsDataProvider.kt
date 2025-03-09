@@ -2,12 +2,14 @@ package com.google.youtube.data
 
 import com.google.youtube.models.CollectionChannelItem
 import com.google.youtube.models.CollectionData
+import com.google.youtube.models.CollectionPageData
 import com.google.youtube.utils.Asset
 
 class CollectionsDataProvider {
     fun getCollections(): List<CollectionData> {
         return listOf(
             CollectionData(
+                id = "gaming",
                 name = "Gaming",
                 channelItems = listOf(
                     CollectionChannelItem(
@@ -77,6 +79,7 @@ class CollectionsDataProvider {
                 ),
             ),
             CollectionData(
+                id = "design_and_code",
                 name = "Design & Code",
                 channelItems = listOf(
                     CollectionChannelItem(
@@ -122,6 +125,7 @@ class CollectionsDataProvider {
                 ),
             ),
             CollectionData(
+                id = "tech",
                 name = "Tech",
                 channelItems = listOf(
                     CollectionChannelItem(
@@ -150,6 +154,28 @@ class CollectionsDataProvider {
                     ),
                 ),
             ),
+        )
+    }
+
+    fun getVideosForCollectionId(
+        @Suppress("UNUSED_PARAMETER") id: String,
+    ): CollectionPageData {
+        return CollectionPageData(
+            name = "Gaming",
+            videos = IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
+                details.id == "h2lk95QWERTYU" ||
+                        details.id == "o4vx28HJKLZXCV" ||
+                        details.id == "t5ge42QWERASD" ||
+                        details.id == "u3hq87ZXCVBNE" ||
+                        details.id == "i8lw15ASDFGHJ" ||
+                        details.id == "p2ka69HJKLZXCV" ||
+                        details.id == "n6ry30MNBVCXZA" ||
+                        details.id == "z7xf94POIUYTRE" ||
+                        details.id == "b9oj51LKJHGFDS" ||
+                        details.id == "m4dv76ZXCVBNMA" ||
+                        details.id == "q1cs28QWERTYUI" ||
+                        details.id == "l6ey25ASDFGHJ"
+            },
         )
     }
 }

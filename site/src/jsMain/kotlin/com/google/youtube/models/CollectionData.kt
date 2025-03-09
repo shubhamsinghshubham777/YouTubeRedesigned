@@ -3,7 +3,11 @@ package com.google.youtube.models
 import androidx.compose.runtime.Immutable
 
 @Immutable
-data class CollectionData(val name: String, val channelItems: List<CollectionChannelItem>)
+data class CollectionData(
+    val id: String,
+    val name: String,
+    val channelItems: List<CollectionChannelItem>,
+)
 
 @Immutable
 data class CollectionChannelItem(
