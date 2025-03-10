@@ -91,7 +91,7 @@ fun ChannelPage(id: String, initialTab: ChannelTab?) {
         }
 
         // Content
-        Tabs(channelId = id, selectedTab = initialTab)
+        Tabs(channelId = id, selectedTab = initialTab ?: ChannelTab.Home)
         HorizontalDivider(Styles.DIVIDER)
         Crossfade(
             targetState = initialTab,
@@ -111,7 +111,7 @@ fun ChannelPage(id: String, initialTab: ChannelTab?) {
 }
 
 @Composable
-private fun Tabs(channelId: String, selectedTab: ChannelTab?) {
+private fun Tabs(channelId: String, selectedTab: ChannelTab) {
     val navigator = LocalNavigator.current
     Wrap(
         horizontalGapPx = 23,
@@ -188,10 +188,20 @@ private fun RowScope.ChannelDetails() {
 @Composable
 private fun SocialLinks() {
     val isSmallBreakpoint by rememberIsSmallBreakpoint()
+    val socialIcons = remember {
+        listOf(
+            Asset.Social.X,
+            Asset.Social.JUXTOPPOSED,
+            Asset.Social.REALTIME_COLORS,
+            Asset.Social.FIGMA,
+        )
+    }
 
     Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(16.px)) {
         SpacedRow(spacePx = 18, modifier = Modifier.margin(21.px).zIndex(1)) {
-            repeat(4) { Image(src = Asset.Icon.USER_AVATAR, width = 24, height = 24) }
+            socialIcons.forEach { src ->
+                Image(modifier = Modifier.clip(Circle()), src = src, width = 24, height = 24)
+            }
             Box(
                 modifier = Modifier
                     .border(1.px, LineStyle.Solid, Styles.WHITE.copyf(alpha = 0.24f))
