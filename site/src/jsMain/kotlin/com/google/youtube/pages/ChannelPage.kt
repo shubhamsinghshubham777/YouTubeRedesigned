@@ -8,7 +8,6 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.CategoryTab
 import com.google.youtube.components.widgets.HorizontalDivider
-import com.google.youtube.utils.Wrap
 import com.google.youtube.components.widgets.channel.ChannelAboutPage
 import com.google.youtube.components.widgets.channel.ChannelChannelsPage
 import com.google.youtube.components.widgets.channel.ChannelHomePage
@@ -24,6 +23,7 @@ import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
+import com.google.youtube.utils.Wrap
 import com.google.youtube.utils.rememberIsSmallBreakpoint
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.ObjectFit
@@ -81,7 +81,7 @@ fun ChannelPage(id: String, initialTab: ChannelTab?) {
                         .border(1.px, LineStyle.Solid, Styles.PAGE_THUMBNAIL_BORDER)
                         .borderRadius(80.px)
                         .clip(Circle()),
-                    src = Asset.Icon.USER_AVATAR,
+                    src = Asset.Channel.JUXTOPPOSED,
                     width = 160,
                     height = 160,
                 )
@@ -150,7 +150,7 @@ private fun RowScope.ChannelDetails() {
         Span({
             style {
                 color(Styles.VIDEO_CARD_SECONDARY_TEXT)
-                if (!isSmallBreakpoint) maxWidth(37.vw)
+                if (!isSmallBreakpoint) maxWidth(50.vw)
             }
         }) {
             Text("@juxtopposed • ")

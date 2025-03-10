@@ -1,7 +1,6 @@
 package com.google.youtube.models
 
 import androidx.compose.runtime.Immutable
-import com.google.youtube.utils.Asset
 
 // TODO: Use appropriate return types
 @Immutable
@@ -10,7 +9,7 @@ data class VideoThumbnailDetails(
     val thumbnailAsset: String,
     val channelAsset: String? = null,
     val title: String,
-    val channelName: String,
+    val channelName: String?,
     val isVerified: Boolean,
     // TODO: Rename this to viewCount
     val views: String,
@@ -24,11 +23,11 @@ data class VideoThumbnailDetails(
     fun toChannelListItemThumbnailDetails(): ChannelListItemData.Thumbnail {
         return ChannelListItemData.Thumbnail(
             id = id,
-            channelAsset = channelAsset ?: Asset.Channel.JUXTOPPOSED,
+            channelAsset = channelAsset,
             channelName = channelName,
             daysSinceUploaded = daysSinceUploaded,
             isChannelVerified = isVerified,
-            subscribersCount = subscribersCount ?: "10K",
+            subscribersCount = subscribersCount ?: "10K", // TODO: See if this value can be removed
             thumbnailAsset = thumbnailAsset,
             videoDuration = duration,
             videoTitle = title,

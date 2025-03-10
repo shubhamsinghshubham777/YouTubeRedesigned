@@ -5,8 +5,8 @@ import androidx.compose.runtime.Immutable
 @Immutable
 sealed class ChannelListItemData(
     open val id: String,
-    open val channelAsset: String,
-    open val channelName: String,
+    open val channelAsset: String?,
+    open val channelName: String?,
     open val daysSinceUploaded: String,
     open val isChannelVerified: Boolean,
     open val subscribersCount: String,
@@ -14,8 +14,8 @@ sealed class ChannelListItemData(
     @Immutable
     data class Thumbnail(
         override val id: String,
-        override val channelAsset: String,
-        override val channelName: String,
+        override val channelAsset: String?,
+        override val channelName: String?,
         override val daysSinceUploaded: String,
         override val isChannelVerified: Boolean,
         override val subscribersCount: String,
@@ -50,13 +50,13 @@ sealed class ChannelListItemData(
     @Immutable
     data class Post(
         override val id: String,
-        override val channelAsset: String,
-        override val channelName: String,
+        override val channelAsset: String?,
+        override val channelName: String?,
         override val daysSinceUploaded: String,
         override val isChannelVerified: Boolean,
         override val subscribersCount: String,
         val commentCount: String,
-        val dislikeCount: String,
+        val dislikeCount: String?,
         val likeCount: String,
         val message: String,
         val postAsset: String? = null,

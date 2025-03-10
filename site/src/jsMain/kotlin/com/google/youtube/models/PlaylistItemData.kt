@@ -6,7 +6,7 @@ import androidx.compose.runtime.Immutable
 data class PlaylistItemData(
     val id: String,
     val name: String,
-    val channelName: String,
+    val channelName: String?,
     val thumbnailImageRef: String,
     val isChannelVerified: Boolean,
     val subscriberCount: String,

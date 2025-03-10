@@ -1,5 +1,6 @@
 package com.google.youtube.data
 
+import com.google.youtube.models.ChannelListItemData
 import com.google.youtube.models.ShortThumbnailDetails
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Asset
@@ -636,6 +637,72 @@ val IN_MEMORY_THUMBNAIL_DETAILS = listOf(
         views = "5.2M",
         daysSinceUploaded = "1 day",
     ),
+    VideoThumbnailDetails(
+        id = "v9ke85QWERTYUI",
+        thumbnailAsset = Asset.Thumbnail.Channel.ITS_TIME,
+        duration = "29:37",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        title = "world’s shortest UI/UX Design course",
+        channelName = "Juxtopposed",
+        isVerified = true,
+        views = "1.4M",
+        daysSinceUploaded = "1 year",
+    ),
+    VideoThumbnailDetails(
+        id = "o3mg46ZXCVBNA",
+        thumbnailAsset = Asset.Thumbnail.Channel.STREAM,
+        duration = "12:06",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        title = "I Redesigned the ENTIRE Steam UI from Scratch",
+        channelName = "Juxtopposed",
+        isVerified = true,
+        views = "830K",
+        daysSinceUploaded = "1 year",
+    ),
+    VideoThumbnailDetails(
+        id = "h1rd71ASDFGHJK",
+        thumbnailAsset = Asset.Thumbnail.Channel.INSTAGRAM,
+        duration = "45:59",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        title = "I Redesigned the ENTIRE Instagram UI... But is that enough?",
+        channelName = "Juxtopposed",
+        isVerified = true,
+        views = "723K",
+        daysSinceUploaded = "8 months",
+    ),
+    VideoThumbnailDetails(
+        id = "e4ya29HJKLZXCV",
+        thumbnailAsset = Asset.Thumbnail.Channel.MISSED_SHOT,
+        duration = "33:18",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        title = "MKBHD's Wallpaper App Could be Way Better - My Review & Redesign",
+        channelName = "Juxtopposed",
+        isVerified = true,
+        views = "296K",
+        daysSinceUploaded = "2 months",
+    ),
+    VideoThumbnailDetails(
+        id = "u8wi63MNBVCXZA",
+        thumbnailAsset = Asset.Thumbnail.Channel.WHO_AM_I,
+        duration = "07:45",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        title = "The Identity Crisis of Nothing’s UI - My Review & Redesign",
+        channelName = "Juxtopposed",
+        isVerified = true,
+        views = "223K",
+        daysSinceUploaded = "3 months",
+    ),
+    VideoThumbnailDetails(
+        id = "l6qb97POIUYTRE",
+        thumbnailAsset = Asset.Thumbnail.Channel.MONETIZED,
+        duration = "59:22",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        title = "I Redesigned the ENTIRE YouTube UI from Scratch",
+        channelName = "Juxtopposed",
+        isVerified = true,
+        views = "120K",
+        daysSinceUploaded = "1 day",
+    ),
 )
 
 val IN_MEMORY_SHORTS_DETAILS = listOf(
@@ -654,5 +721,52 @@ val IN_MEMORY_SHORTS_DETAILS = listOf(
         channelName = "DailyDostOfInternetCats",
         views = "10M",
         daysSinceUploaded = "3 weeks",
+    ),
+)
+
+val IN_MEMORY_POSTS = listOf(
+    ChannelListItemData.Post(
+        id = "d2jb68HJKLZXCV",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        channelName = "Juxtopposed",
+        daysSinceUploaded = "1 month",
+        isChannelVerified = true,
+        subscribersCount = "50K",
+        commentCount = "1.1K",
+        dislikeCount = null,
+        likeCount = "2.9K",
+        message = "it’s finally time for youtube. what are your biggest issues with it?",
+        postAsset = null,
+        isPinned = true,
+    ),
+    ChannelListItemData.Post(
+        id = "j7qh39MNBVCXZA",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        channelName = "Juxtopposed",
+        daysSinceUploaded = "1 month",
+        isChannelVerified = true,
+        subscribersCount = "50K",
+        commentCount = "154",
+        dislikeCount = null,
+        likeCount = "2.8K",
+        message = "safari is a browser guys \uD83D\uDC80",
+        postAsset = null,
+        isPinned = false,
+    ),
+    ChannelListItemData.Post(
+        id = "c5lz72POIUYTRE",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        channelName = "Juxtopposed",
+        daysSinceUploaded = "2 months",
+        isChannelVerified = true,
+        subscribersCount = "50K",
+        commentCount = "87",
+        dislikeCount = null,
+        likeCount = "2.3K",
+        message = "good day friends! the discord redesign file is now on Figma, in case " +
+                "you'd like to take a look and try it out. \n" +
+                "check the video description for the link.",
+        postAsset = Asset.Post.DISCORD,
+        isPinned = false,
     ),
 )

@@ -11,7 +11,6 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.SegmentedButtonPair
-import com.google.youtube.utils.Wrap
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants
@@ -21,6 +20,7 @@ import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
+import com.google.youtube.utils.Wrap
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.rememberIsLargeBreakpoint
 import com.google.youtube.utils.rememberIsSmallBreakpoint
@@ -146,7 +146,9 @@ private fun ListCard(details: VideoThumbnailDetails) {
                         SpacedRow(15) {
                             Image(src = Asset.Icon.USER_AVATAR, width = 28, height = 28)
                             SpacedRow(8) {
-                                TextBox(text = details.channelName, lineHeight = 28.3)
+                                details.channelName?.let { channelName ->
+                                    TextBox(text = channelName, lineHeight = 28.3)
+                                }
                                 if (details.isVerified) {
                                     Image(
                                         src = Asset.Icon.VERIFIED_BADGE,
@@ -172,7 +174,7 @@ private fun ListCard(details: VideoThumbnailDetails) {
 
     val onClick: () -> Unit = remember {
         {
-            details.id?.let { id -> navigator.pushRoute(Route.Video(id)) }
+            navigator.pushRoute(Route.Video(details.id))
         }
     }
 
@@ -202,7 +204,10 @@ private fun Filters(modifier: Modifier = Modifier) {
     var isLayoutTypeGrid by remember { mutableStateOf(false) }
     var isWatchTypeWatched by remember { mutableStateOf<Boolean?>(null) }
 
-    Wrap(horizontalGapPx = 8, verticalGapPx = 8, modifier = Modifier.fillMaxWidth().then(modifier)) {
+    Wrap(
+        horizontalGapPx = 8,
+        modifier = Modifier.fillMaxWidth().then(modifier),
+    ) {
         AssetSvgButton(
             endIconPath = Asset.Path.ARROW_DOWN,
             id = "type_button",

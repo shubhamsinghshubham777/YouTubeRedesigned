@@ -73,6 +73,7 @@ class SubscriptionsDataProvider {
     }
 }
 
+// TODO: Get this data from the data layer instead
 private val FAKE_CHANNEL_POST = ChannelListItemData.Post(
     id = "fake_post_id",
     channelAsset = Asset.Channel.JUXTOPPOSED,

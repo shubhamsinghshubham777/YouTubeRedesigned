@@ -80,18 +80,20 @@ fun SuggestionSection(data: SuggestionSectionData) {
                         weight = FontWeight.Medium,
                     )
                     Column {
-                        SpacedRow(4) {
-                            TextBox(
-                                color = Styles.VIDEO_CARD_SECONDARY_TEXT,
-                                lineHeight = 18,
-                                size = 12,
-                                text = video.channelName,
-                            )
-                            if (video.isVerified) {
-                                Image(
-                                    modifier = Modifier.size(12.px),
-                                    src = Asset.Icon.VERIFIED_BADGE,
+                        video.channelName?.let { channelName ->
+                            SpacedRow(4) {
+                                TextBox(
+                                    color = Styles.VIDEO_CARD_SECONDARY_TEXT,
+                                    lineHeight = 18,
+                                    size = 12,
+                                    text = channelName,
                                 )
+                                if (video.isVerified) {
+                                    Image(
+                                        modifier = Modifier.size(12.px),
+                                        src = Asset.Icon.VERIFIED_BADGE,
+                                    )
+                                }
                             }
                         }
                         TextBox(

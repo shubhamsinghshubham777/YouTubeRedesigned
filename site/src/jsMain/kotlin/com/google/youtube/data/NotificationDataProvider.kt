@@ -13,7 +13,7 @@ class NotificationDataProvider {
             NotificationListItemData(
                 id = video.id,
                 sharerChannelAsset = video.channelAsset ?: Asset.Channel.JUXTOPPOSED,
-                sharerChannelUsername = video.channelName,
+                sharerChannelUsername = video.channelName ?: "Juxtopposed",
                 title = video.title,
                 notificationType = NotificationListItemType.Upload(timeSinceUpload = video.daysSinceUploaded),
                 thumbnailAsset = video.thumbnailAsset,

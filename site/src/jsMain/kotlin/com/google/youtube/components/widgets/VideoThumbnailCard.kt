@@ -7,7 +7,9 @@ import com.google.youtube.utils.Asset
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
+import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.clickable
+import com.google.youtube.utils.noShrink
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.UserSelect
@@ -17,20 +19,18 @@ import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
 import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.color
-import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
-import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
-import com.varabyte.kobweb.compose.ui.modifiers.lineHeight
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.objectFit
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
-import com.varabyte.kobweb.compose.ui.thenIf
+import com.varabyte.kobweb.compose.ui.thenIfNotNull
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.Rect
@@ -44,30 +44,28 @@ fun VideoThumbnailCard(
     details: VideoThumbnailDetails,
     modifier: Modifier = Modifier,
     shape: Shape = Styles.Shape.CARD,
+    // TODO: Use appropriate value for each screen (refer Figma)
     size: IntSize? = null,
 ) {
     val navigator = LocalNavigator.current
     Column(
         modifier = Modifier
             .clickable { navigator.pushRoute(Route.Video(id = details.id)) }
-            .thenIf(size != null) { Modifier.maxWidth(size!!.width.px) }
+            .noShrink()
+            .thenIfNotNull(size) { safeSize -> Modifier.maxWidth(safeSize.width.px) }
             .userSelect(UserSelect.None)
             .then(modifier),
         verticalArrangement = Arrangement.spacedBy(15.px)
     ) {
-        Box(
-            modifier = Modifier
-                .then(
-                    size?.let { safeSize ->
-                        Modifier.size(width = safeSize.width.px, height = safeSize.height.px)
-                    } ?: Modifier.fillMaxSize()
-                )
-                .clip(shape),
-            contentAlignment = Alignment.BottomEnd,
-        ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             Image(
                 modifier = Modifier
-                    .thenIf(size == null) { Modifier.fillMaxSize() }
+                    .clip(shape)
+                    .fillMaxWidth()
+                    .aspectRatio(
+                        size?.width ?: VideoThumbnailCardDefaults.SIZE.width,
+                        size?.height ?: VideoThumbnailCardDefaults.SIZE.height,
+                    )
                     .objectFit(ObjectFit.Cover),
                 src = details.thumbnailAsset,
                 width = size?.width,
@@ -75,6 +73,7 @@ fun VideoThumbnailCard(
             )
             Box(
                 modifier = Modifier
+                    .align(Alignment.BottomEnd)
                     .background(Styles.VIDEO_CARD_DURATION_CONTAINER)
                     .margin(10.px)
                     .padding(leftRight = 6.px, topBottom = 3.px)
@@ -94,19 +93,22 @@ fun VideoThumbnailCard(
                 modifier = Modifier.weight(1).color(Styles.VIDEO_CARD_SECONDARY_TEXT),
                 verticalArrangement = Arrangement.spacedBy(8.px),
             ) {
-                Box(
-                    modifier = Modifier
-                        .fontSize(18.px)
-                        .fontWeight(FontWeight.Medium)
-                        .lineHeight(25.px)
-                        .color(Styles.VIDEO_CARD_PRIMARY_TEXT)
-                ) { Text(details.title) }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.px),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(details.channelName)
-                    if (details.isVerified) Image(Asset.Icon.VERIFIED_BADGE)
+                TextBox(
+                    color = Styles.VIDEO_CARD_PRIMARY_TEXT,
+                    lineHeight = 25,
+                    maxLines = 2,
+                    size = 18,
+                    text = details.title,
+                    weight = FontWeight.Medium,
+                )
+                details.channelName?.let { safeChannelName ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.px),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(safeChannelName)
+                        if (details.isVerified) Image(Asset.Icon.VERIFIED_BADGE)
+                    }
                 }
                 Row { Text("${details.views} views • ${details.daysSinceUploaded} ago") }
             }

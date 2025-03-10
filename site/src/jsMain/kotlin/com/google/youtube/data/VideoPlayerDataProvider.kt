@@ -40,7 +40,7 @@ class VideoPlayerDataProvider {
             id = details.id,
             title = details.title,
             channelId = "juxtopposed", // TODO: Use real IDs (if possible)
-            channelName = details.channelName,
+            channelName = details.channelName ?: "Juxtopposed",
             channelAsset = details.channelAsset ?: Asset.Channel.JUXTOPPOSED,
             subscribersCount = details.subscribersCount ?: "54K",
             viewCount = details.views,

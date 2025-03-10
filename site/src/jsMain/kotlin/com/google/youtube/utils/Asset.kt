@@ -383,6 +383,15 @@ object Asset {
             const val WEAPONS = "/collection/weapons.png"
         }
 
+        object Channel {
+            const val INSTAGRAM = "/thumbnails/instagram.png"
+            const val ITS_TIME = "/thumbnails/its_time.png"
+            const val MISSED_SHOT = "/thumbnails/missed_shot.png"
+            const val MONETIZED = "/thumbnails/monetized.png"
+            const val STREAM = "/thumbnails/stream.png"
+            const val WHO_AM_I = "/thumbnails/who_am_i.png"
+        }
+
         object Feed {
             const val ALL_AT_ONCE = "/feed/all_at_once.png"
             const val BITS = "/feed/bits.png"
@@ -458,6 +467,10 @@ object Asset {
 
     object Banner {
         const val BANNER_1 = "/banners/banner_1.png"
+    }
+
+    object Post {
+        const val DISCORD = "/post/discord_post.png"
     }
 
     object Social {

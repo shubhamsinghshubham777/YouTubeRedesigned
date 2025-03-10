@@ -171,7 +171,7 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
             SpacedRow(15) {
                 Image(
                     modifier = Modifier.clip(Circle()),
-                    src = data.first().channelAsset,
+                    src = data.firstOrNull()?.channelAsset ?: Asset.Channel.JUXTOPPOSED,
                     width = 46,
                     height = 46,
                 )
@@ -180,7 +180,7 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
                         TextBox(
                             lineHeight = 28.3,
                             size = 18,
-                            text = data.first().channelName,
+                            text = data.firstOrNull()?.channelName ?: "Juxtopposed",
                             weight = FontWeight.Medium,
                         )
                         if (data.first().isChannelVerified) {
@@ -216,7 +216,10 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
                     when (item) {
                         is ChannelListItemData.Post -> MessagePostCard(item)
                         is ChannelListItemData.Thumbnail -> VideoThumbnailCard(
-                            details = item.toThumbnailDetails(),
+                            details = item.toThumbnailDetails().copy(
+                                channelAsset = null,
+                                channelName = null,
+                            ),
                             size = VideoThumbnailCardDefaults.SIZE,
                         )
                     }

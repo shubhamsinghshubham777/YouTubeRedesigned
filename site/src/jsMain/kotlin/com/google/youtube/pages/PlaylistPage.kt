@@ -169,9 +169,7 @@ fun PlaylistPage(id: String) {
                                 onSelectionChanged = { isSelected ->
                                     isSelectedStates[index] = isSelected
                                 },
-                                onClick = {
-                                    details.id?.let { id -> navigator.pushRoute(Route.Video(id)) }
-                                },
+                                onClick = { navigator.pushRoute(Route.Video(details.id)) },
                             )
                         },
                     )
@@ -193,9 +191,7 @@ fun PlaylistPage(id: String) {
                                 onSelectionChanged = { isSelected ->
                                     isSelectedStates[index] = isSelected
                                 },
-                                onClick = {
-                                    details.id?.let { id -> navigator.pushRoute(Route.Video(id)) }
-                                },
+                                onClick = { navigator.pushRoute(Route.Video(details.id)) },
                             )
                         },
                     )
@@ -347,10 +343,8 @@ private fun ChannelInfo(details: VideoThumbnailDetails) {
             width = 28,
             height = 28,
         )
-        TextBox(text = details.channelName)
-        if (details.isVerified) {
-            Image(src = Asset.Icon.VERIFIED_BADGE, width = 15, height = 15)
-        }
+        details.channelName?.let { name -> TextBox(text = name) }
+        if (details.isVerified) Image(src = Asset.Icon.VERIFIED_BADGE, width = 15, height = 15)
         TextBox(
             text = "${details.subscribersCount} subscribers",
             size = 14,
