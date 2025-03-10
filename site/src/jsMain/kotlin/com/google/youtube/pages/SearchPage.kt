@@ -11,6 +11,7 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.SegmentedButtonPair
+import com.google.youtube.data.SearchDataProvider
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants
@@ -43,32 +44,20 @@ import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.theme.shapes.Circle
+import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.FlexWrap
 import org.jetbrains.compose.web.css.px
 
-@Suppress("UNUSED_PARAMETER")
 @Composable
 fun SearchPage(query: String) {
+    val searchDataProvider = remember { SearchDataProvider() }
+    val results = remember(searchDataProvider) {
+        searchDataProvider.getSearchedVideosForQuery(query)
+    }
     SpacedColumn(spacePx = 40, modifier = Modifier.fillMaxWidth().padding(bottom = 40.px)) {
         Filters(modifier = Modifier.margin(bottom = 2.px))
-        repeat(10) {
-            ListCard(
-                details = VideoThumbnailDetails(
-                    id = "zryrtkfabzb",
-                    thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                    channelAsset = Asset.Icon.USER_AVATAR,
-                    title = "Classic Gingerbread Cookies Recipe",
-                    channelName = "Irene Magazine",
-                    isVerified = true,
-                    views = "1.2M",
-                    daysSinceUploaded = "",
-                    duration = "12:07",
-                    likeCount = "26K",
-                    subscribersCount = "27K",
-                    uploadDate = "11 Dec 2021",
-                )
-            )
-        }
+        results.forEach { result -> ListCard(result) }
     }
 }
 
@@ -144,17 +133,18 @@ private fun ListCard(details: VideoThumbnailDetails) {
                     }
                     Wrap(horizontalGapPx = 16, verticalGapPx = 16) {
                         SpacedRow(15) {
-                            Image(src = Asset.Icon.USER_AVATAR, width = 28, height = 28)
+                            Image(
+                                modifier = Modifier.clip(Circle()),
+                                src = details.channelAsset ?: Asset.Channel.JUXTOPPOSED,
+                                width = 28,
+                                height = 28,
+                            )
                             SpacedRow(8) {
                                 details.channelName?.let { channelName ->
                                     TextBox(text = channelName, lineHeight = 28.3)
                                 }
                                 if (details.isVerified) {
-                                    Image(
-                                        src = Asset.Icon.VERIFIED_BADGE,
-                                        width = 15,
-                                        height = 15
-                                    )
+                                    Image(src = Asset.Icon.VERIFIED_BADGE, width = 18, height = 18)
                                 }
                             }
                         }
