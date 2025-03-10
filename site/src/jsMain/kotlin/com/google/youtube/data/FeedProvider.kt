@@ -34,7 +34,7 @@ class FeedProvider {
     }
 
     fun getShortsFeed(): List<ShortThumbnailDetails> {
-        return List(3) {
+        return List(5) {
             IN_MEMORY_SHORTS_DETAILS.filter { details ->
                 details.id == "l7wk69TREWQ" ||
                         details.id == "y1sp52UIOPL"

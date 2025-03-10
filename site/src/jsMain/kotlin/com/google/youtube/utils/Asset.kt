@@ -334,6 +334,8 @@ object Asset {
         const val CODING_WITH_LEWIS = "/channel/coding_with_lewis.png"
         const val COLDPLAY = "/channel/coldplay.png"
         const val CYBERPUNK_2077 = "/channel/cyberpunk_2077.png"
+        const val DAILY_DOSE_OF_INTERNET = "/channel/daily_dose_of_internet.jpg"
+        const val DAILY_DOSE_OF_INTERNET_CATS = "/channel/daily_dose_of_internet_cats.jpg"
         const val DANIEL_KRAFFT = "/channel/daniel_krafft.png"
         const val DAVE_2D = "/channel/dave_2d.jpg"
         const val ETHAN_CHLEBOWSKI = "/channel/ethan_chlebowski.png"

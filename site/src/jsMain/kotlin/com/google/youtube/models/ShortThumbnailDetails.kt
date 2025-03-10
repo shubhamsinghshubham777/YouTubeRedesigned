@@ -8,6 +8,8 @@ data class ShortThumbnailDetails(
     val thumbnailAsset: String,
     val title: String,
     val channelName: String,
+    val channelAsset: String,
     val views: String,
     val daysSinceUploaded: String,
+    val subscribersCount: String,
 )

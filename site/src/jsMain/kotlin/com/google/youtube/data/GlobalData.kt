@@ -767,16 +767,20 @@ val IN_MEMORY_SHORTS_DETAILS = listOf(
         thumbnailAsset = Asset.Thumbnail.Feed.CAT_1,
         title = "Put this cat in jail",
         channelName = "DailyDostOfInternet",
+        channelAsset = Asset.Channel.DAILY_DOSE_OF_INTERNET,
         views = "10M",
         daysSinceUploaded = "3 weeks",
+        subscribersCount = "52K",
     ),
     ShortThumbnailDetails(
         id = "y1sp52UIOPL",
         thumbnailAsset = Asset.Thumbnail.Feed.CAT_2,
         title = "Pizza Crust Really wants Mac and Cheese",
         channelName = "DailyDostOfInternetCats",
+        channelAsset = Asset.Channel.DAILY_DOSE_OF_INTERNET_CATS,
         views = "10M",
         daysSinceUploaded = "3 weeks",
+        subscribersCount = "19K",
     ),
 )
 

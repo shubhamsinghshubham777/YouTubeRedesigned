@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.utils.Asset
+import com.google.youtube.utils.Constants
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Route
@@ -93,8 +94,12 @@ fun TVModePage(
         modifier = Modifier
             .fillMaxWidth()
             .minHeight(500.px)
-            .height(100.vh - TopBarDefaults.HEIGHT - (if (isFullScreenEnabled) 0.px else 12.px))
-            .thenIf(!isFullScreenEnabled) { Modifier.padding(bottom = 12.px) }
+            .height(
+                100.vh
+                    .minus(TopBarDefaults.HEIGHT)
+                    .minus(if (isFullScreenEnabled) 0.px else Constants.CONTENT_PADDING)
+            )
+            .thenIf(!isFullScreenEnabled) { Modifier.padding(bottom = Constants.CONTENT_PADDING) }
     ) {
         Image(
             modifier = Modifier.borderRadius(borderRadius).fillMaxSize().objectFit(ObjectFit.Cover),
