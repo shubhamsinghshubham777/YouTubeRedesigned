@@ -1,22 +1,23 @@
 package com.google.youtube.pages
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.utils.Asset
-import com.google.youtube.utils.MouseEventState
+import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.PaddingValues
+import com.google.youtube.utils.Route
+import com.google.youtube.utils.SpacedRow
+import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.hideScrollBar
-import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.limitTextWithEllipsis
 import com.google.youtube.utils.noShrink
-import com.google.youtube.utils.rememberMouseEventAsState
 import com.varabyte.kobweb.compose.css.CSSLengthOrPercentageNumericValue
 import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
@@ -37,8 +38,10 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.height
-import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.minHeight
 import com.varabyte.kobweb.compose.ui.modifiers.objectFit
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseEnter
+import com.varabyte.kobweb.compose.ui.modifiers.onMouseLeave
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
@@ -46,31 +49,56 @@ import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
-import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
-import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
+import kotlinx.browser.document
+import kotlinx.browser.window
+import org.jetbrains.compose.web.css.minus
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.Element
+import org.w3c.dom.events.Event
 
 @Composable
-fun TVModePage(borderRadius: CSSLengthOrPercentageNumericValue = 14.px) {
-    val breakpoint = rememberBreakpoint()
-    val animatedContentPaddingFactor by animateFloatAsState(
-        if (breakpoint.isGreaterThan(Breakpoint.SM)) 1f else 0.5f
-    )
-    val contentPadding by remember {
-        derivedStateOf {
-            PaddingValues(leftRight = 25.px, topBottom = 20.px) * animatedContentPaddingFactor
+fun TVModePage(
+    borderRadius: CSSLengthOrPercentageNumericValue = 14.px,
+    contentPadding: PaddingValues = PaddingValues(leftRight = 25.px, topBottom = 20.px),
+) {
+    val navigator = LocalNavigator.current
+
+    var parentContainerRef by remember { mutableStateOf<Element?>(null) }
+
+    var isTitleHovered by remember { mutableStateOf(false) }
+    var isChannelNameHovered by remember { mutableStateOf(false) }
+
+    var isCCEnabled by remember { mutableStateOf(false) }
+    var isFullScreenEnabled by remember { mutableStateOf(false) }
+
+    DisposableEffect(Unit) {
+        val listener: (Event) -> Unit = { isFullScreenEnabled = document.fullscreen }
+        document.addEventListener("fullscreenchange", listener)
+        document.addEventListener("mozfullscreenchange", listener)
+        document.addEventListener("MSFullscreenChange", listener)
+        document.addEventListener("webkitfullscreenchange", listener)
+        onDispose {
+            document.removeEventListener("fullscreenchange", listener)
+            document.removeEventListener("mozfullscreenchange", listener)
+            document.removeEventListener("MSFullscreenChange", listener)
+            document.removeEventListener("webkitfullscreenchange", listener)
         }
     }
-    var titleRef by remember { mutableStateOf<Element?>(null) }
-    val mouseEventStateForTitle by rememberMouseEventAsState(titleRef)
 
-    Box(modifier = Modifier.fillMaxWidth().height(95.percent)) {
+    Box(
+        ref = ref { e -> parentContainerRef = e },
+        modifier = Modifier
+            .fillMaxWidth()
+            .minHeight(500.px)
+            .height(100.vh - TopBarDefaults.HEIGHT - (if (isFullScreenEnabled) 0.px else 12.px))
+            .thenIf(!isFullScreenEnabled) { Modifier.padding(bottom = 12.px) }
+    ) {
         Image(
             modifier = Modifier.borderRadius(borderRadius).fillMaxSize().objectFit(ObjectFit.Cover),
-            src = Asset.Thumbnails.THUMBNAIL_1,
+            src = Asset.Thumbnail.TV.TV_MODE_THUMBNAIL,
         )
 
         Box(
@@ -104,29 +132,36 @@ fun TVModePage(borderRadius: CSSLengthOrPercentageNumericValue = 14.px) {
                 }
 
                 Box(
-                    ref = ref { element -> titleRef = element },
                     modifier = Modifier
+                        .clickable { navigator.pushRoute(Route.Video(id = "m9kd28VOTLK")) }
                         .limitTextWithEllipsis()
-                        .thenIf(mouseEventStateForTitle != MouseEventState.Released) {
+                        .onMouseEnter { isTitleHovered = true }
+                        .onMouseLeave { isTitleHovered = false }
+                        .thenIf(isTitleHovered) {
                             Modifier.textDecorationLine(TextDecorationLine.Underline)
-                        }
-                        .clickable {}
+                        },
                 ) {
                     Text("I Redesigned the ENTIRE YouTube UI from Scratch")
                 }
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    modifier = Modifier.size(28.px),
-                    src = Asset.Avatar.JACKSEPTICEYE,
-                )
-
-                Box(modifier = Modifier.margin(left = 16.px, right = 8.px)) {
-                    Text("Juxtopposed")
+            SpacedRow(
+                spacePx = 15,
+                modifier = Modifier
+                    .onMouseEnter { isChannelNameHovered = true }
+                    .onMouseLeave { isChannelNameHovered = false }
+                    .clickable { navigator.pushRoute(Route.Page(id = "juxtopposed")) },
+            ) {
+                Image(modifier = Modifier.size(28.px), src = Asset.Channel.JUXTOPPOSED)
+                SpacedRow(8) {
+                    TextBox(
+                        modifier = Modifier.thenIf(isChannelNameHovered) {
+                            Modifier.textDecorationLine(TextDecorationLine.Underline)
+                        },
+                        text = "Juxtopposed"
+                    )
+                    Image(Asset.Icon.VERIFIED_BADGE)
                 }
-
-                Image(Asset.Icon.VERIFIED_BADGE)
             }
         }
 
@@ -162,12 +197,24 @@ fun TVModePage(borderRadius: CSSLengthOrPercentageNumericValue = 14.px) {
                 horizontalArrangement = Arrangement.spacedBy(8.px),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AssetImageButton(Asset.Icon.CC) {}
+                AssetImageButton(if (isCCEnabled) Asset.Icon.CC_SELECTED else Asset.Icon.CC) {
+                    isCCEnabled = !isCCEnabled
+                }
                 AssetImageButton(Asset.Icon.QUALITY_4K) {}
                 AssetImageButton(Asset.Icon.SETTINGS) {}
                 AssetImageButton(Asset.Icon.PIP) {}
                 AssetImageButton(Asset.Icon.THEATER) {}
-                AssetImageButton(Asset.Icon.FULLSCREEN) {}
+                AssetImageButton(
+                    if (isFullScreenEnabled) Asset.Icon.FULLSCREEN_SELECTED
+                    else Asset.Icon.FULLSCREEN
+                ) {
+                    if (isFullScreenEnabled) {
+                        window.document.exitFullscreen()
+                    } else {
+                        parentContainerRef?.requestFullscreen()
+                    }
+                    isFullScreenEnabled = !isFullScreenEnabled
+                }
             }
         }
     }

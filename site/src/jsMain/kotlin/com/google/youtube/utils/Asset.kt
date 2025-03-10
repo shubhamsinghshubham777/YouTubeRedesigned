@@ -460,6 +460,10 @@ object Asset {
             const val YESTERDAY_WORLD = "/trending/yesterday_world.png"
         }
 
+        object TV {
+            const val TV_MODE_THUMBNAIL = "/tv/tv_mode_thumbnail.png"
+        }
+
         object Subscriptions {
             const val BEST_AND_WORST = "/subscriptions/best_and_worst.png"
             const val FIRST_PERSON_ISLANDS = "/subscriptions/first_person_islands.png"
