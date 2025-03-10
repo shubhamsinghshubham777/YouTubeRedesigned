@@ -10,8 +10,7 @@ import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.ThumbnailGrid
 import com.google.youtube.components.widgets.context.RoundedSearchTextField
-import com.google.youtube.models.ThumbnailGridData
-import com.google.youtube.models.VideoThumbnailDetails
+import com.google.youtube.data.HistoryDataProvider
 import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Styles
@@ -51,6 +50,9 @@ fun HistoryPage() {
     var selectedLayoutFilter by remember { mutableStateOf(HistoryFilter.GridView) }
     val searchQueryState = remember { mutableStateOf("") }
     val animatedFilterPaddingFraction by animateFloatAsState(if (isLargeBreakpoint) 1f else 0.5f)
+
+    val historyDataProvider = remember { HistoryDataProvider() }
+    val data = remember(historyDataProvider) { historyDataProvider.provideHistoryVideoDetails() }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(modifier = Modifier.fontSize(20.px).fontWeight(FontWeight.Medium)) { Text("History") }
@@ -149,49 +151,11 @@ fun HistoryPage() {
             RoundedSearchTextField(textState = searchQueryState, hintText = "Search history")
         }
 
-        ThumbnailGrid(
-            data = ThumbnailGridData(
-                date = "Today - 15 Nov 2024",
-                thumbnailDetails = List(3) { index ->
-                    VideoThumbnailDetails(
-                        id = index.toString(),
-                        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                        channelAsset = Asset.Avatar.JACKSEPTICEYE,
-                        title = "Honest Trailers - Shrek",
-                        channelName = "Screen Junkies",
-                        isVerified = true,
-                        views = "6.3M",
-                        daysSinceUploaded = "7 years",
-                        duration = "12:07",
-                    )
-                }
-            )
-        )
-        ThumbnailGrid(
-            data = ThumbnailGridData(
-                date = "Yesterday - 14 Nov 2024",
-                thumbnailDetails = List(1) { index ->
-                    VideoThumbnailDetails(
-                        id = index.toString(),
-                        thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                        channelAsset = Asset.Avatar.JACKSEPTICEYE,
-                        title = "Google - Year in Search 2024",
-                        channelName = "Google",
-                        isVerified = true,
-                        views = "5.2M",
-                        daysSinceUploaded = "1 day",
-                        duration = "12:07",
-                    )
-                }
-            )
-        )
+        data.forEach { data -> ThumbnailGrid(data) }
     }
 }
 
-private enum class HistoryFilter(
-    val iconPath: String? = null,
-    val iconOnly: Boolean = false,
-) {
+private enum class HistoryFilter(val iconPath: String? = null, val iconOnly: Boolean = false) {
     Videos,
     Posts,
     Live,

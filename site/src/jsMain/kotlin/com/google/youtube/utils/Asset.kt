@@ -341,6 +341,7 @@ object Asset {
         const val FIRESHIP = "/channel/fireship.png"
         const val FORTNITE = "/channel/fortnite.png"
         const val GAMESPOT = "/channel/gamespot.png"
+        const val GOOGLE = "/channel/google.png"
         const val HOW_TO_BASIC = "/channel/how_to_basic.png"
         const val JUXTOPPOSED = "/channel/juxtopposed.png"
         const val LOFI_GIRL = "/channel/lofi_girl.png"
@@ -354,6 +355,7 @@ object Asset {
         const val RED_LETTER_MEDIA = "/channel/red_letter_media.png"
         const val ROSE = "/channel/rose.png"
         const val RYAN_TRAHAN = "/channel/ryan_trahan.png"
+        const val SCREEN_JUNKIES = "/channel/screen_junkies.png"
         const val TECH_ALTAR = "/channel/tech_altar.png"
         const val THE_CRITICAL_DRINKER = "/channel/the_critical_drinker.png"
         const val THE_GAME_THEORISTS = "/channel/the_game_theorists.jpg"
@@ -364,6 +366,7 @@ object Asset {
         const val VICE_GRIP_GARAGE = "/channel/vice_grip_garage.png"
         const val VSAUCE = "/channel/vsauce.jpg"
         const val WWW = "/channel/www.png"
+        const val YUKON = "/channel/yukon.png"
         const val ZOOM_ART_STUDIO = "/channel/zoom_art_studio.png"
     }
 
@@ -397,6 +400,12 @@ object Asset {
             const val LOFI_GIRL = "/feed/lofi_girl.png"
             const val SHREK = "/feed/shrek.png"
             const val WE_ARE_DONE = "/feed/we_are_done.png"
+        }
+
+        object History {
+            const val GOOGLE = "/history/google.png"
+            const val HORSE_KICKS = "/history/horse_kicks.png"
+            const val SHREK = "/history/shrek.png"
         }
 
         object Suggestion {
