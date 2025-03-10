@@ -4,13 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.google.youtube.data.ChannelDataProvider
 import com.google.youtube.models.ChannelListItemData
-import com.google.youtube.utils.Asset
 import com.google.youtube.utils.BasicGrid
 import com.google.youtube.utils.Constants
 import com.google.youtube.utils.Crossfade
+import com.google.youtube.utils.DescendingStringDurationComparator
 import com.google.youtube.utils.GridGap
 import com.google.youtube.utils.SpacedColumn
+import com.google.youtube.utils.StringDurationComparator
+import com.google.youtube.utils.StringViewCountComparator
 import com.google.youtube.utils.isGreaterThan
 import com.google.youtube.utils.rememberBreakpointAsState
 import com.varabyte.kobweb.compose.ui.Modifier
@@ -26,18 +29,69 @@ import org.jetbrains.compose.web.css.px
 fun ChannelPostsPage() {
     val filterState = remember { mutableStateOf(VideosAndPostsFilter.Latest) }
     val layoutTypeState = remember { mutableStateOf(VideosAndPostsLayoutType.Grid) }
+    val channelDataProvider = remember { ChannelDataProvider() }
+    val posts = remember(channelDataProvider) { channelDataProvider.getAllPosts() }
+    val pinnedPosts = remember(posts) { posts.filter { it.isPinned } }
+    val unpinnedPosts = remember(posts) { posts.filterNot { it.isPinned } }
 
     SpacedColumn(spacePx = 28, modifier = Modifier.fillMaxWidth()) {
         VideosAndPostsFilters(filterState, layoutTypeState)
         Crossfade(
-            targetState = layoutTypeState.value,
+            targetState = filterState.value,
             modifier = Modifier.fillMaxWidth(),
-        ) { animatedLayoutType ->
-            when (animatedLayoutType) {
-                VideosAndPostsLayoutType.Grid -> PostsGrid(posts = remember { SAMPLE_POSTS })
-                VideosAndPostsLayoutType.List -> PostsList(posts = remember { SAMPLE_POSTS })
+        ) { animatedFilter ->
+            val sortedPinnedPosts = when (animatedFilter) {
+                VideosAndPostsFilter.Latest ->
+                    pinnedPosts.sortedWith(PostDurationComparator)
+
+                VideosAndPostsFilter.Popular ->
+                    pinnedPosts.sortedWith(PostLikeCountComparator)
+
+                VideosAndPostsFilter.Oldest ->
+                    pinnedPosts.sortedWith(DescendingPostDurationComparator)
+            }
+
+            val sortedUnpinnedPosts = when (animatedFilter) {
+                VideosAndPostsFilter.Latest ->
+                    unpinnedPosts.sortedWith(PostDurationComparator)
+
+                VideosAndPostsFilter.Popular ->
+                    unpinnedPosts.sortedWith(PostLikeCountComparator)
+
+                VideosAndPostsFilter.Oldest ->
+                    unpinnedPosts.sortedWith(DescendingPostDurationComparator)
+            }
+
+            val sortedPosts = sortedPinnedPosts + sortedUnpinnedPosts
+
+            Crossfade(
+                targetState = layoutTypeState.value,
+                modifier = Modifier.fillMaxWidth(),
+            ) { animatedLayoutType ->
+                when (animatedLayoutType) {
+                    VideosAndPostsLayoutType.Grid -> PostsGrid(sortedPosts)
+                    VideosAndPostsLayoutType.List -> PostsList(sortedPosts)
+                }
             }
         }
+    }
+}
+
+private object PostDurationComparator : Comparator<ChannelListItemData.Post> {
+    override fun compare(a: ChannelListItemData.Post, b: ChannelListItemData.Post): Int {
+        return StringDurationComparator.compare(a.daysSinceUploaded, b.daysSinceUploaded)
+    }
+}
+
+private object DescendingPostDurationComparator : Comparator<ChannelListItemData.Post> {
+    override fun compare(a: ChannelListItemData.Post, b: ChannelListItemData.Post): Int {
+        return DescendingStringDurationComparator.compare(a.daysSinceUploaded, b.daysSinceUploaded)
+    }
+}
+
+private object PostLikeCountComparator : Comparator<ChannelListItemData.Post> {
+    override fun compare(a: ChannelListItemData.Post, b: ChannelListItemData.Post): Int {
+        return StringViewCountComparator.compare(a.likeCount, b.likeCount)
     }
 }
 
@@ -83,20 +137,4 @@ private fun PostsGrid(posts: List<ChannelListItemData.Post>) {
             )
         }
     }
-}
-
-private val SAMPLE_POSTS = List(10) { index ->
-    ChannelListItemData.Post(
-        id = index.toString(),
-        channelAsset = Asset.Icon.USER_AVATAR,
-        channelName = "Juxtopposed",
-        daysSinceUploaded = "1 day",
-        isChannelVerified = true,
-        subscribersCount = "295K",
-        commentCount = "1.1K",
-        dislikeCount = "12",
-        likeCount = "2.9K",
-        message = "it’s finally time for youtube. what are your biggest issues with it?",
-        postAsset = Asset.Banner.BANNER_1,
-    )
 }

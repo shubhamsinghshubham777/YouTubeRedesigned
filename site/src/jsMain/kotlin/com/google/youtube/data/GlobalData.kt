@@ -726,6 +726,20 @@ val IN_MEMORY_SHORTS_DETAILS = listOf(
 
 val IN_MEMORY_POSTS = listOf(
     ChannelListItemData.Post(
+        id = "t5aj18LKJHGFDS",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        channelName = "Juxtopposed",
+        daysSinceUploaded = "1 hour",
+        isChannelVerified = true,
+        subscribersCount = "50K",
+        commentCount = "5K",
+        dislikeCount = null,
+        likeCount = "100",
+        message = "If YouTube allows us to pin posts, I’ll release my cat meme library.",
+        postAsset = null,
+        isPinned = true,
+    ),
+    ChannelListItemData.Post(
         id = "d2jb68HJKLZXCV",
         channelAsset = Asset.Channel.JUXTOPPOSED,
         channelName = "Juxtopposed",

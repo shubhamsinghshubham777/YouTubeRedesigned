@@ -7,8 +7,11 @@ import com.google.youtube.data.ChannelDataProvider
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.pages.MainVideosGrid
 import com.google.youtube.utils.Crossfade
+import com.google.youtube.utils.DescendingStringDurationComparator
 import com.google.youtube.utils.GridGap
 import com.google.youtube.utils.SpacedColumn
+import com.google.youtube.utils.StringDurationComparator
+import com.google.youtube.utils.StringViewCountComparator
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import org.jetbrains.compose.web.css.px
@@ -27,9 +30,9 @@ fun ChannelVideosPage() {
             modifier = Modifier.fillMaxWidth(),
         ) { animatedFilterState ->
             val sortedVideos = when (animatedFilterState) {
-                VideosAndPostsFilter.Latest -> videos.sortedWith(DurationComparator)
-                VideosAndPostsFilter.Popular -> videos.sortedWith(ViewCountComparator)
-                VideosAndPostsFilter.Oldest -> videos.sortedWith(DescendingDurationComparator)
+                VideosAndPostsFilter.Latest -> videos.sortedWith(VideoDurationComparator)
+                VideosAndPostsFilter.Popular -> videos.sortedWith(VideoViewCountComparator)
+                VideosAndPostsFilter.Oldest -> videos.sortedWith(DescendingVideoDurationComparator)
             }
             MainVideosGrid(
                 modifier = Modifier.fillMaxWidth(),
@@ -41,68 +44,20 @@ fun ChannelVideosPage() {
     }
 }
 
-private object DurationComparator : Comparator<VideoThumbnailDetails> {
-    private const val DAYS_IN_YEAR = 365 // Approximate, for simplicity
-    private const val DAYS_IN_MONTH = 30  // Approximate, for simplicity
-    private const val DAYS_IN_WEEK = 7
-
+private object VideoDurationComparator : Comparator<VideoThumbnailDetails> {
     override fun compare(a: VideoThumbnailDetails, b: VideoThumbnailDetails): Int {
-        val duration1Days = getDurationInDays(a.daysSinceUploaded)
-        val duration2Days = getDurationInDays(b.daysSinceUploaded)
-
-        return duration1Days.compareTo(duration2Days)
-    }
-
-    private fun getDurationInDays(durationStr: String): Long {
-        val parts = durationStr.split("\\s+".toRegex())
-        if (parts.size != 2) {
-            throw IllegalArgumentException("Invalid duration format: $durationStr")
-        }
-
-        val value = parts[0].toInt()
-
-        // Case-insensitive unit matching
-        return when (val unit = parts[1].lowercase()) {
-            "year", "years" -> value * DAYS_IN_YEAR.toLong()
-            "month", "months" -> value * DAYS_IN_MONTH.toLong()
-            "week", "weeks" -> value * DAYS_IN_WEEK.toLong()
-            "day", "days" -> value.toLong()
-            else -> throw IllegalArgumentException("Unsupported duration unit: $unit")
-        }
+        return StringDurationComparator.compare(a.daysSinceUploaded, b.daysSinceUploaded)
     }
 }
 
-private object DescendingDurationComparator : Comparator<VideoThumbnailDetails> {
+private object DescendingVideoDurationComparator : Comparator<VideoThumbnailDetails> {
     override fun compare(a: VideoThumbnailDetails, b: VideoThumbnailDetails): Int {
-        // Reverse the result of the ascending comparator
-        return DurationComparator.compare(b, a)
+        return DescendingStringDurationComparator.compare(a.daysSinceUploaded, b.daysSinceUploaded)
     }
 }
 
-private object ViewCountComparator : Comparator<VideoThumbnailDetails> {
+private object VideoViewCountComparator : Comparator<VideoThumbnailDetails> {
     override fun compare(a: VideoThumbnailDetails, b: VideoThumbnailDetails): Int {
-        val value1 = getViewCountValue(b.views)
-        val value2 = getViewCountValue(a.views)
-        return value1.compareTo(value2)
-    }
-
-    private fun getViewCountValue(viewStr: String): Double {
-        val cleanViewStr = viewStr.trim()
-        val suffix = cleanViewStr.takeLast(1).uppercase()
-        val numberPart = cleanViewStr.dropLast(1)
-
-        return when (suffix) {
-            "K" -> parseNumber(numberPart) * 1000
-            "M" -> parseNumber(numberPart) * 1000000
-            else -> parseNumber(cleanViewStr) // No suffix, parse the whole string
-        }
-    }
-
-    private fun parseNumber(numberStr: String): Double {
-        return try {
-            numberStr.toDouble()
-        } catch (e: NumberFormatException) {
-            throw IllegalArgumentException("Invalid view count format: $numberStr", e)
-        }
+        return StringViewCountComparator.compare(a.views, b.views)
     }
 }

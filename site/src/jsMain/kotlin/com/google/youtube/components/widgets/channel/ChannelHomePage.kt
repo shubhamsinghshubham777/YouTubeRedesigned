@@ -129,6 +129,7 @@ private fun ChannelListItemsContainer(
                     .hideScrollBar()
                     .overflow(overflowX = Overflow.Scroll, overflowY = Overflow.Hidden)
                     .scrollBehavior(ScrollBehavior.Smooth),
+                centerContentVertically = false,
             ) {
                 items.forEach { data ->
                     when (data) {

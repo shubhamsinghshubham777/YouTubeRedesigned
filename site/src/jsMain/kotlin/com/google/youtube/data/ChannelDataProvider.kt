@@ -45,4 +45,6 @@ class ChannelDataProvider {
                     details.id == "l6qb97POIUYTRE"
         }.map { it.copy(channelAsset = null) }
     }
+
+    fun getAllPosts(): List<ChannelListItemData.Post> = IN_MEMORY_POSTS
 }
