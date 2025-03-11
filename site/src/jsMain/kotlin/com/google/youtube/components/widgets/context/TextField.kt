@@ -64,6 +64,7 @@ fun TextField(
                 onDispose {}
             }
         }
+        onClick { it.stopPropagation() }
         onInput { event -> textState.value = event.value }
         if (showBorder) {
             onFocus { isFocused = true }

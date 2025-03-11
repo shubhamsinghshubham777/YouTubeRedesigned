@@ -10,6 +10,7 @@ import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
 import com.google.youtube.components.widgets.HorizontalDivider
+import com.google.youtube.components.widgets.SubscribeButton
 import com.google.youtube.components.widgets.ThumbnailGrid
 import com.google.youtube.components.widgets.VerticalDivider
 import com.google.youtube.components.widgets.VideoThumbnailCard
@@ -42,7 +43,6 @@ import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.deg
 import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun SubscriptionsSubPage() {
@@ -196,13 +196,7 @@ private fun ChannelListItem(data: List<ChannelListItemData>, initialIsExpanded: 
             }
             Spacer()
             SpacedRow(32) {
-                AssetSvgButton(
-                    id = "list_item_subscribe_button_${data.first().channelName}",
-                    onClick = {},
-                    startIconPath = Asset.Path.NOTIFS_SELECTED,
-                ) {
-                    Text("Subscribed")
-                }
+                SubscribeButton(initialIsSubscribed = true)
                 AssetImageButton(
                     asset = Asset.Icon.ARROW_DOWN,
                     modifier = Modifier.rotate(animatedArrowRotation.deg)

@@ -11,10 +11,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.components.sections.TopBarDefaults
 import com.google.youtube.components.widgets.AssetImageButton
-import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.FilterRow
 import com.google.youtube.components.widgets.ShortThumbnailCard
 import com.google.youtube.components.widgets.ShortThumbnailCardDefaults
+import com.google.youtube.components.widgets.SubscribeButton
 import com.google.youtube.data.ShortsDataProvider
 import com.google.youtube.models.ShortThumbnailDetails
 import com.google.youtube.utils.Asset
@@ -72,6 +72,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.overlay.PopupPlacement
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.Rect
@@ -262,18 +263,7 @@ private fun ShortVideoPlayer(
                                 }
                             }
 
-                            Box(
-                                modifier = Modifier
-                                    .background(Styles.RED)
-                                    .clip(Rect(24.px))
-                                    .noShrink(),
-                            ) {
-                                AssetSvgButton(
-                                    id = "subscribe_button",
-                                    onClick = {},
-                                    text = "Subscribe",
-                                )
-                            }
+                            SubscribeButton(popupPlacement = PopupPlacement.TopLeft)
                         }
                     }
 

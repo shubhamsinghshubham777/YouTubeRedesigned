@@ -60,7 +60,7 @@ class VideoPlayerDataProvider {
                 durationSinceUploaded = "1 day",
                 message = "Soooo what did you think of this redesign?",
                 likeCount = "5K",
-                userAssetRef = Asset.Avatar.JUXTOPPOSED,
+                userAssetRef = Asset.Channel.JUXTOPPOSED,
             ),
             VideoCommentData(
                 username = "@YouTube Enjoyer",

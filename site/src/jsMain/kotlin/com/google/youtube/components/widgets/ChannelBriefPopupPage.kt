@@ -1,7 +1,11 @@
 package com.google.youtube.components.widgets
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import com.google.youtube.data.ChannelDataProvider
 import com.google.youtube.utils.Asset
+import com.google.youtube.utils.LocalNavigator
+import com.google.youtube.utils.Route
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.limitTextWithEllipsis
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -17,9 +21,13 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.minWidth
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
+import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.layout.HorizontalDivider
+import com.varabyte.kobweb.silk.theme.shapes.Circle
+import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.minus
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
@@ -28,17 +36,29 @@ import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun ChannelBriefPopupPage(channelId: String) {
+    val navigator = LocalNavigator.current
+    val channelDataProvider = remember { ChannelDataProvider() }
+    val data = remember(channelDataProvider, channelId) {
+        channelDataProvider.getChannelBriefForId(channelId)
+    }
+
     Column(
         modifier = Modifier.margin(topBottom = containerPaddingVertical),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.px)
+        verticalArrangement = Arrangement.spacedBy(8.px),
     ) {
-        // Image-Name-ID-Duration-Subscribers
-        Row(modifier = Modifier.fillMaxWidth(100.percent - containerPaddingHorizontal)) {
+        // Channel Details
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(leftRight = containerPaddingHorizontal)
+                .minWidth(370.px),
+        ) {
             Image(
-                src = Asset.Avatar.JACKSEPTICEYE,
+                modifier = Modifier.clip(Circle()),
+                src = data.assetRef,
                 width = imageSizePx,
-                height = imageSizePx
+                height = imageSizePx,
             )
 
             Column(
@@ -57,16 +77,16 @@ fun ChannelBriefPopupPage(channelId: String) {
                             .fontSize(18.px)
                             .fontWeight(FontWeight.Medium)
                             .color(Styles.VIDEO_CARD_PRIMARY_TEXT),
-                    ) { Text("jackscepticeye") }
-                    Image(Asset.Icon.VERIFIED_BADGE)
+                    ) { Text(data.name) }
+                    if (data.isVerified) Image(Asset.Icon.VERIFIED_BADGE)
                 }
-                Box { Text("@jacksepticeye") }
+                Box { Text("@${data.id}") }
                 Box(
                     modifier = Modifier
                         .color(Styles.VIDEO_CARD_SECONDARY_TEXT)
                         .limitTextWithEllipsis()
                 ) {
-                    Text("Joined 17 years ago • 30.8M subscribers")
+                    Text("Joined ${data.joinedSince} ago • ${data.subscribersCount} subscribers")
                 }
             }
 
@@ -77,24 +97,15 @@ fun ChannelBriefPopupPage(channelId: String) {
         Row(
             modifier = Modifier.margin(
                 top = containerPaddingVertical,
-                leftRight = containerPaddingHorizontal
+                leftRight = containerPaddingHorizontal,
             ),
-            horizontalArrangement = Arrangement.spacedBy(8.px)
+            horizontalArrangement = Arrangement.spacedBy(12.px),
         ) {
-            AssetSvgButton(
-                id = "subscribe_button",
-                onClick = {},
-                startIconPath = Asset.Path.NOTIFS_SELECTED,
-                endIconPath = Asset.Path.ARROW_DOWN,
-            ) {
-                Text("Subscribed")
-            }
+            SubscribeButton(showPopup = false)
 
             AssetSvgButton(
                 id = "view_channel_button",
-                onClick = {},
-                startIconPath = "",
-                endIconPath = "",
+                onClick = { navigator.pushRoute(Route.Page(id = channelId)) },
             ) {
                 Text("View Channel")
             }
@@ -118,7 +129,7 @@ fun ChannelBriefPopupPage(channelId: String) {
                 modifier = Modifier
                     .fontSize(Styles.FontSize.SMALL)
                     .color(Styles.VIDEO_CARD_SECONDARY_TEXT),
-            ) { Text("100+ comments") }
+            ) { Text("${data.commentsCount} comments") }
         }
     }
 }

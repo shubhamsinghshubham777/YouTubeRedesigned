@@ -185,6 +185,45 @@ object ContextMenuPage {
         ),
         ContextMenuChild.VerticalSpacer,
     )
+
+    fun subscription(
+        isPostsSelected: Boolean,
+        isVideosSelected: Boolean,
+        isLiveSelected: Boolean,
+        onPostsClick: () -> Unit,
+        onVideosClick: () -> Unit,
+        onLiveClick: () -> Unit,
+        onUnsubscribeClick: () -> Unit,
+    ): List<ContextMenuChild> = listOf(
+        ContextMenuChild.ListItem(
+            text = "Posts",
+            leadingContent = ContextMenuChild.ListItem.LeadingContent.Check(isPostsSelected),
+            onClick = onPostsClick,
+        ),
+        ContextMenuChild.ListItem(
+            text = "Videos",
+            leadingContent = ContextMenuChild.ListItem.LeadingContent.Check(isVideosSelected),
+            onClick = onVideosClick,
+        ),
+        ContextMenuChild.ListItem(
+            text = "Live",
+            leadingContent = ContextMenuChild.ListItem.LeadingContent.Check(isLiveSelected),
+            onClick = onLiveClick,
+        ),
+        ContextMenuChild.VerticalSpacer,
+        ContextMenuChild.HorizontalDivider,
+        ContextMenuChild.VerticalSpacer,
+        ContextMenuChild.ListItem(
+            text = "Collection",
+            leadingContent = ContextMenuChild.ListItem.LeadingContent.Asset(Asset.Path.COLLECTIONS),
+            trailingContent = ContextMenuChild.ListItem.TrailingContent.Arrow,
+        ),
+        ContextMenuChild.ListItem(
+            text = "Unsubscribe",
+            leadingContent = ContextMenuChild.ListItem.LeadingContent.Asset(Asset.Path.UNSUBSCRIBE),
+            onClick = onUnsubscribeClick,
+        ),
+    )
 }
 
 enum class VideoOptionPage { Main, MoreOptions }

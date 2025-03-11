@@ -449,85 +449,85 @@ private val SampleNavRailItems = listOf(
         children = listOf(
             NavRailItemData(
                 label = "Lofi Girl",
-                route = Route.Page(id = "LofiGirl"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.LOFI_GIRL),
-                count = 2
+                route = Route.Page(id = "lofigirl"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.LOFI_GIRL),
+                count = 2,
             ),
             NavRailItemData(
                 label = "Ninja",
-                route = Route.Page(id = "Ninja"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.NINJA),
-                count = 3
+                route = Route.Page(id = "ninja"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.NINJA),
+                count = 3,
             ),
             NavRailItemData(
                 label = "TechAltar",
-                route = Route.Page(id = "TechAltar"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.TECH_ALTAIR)
+                route = Route.Page(id = "techaltar"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.TECH_ALTAR)
             ),
             NavRailItemData(
                 label = "The Human Spider",
-                route = Route.Page(id = "TheHumanSpider"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.THE_HUMAN_SPIDER)
+                route = Route.Page(id = "thehumanspider"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.THE_HUMAN_SPIDER)
             ),
             NavRailItemData(
                 label = "FaceDev",
-                route = Route.Page(id = "FaceDev"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.FACE_DEV)
+                route = Route.Page(id = "facedev"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.FACE_DEV)
             ),
             NavRailItemData(
                 label = "jacksepticeye",
-                route = Route.Page(id = "JackSepticEye"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.JACKSEPTICEYE),
-                count = 1
+                route = Route.Page(id = "jacksepticeye"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.JACKSEPTICEYE),
+                count = 1,
             ),
             NavRailItemData(
                 label = "jacksfilms",
-                route = Route.Page(id = "JacksFilms"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.JACKSFILMS)
+                route = Route.Page(id = "jacksfilms"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.JACKSFILMS)
             ),
             NavRailItemData(
                 label = "Screen Junkies",
-                route = Route.Page(id = "ScreenJunkies"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.SCREEN_JUNKIES),
-                count = 8
+                route = Route.Page(id = "screenjunkies"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.SCREEN_JUNKIES),
+                count = 8,
             ),
             NavRailItemData(
                 label = "Papa Meat",
-                route = Route.Page(id = "PapaMeat"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.PAPA_MEAT),
-                count = 1
+                route = Route.Page(id = "papameat"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.PAPA_MEAT),
+                count = 1,
             ),
             NavRailItemData(
                 label = "Steam",
-                route = Route.Page(id = "Steam"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.STEAM)
+                route = Route.Page(id = "steam"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.STEAM)
             ),
             NavRailItemData(
                 label = "The Critical Drinker",
-                route = Route.Page(id = "TheCriticalDrinker"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.THE_CRITICAL_DRINKER)
+                route = Route.Page(id = "thecriticaldrinker"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.THE_CRITICAL_DRINKER)
             ),
             NavRailItemData(
                 label = "Hyperplexed",
-                route = Route.Page(id = "Hyperplexed"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.HYPERPLEXED),
-                count = 5
+                route = Route.Page(id = "hyperplexed"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.HYPERPLEXED),
+                count = 5,
             ),
             NavRailItemData(
                 label = "The Coding Sloth",
-                route = Route.Page(id = "TheCodingSloth"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.THE_CODING_SLOTH)
+                route = Route.Page(id = "thecodingsloth"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.THE_CODING_SLOTH)
             ),
             NavRailItemData(
                 label = "BOG",
-                route = Route.Page(id = "BOG"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.BOG)
+                route = Route.Page(id = "bog"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.BOG)
             ),
             NavRailItemData(
                 label = "Cyberpunk 2077",
-                route = Route.Page(id = "Cyberpunk2077"),
-                iconType = NavRailListItemIconType.Image(ref = Asset.Avatar.CYBERPUNK_2077),
-                count = 7
+                route = Route.Page(id = "cyberpunk2077"),
+                iconType = NavRailListItemIconType.Image(ref = Asset.Channel.CYBERPUNK_2077),
+                count = 7,
             ),
         ),
     ),

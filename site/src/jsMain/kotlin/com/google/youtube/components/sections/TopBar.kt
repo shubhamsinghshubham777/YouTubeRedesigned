@@ -221,7 +221,7 @@ fun TopBar(
 
                 AssetImageButton(
                     modifier = Modifier.size(48.px),
-                    asset = Asset.Avatar.JUXTOPPOSED,
+                    asset = Asset.Channel.JUXTOPPOSED,
                 ) {}
             }
         }

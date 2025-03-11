@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.AssetSvgButtonType
+import com.google.youtube.components.widgets.SubscribeButton
 import com.google.youtube.components.widgets.VerticalDivider
 import com.google.youtube.components.widgets.context.RoundedSearchTextField
 import com.google.youtube.components.widgets.context.TextField
@@ -46,6 +47,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.rotate
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.overlay.PopupPlacement
 import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import kotlinx.coroutines.Dispatchers
@@ -61,13 +63,14 @@ import org.w3c.dom.HTMLElement
 @Composable
 fun CollectionsSubPage() {
     val navigator = LocalNavigator.current
+    val searchQueryState = remember { mutableStateOf("") }
     val collectionsDataProvider = remember { CollectionsDataProvider() }
     val collectionsData = remember { collectionsDataProvider.getCollections() }
 
     Column(modifier = Modifier.fillMaxWidth().padding(top = 40.px)) {
-        Filters()
+        Filters(searchQueryState)
         SpacedColumn(spacePx = 35, modifier = Modifier.fillMaxWidth().padding(topBottom = 47.px)) {
-            collectionsData.forEach { data ->
+            collectionsData.forEachIndexed { parentIndex, data ->
                 var isRowExpanded by remember { mutableStateOf(true) }
                 val animatedArrowRotation by animateFloatAsState(if (isRowExpanded) 180f else 0f)
                 val nameState = remember { mutableStateOf(data.name) }
@@ -151,67 +154,75 @@ fun CollectionsSubPage() {
                             showScrollButtons = true,
                             modifier = Modifier.padding(top = 16.px),
                         ) {
-                            data.channelItems.forEach { item ->
-                                var isChannelNameHovered by remember { mutableStateOf(false) }
-
-                                SpacedColumn(
-                                    spacePx = 20,
-                                    modifier = Modifier.noShrink().padding(leftRight = 10.px),
-                                    centerContentHorizontally = true,
-                                ) {
-                                    SpacedColumn(
-                                        spacePx = 16,
-                                        centerContentHorizontally = true,
-                                        modifier = Modifier
-                                            .clickable {
-                                                navigator.pushRoute(Route.Page(id = item.channelId))
-                                            }
-                                            .onMouseEnter { isChannelNameHovered = true }
-                                            .onMouseLeave { isChannelNameHovered = false }
-                                    ) {
-                                        Image(
-                                            modifier = Modifier.clip(Circle()),
-                                            src = item.avatarAsset,
-                                            width = 46,
-                                            height = 46,
-                                        )
-                                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                            SpacedRow(8) {
-                                                TextBox(
-                                                    modifier = Modifier
-                                                        .thenIf(isChannelNameHovered) {
-                                                            Modifier.textDecorationLine(
-                                                                TextDecorationLine.Underline
-                                                            )
-                                                        },
-                                                    text = item.channelName,
-                                                    size = 18,
-                                                    maxLines = 1,
-                                                    lineHeight = 28.3,
-                                                    weight = FontWeight.Medium,
-                                                )
-                                                Image(
-                                                    src = Asset.Icon.VERIFIED_BADGE,
-                                                    width = 15,
-                                                    height = 15,
-                                                )
-                                            }
-                                            TextBox(
-                                                text = "${item.subscribersCount} subscribers",
-                                                lineHeight = 23.1,
-                                                color = Styles.VIDEO_CARD_SECONDARY_TEXT,
-                                            )
-                                        }
-                                    }
-                                    // TODO: Replace with real subscribe button
-                                    AssetSvgButton(
-                                        id = "subscribe_button",
-                                        startIconPath = Asset.Path.NOTIFS_SELECTED,
-                                        text = "Subscribed",
-                                        onClick = {},
+                            data.channelItems
+                                .filter { item ->
+                                    item.channelName.contains(
+                                        searchQueryState.value,
+                                        ignoreCase = true,
                                     )
                                 }
-                            }
+                                .forEach { item ->
+                                    var isChannelNameHovered by remember { mutableStateOf(false) }
+
+                                    SpacedColumn(
+                                        spacePx = 20,
+                                        modifier = Modifier.noShrink().padding(leftRight = 10.px),
+                                        centerContentHorizontally = true,
+                                    ) {
+                                        SpacedColumn(
+                                            spacePx = 16,
+                                            centerContentHorizontally = true,
+                                            modifier = Modifier
+                                                .clickable {
+                                                    navigator.pushRoute(Route.Page(id = item.channelId))
+                                                }
+                                                .onMouseEnter { isChannelNameHovered = true }
+                                                .onMouseLeave { isChannelNameHovered = false }
+                                        ) {
+                                            Image(
+                                                modifier = Modifier.clip(Circle()),
+                                                src = item.avatarAsset,
+                                                width = 46,
+                                                height = 46,
+                                            )
+                                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                                SpacedRow(8) {
+                                                    TextBox(
+                                                        modifier = Modifier
+                                                            .thenIf(isChannelNameHovered) {
+                                                                Modifier.textDecorationLine(
+                                                                    TextDecorationLine.Underline
+                                                                )
+                                                            },
+                                                        text = item.channelName,
+                                                        size = 18,
+                                                        maxLines = 1,
+                                                        lineHeight = 28.3,
+                                                        weight = FontWeight.Medium,
+                                                    )
+                                                    Image(
+                                                        src = Asset.Icon.VERIFIED_BADGE,
+                                                        width = 15,
+                                                        height = 15,
+                                                    )
+                                                }
+                                                TextBox(
+                                                    text = "${item.subscribersCount} subscribers",
+                                                    lineHeight = 23.1,
+                                                    color = Styles.VIDEO_CARD_SECONDARY_TEXT,
+                                                )
+                                            }
+                                        }
+                                        SubscribeButton(
+                                            initialIsSubscribed = true,
+                                            popupPlacement = if (parentIndex == collectionsData.lastIndex) {
+                                                PopupPlacement.TopLeft
+                                            } else {
+                                                PopupPlacement.BottomLeft
+                                            },
+                                        )
+                                    }
+                                }
                         }
                     }
                 }
@@ -237,9 +248,8 @@ private suspend fun toggleTextField(
 }
 
 @Composable
-private fun Filters() {
+private fun Filters(searchQueryState: MutableState<String>) {
     val isSmallBreakpoint by rememberIsSmallBreakpoint()
-    val searchQueryState = remember { mutableStateOf("") }
     var isGridLayoutSelected by remember { mutableStateOf(true) }
 
     Wrap(horizontalGapPx = 16, modifier = Modifier.fillMaxWidth()) {

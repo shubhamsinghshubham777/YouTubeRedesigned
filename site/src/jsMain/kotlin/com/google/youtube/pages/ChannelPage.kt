@@ -5,9 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.google.youtube.components.widgets.AssetImageButton
-import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.CategoryTab
 import com.google.youtube.components.widgets.HorizontalDivider
+import com.google.youtube.components.widgets.SubscribeButton
 import com.google.youtube.components.widgets.channel.ChannelAboutPage
 import com.google.youtube.components.widgets.channel.ChannelChannelsPage
 import com.google.youtube.components.widgets.channel.ChannelHomePage
@@ -47,6 +47,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.overlay.PopupPlacement
 import com.varabyte.kobweb.silk.theme.shapes.Circle
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
@@ -219,17 +220,11 @@ private fun SocialLinks() {
             }
         }
 
-        // TODO: Replace with dedicated subscribe button (and use it in the whole codebase)
-        Box(
-            modifier = Modifier.thenIf(isSmallBreakpoint) { Modifier.align(Alignment.Start) }
-        ) {
-            AssetSvgButton(
-                id = "subscribe_button",
-                onClick = {},
-                startIconPath = Asset.Path.NOTIFS,
-                text = "Subscribed",
-            )
-        }
+        SubscribeButton(
+            initialIsSubscribed = true,
+            modifier = Modifier.thenIf(isSmallBreakpoint) { Modifier.align(Alignment.Start) },
+            popupPlacement = PopupPlacement.BottomRight,
+        )
     }
 }
 

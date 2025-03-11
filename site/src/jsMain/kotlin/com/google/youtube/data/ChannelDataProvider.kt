@@ -1,5 +1,6 @@
 package com.google.youtube.data
 
+import com.google.youtube.models.ChannelBriefPopupData
 import com.google.youtube.models.ChannelListItemData
 import com.google.youtube.models.VideoThumbnailDetails
 
@@ -47,4 +48,9 @@ class ChannelDataProvider {
     }
 
     fun getAllPosts(): List<ChannelListItemData.Post> = IN_MEMORY_POSTS
+
+    fun getChannelBriefForId(channelId: String): ChannelBriefPopupData {
+        return IN_MEMORY_CHANNEL_DATA.find { it.id == channelId }
+            ?: IN_MEMORY_CHANNEL_DATA.first()
+    }
 }

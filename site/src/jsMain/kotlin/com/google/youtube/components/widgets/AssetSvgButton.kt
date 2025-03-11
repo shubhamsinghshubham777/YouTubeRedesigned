@@ -19,6 +19,7 @@ import com.google.youtube.utils.toComposeColor
 import com.google.youtube.utils.toKobwebColor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.UserSelect
+import com.varabyte.kobweb.compose.dom.ElementRefScope
 import com.varabyte.kobweb.compose.dom.ref
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -50,11 +51,14 @@ import org.jetbrains.compose.web.css.marginRight
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.Element
+import org.w3c.dom.HTMLElement
 
 @Composable
 fun AssetSvgButton(
     onClick: () -> Unit,
     id: String,
+    modifier: Modifier = Modifier,
+    ref: ElementRefScope<HTMLElement>? = null,
     type: AssetSvgButtonType = AssetSvgButtonType.Button,
     iconPrimaryColor: Color? = null,
     iconSecondaryColor: Color? = null,
@@ -113,6 +117,7 @@ fun AssetSvgButton(
     )
 
     Box(
+        ref = ref,
         modifier = Modifier
             .noShrink()
             .height(
@@ -122,7 +127,8 @@ fun AssetSvgButton(
                 }
             )
             .background(animatedContainerColor.toKobwebColor())
-            .clip(Rect(borderRadius)),
+            .clip(Rect(borderRadius))
+            .then(modifier),
     ) {
         Row(
             ref = ref { elementRef = it },

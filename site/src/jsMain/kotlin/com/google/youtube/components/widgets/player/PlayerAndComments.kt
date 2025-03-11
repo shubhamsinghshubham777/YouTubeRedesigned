@@ -7,9 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
-import com.google.youtube.components.widgets.AssetSvgButton
 import com.google.youtube.components.widgets.IconLabel
 import com.google.youtube.components.widgets.SegmentedButtonPair
+import com.google.youtube.components.widgets.SubscribeButton
 import com.google.youtube.components.widgets.UnderlinedToggleText
 import com.google.youtube.components.widgets.comments.CommentsSection
 import com.google.youtube.data.VideoPlayerDataProvider
@@ -143,13 +143,7 @@ fun PlayerAndComments(
                         )
                     }
                 }
-                AssetSvgButton(
-                    id = "subscribe_button",
-                    onClick = {},
-                    containerColor = Styles.PINK_DARKENED,
-                    contentColor = Styles.WHITE,
-                    text = "Subscribe",
-                )
+                SubscribeButton()
             }
             SpacedRow(24) {
                 IconLabel(iconAsset = Asset.Icon.EYE, label = videoDetails.viewCount)
