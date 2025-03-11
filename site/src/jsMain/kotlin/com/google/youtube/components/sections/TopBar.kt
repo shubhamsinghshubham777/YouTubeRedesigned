@@ -75,8 +75,12 @@ fun TopBar(
     onOpenNotificationPanel: () -> Unit,
     onSearch: (query: String) -> Unit,
 ) {
+    var addBtnRef by remember { mutableStateOf<HTMLElement?>(null) }
     var notificationBtnRef by remember { mutableStateOf<HTMLElement?>(null) }
+    var settingsBtnRef by remember { mutableStateOf<HTMLElement?>(null) }
+    var accountBtnRef by remember { mutableStateOf<HTMLElement?>(null) }
     var textInputRef by remember { mutableStateOf<HTMLElement?>(null) }
+
     val breakpoint = rememberBreakpoint()
 
     var searchQuery by remember { mutableStateOf("") }
@@ -184,7 +188,7 @@ fun TopBar(
                     .height(44.px)
                     .padding(topBottom = 12.px)
                     .clickable(onClick = onLogoClick),
-                src = Asset.Icon.YOUTUBE_LOGO
+                src = Asset.Icon.YOUTUBE_LOGO,
             )
 
             Spacer()
@@ -198,10 +202,23 @@ fun TopBar(
             ) {
                 AssetImageButton(
                     modifier = TopBarSearchButtonStyle.toModifier(),
-                    asset = Asset.Icon.SEARCH
+                    asset = Asset.Icon.SEARCH,
                 ) { showSearchBar = true }
 
-                if (breakpoint isGreaterThan Breakpoint.SM) AssetImageButton(Asset.Icon.ADD) {}
+                if (breakpoint isGreaterThan Breakpoint.SM) {
+                    AssetImageButton(
+                        asset = Asset.Icon.ADD,
+                        onRefAvailable = { addBtnRef = it },
+                    ) {}
+
+                    addBtnRef?.let {
+                        Tooltip(
+                            target = ElementTarget.of(it),
+                            text = "Add Video / Post",
+                            showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
+                        )
+                    }
+                }
 
                 AssetImageButton(
                     asset = Asset.Icon.NOTIFS,
@@ -217,12 +234,32 @@ fun TopBar(
                     )
                 }
 
-                AssetImageButton(Asset.Icon.SETTINGS) {}
+                AssetImageButton(
+                    asset = Asset.Icon.SETTINGS,
+                    onRefAvailable = { settingsBtnRef = it },
+                ) {}
+
+                settingsBtnRef?.let {
+                    Tooltip(
+                        target = ElementTarget.of(it),
+                        text = "Settings",
+                        showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
+                    )
+                }
 
                 AssetImageButton(
                     modifier = Modifier.size(48.px),
+                    onRefAvailable = { accountBtnRef = it },
                     asset = Asset.Channel.JUXTOPPOSED,
                 ) {}
+
+                accountBtnRef?.let {
+                    Tooltip(
+                        target = ElementTarget.of(it),
+                        text = "Account",
+                        showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
+                    )
+                }
             }
         }
 

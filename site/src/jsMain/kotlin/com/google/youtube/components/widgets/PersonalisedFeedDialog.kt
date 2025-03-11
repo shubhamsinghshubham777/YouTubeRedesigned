@@ -1,16 +1,20 @@
 package com.google.youtube.components.widgets
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.youtube.components.widgets.context.TextField
 import com.google.youtube.models.TagData
 import com.google.youtube.utils.Asset
+import com.google.youtube.utils.Constants
 import com.google.youtube.utils.PaddingValues
 import com.google.youtube.utils.Styles
+import com.varabyte.kobweb.browser.dom.ElementTarget
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -32,7 +36,9 @@ import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.width
+import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.toAttrs
+import com.varabyte.kobweb.silk.components.overlay.Tooltip
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import org.jetbrains.compose.web.css.DisplayStyle
@@ -42,12 +48,15 @@ import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.css.vw
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
+import org.w3c.dom.HTMLElement
 
 @Composable
 fun PersonalisedFeedDialog(
     contentPadding: PaddingValues = PaddingValues(24.px),
     onClose: () -> Unit,
 ) {
+    var closeBtnRef by remember { mutableStateOf<HTMLElement?>(null) }
+
     val allTags = remember {
         mutableStateListOf(
             TagData("Subscriptions", Asset.Path.SUBSCRIPTIONS),
@@ -107,7 +116,19 @@ fun PersonalisedFeedDialog(
             Spacer()
             Row(modifier = Modifier.opacity(0.5f)) {
                 AssetImageButton(Asset.Icon.SETTINGS) {}
-                AssetImageButton(Asset.Icon.CLOSE, onClick = onClose)
+                AssetImageButton(
+                    asset = Asset.Icon.CLOSE,
+                    onRefAvailable = { e -> closeBtnRef = e },
+                    onClick = onClose,
+                )
+                closeBtnRef?.let {
+                    Tooltip(
+                        modifier = Modifier.zIndex(1),
+                        target = ElementTarget.of(it),
+                        text = "Close (Esc)",
+                        showDelayMs = Constants.POPUP_SHOW_DELAY_MS,
+                    )
+                }
             }
         }
 
