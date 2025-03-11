@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateRectAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
@@ -55,11 +56,12 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ReorderableList(
+    state: ReorderableListState = ReorderableListState(),
     modifier: Modifier = Modifier,
     verticalSpacePx: Int? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    CompositionLocalProvider(LocalReorderableListState provides remember { ReorderableListState() }) {
+    CompositionLocalProvider(LocalReorderableListState provides state) {
         Column(
             modifier = modifier.scrollBehavior(ScrollBehavior.Smooth),
             verticalArrangement = verticalSpacePx?.let { space ->
@@ -86,8 +88,13 @@ fun ReorderableListItem(
             state.rectForIndexAsState(safeIndex).value.toRect()
         } ?: Rect.Zero
     )
-    val animatedScale by animateFloatAsState(targetValue = if (isDragged) onPressScale else 1f, animationSpec = tween())
+    val animatedScale by animateFloatAsState(
+        targetValue = if (isDragged) onPressScale else 1f,
+        animationSpec = tween()
+    )
     val animatedTranslationY by animateIntAsState(if (isDragged) state.translationY else 0)
+
+    LaunchedEffect(stateRect) { state.updateTopIndex(index, stateRect) }
 
     Box(
         ref = ref { e ->
@@ -127,6 +134,9 @@ class ReorderableListState {
         private set
 
     var translationY by mutableIntStateOf(0)
+        private set
+
+    var topIndex by mutableIntStateOf(0)
         private set
 
     private val rects = mutableStateListOf<IntRect>()
@@ -211,6 +221,11 @@ class ReorderableListState {
             rects[index] = rects[safeDragIndex]
             rects[safeDragIndex] = temp
         }
+    }
+
+    fun updateTopIndex(index: Int?, rect: Rect?) {
+        val isOnTop = rect?.top?.toInt() == rects.minOf { it.top }
+        if (isOnTop) topIndex = index ?: return
     }
 }
 

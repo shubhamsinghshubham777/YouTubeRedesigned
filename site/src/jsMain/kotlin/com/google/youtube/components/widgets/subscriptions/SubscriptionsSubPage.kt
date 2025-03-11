@@ -47,7 +47,7 @@ import org.jetbrains.compose.web.dom.Text
 @Composable
 fun SubscriptionsSubPage() {
     val searchQueryState = remember { mutableStateOf("") }
-    val viewAsTimeline = remember { mutableStateOf(true) }
+    val viewAsTimeline = remember { mutableStateOf(false) }
     var selectedFilter by remember { mutableStateOf("All") }
     val subscriptionsDataProvider = remember { SubscriptionsDataProvider() }
     val timelineData = remember(subscriptionsDataProvider) {

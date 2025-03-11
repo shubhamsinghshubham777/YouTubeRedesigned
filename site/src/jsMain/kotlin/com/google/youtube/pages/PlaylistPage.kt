@@ -15,20 +15,20 @@ import com.google.youtube.components.widgets.PlaylistListItem
 import com.google.youtube.components.widgets.RadioButton
 import com.google.youtube.components.widgets.SegmentedButtonPair
 import com.google.youtube.components.widgets.context.RoundedSearchTextField
+import com.google.youtube.data.PlaylistDataProvider
 import com.google.youtube.models.PlaylistItemData
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Asset
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.ReorderableList
 import com.google.youtube.utils.ReorderableListItem
+import com.google.youtube.utils.ReorderableListState
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.SpacedColumn
 import com.google.youtube.utils.SpacedRow
 import com.google.youtube.utils.Styles
 import com.google.youtube.utils.TextBox
 import com.google.youtube.utils.Wrap
-import com.google.youtube.utils.addDurations
-import com.google.youtube.utils.addOrdinals
 import com.google.youtube.utils.clickable
 import com.google.youtube.utils.rememberIsSmallBreakpoint
 import com.varabyte.kobweb.compose.css.Cursor
@@ -70,30 +70,33 @@ fun PlaylistPage(id: String) {
 
     val isGridModeSelected = remember { mutableStateOf(false) }
     val searchQueryState = remember { mutableStateOf("") }
-    val videoDetails = remember {
-        List(10) { index ->
-            VideoThumbnailDetails(
-                id = "axcpum${index}wldq",
-                channelAsset = Asset.Icon.USER_AVATAR,
-                channelName = "Juxtopposed",
-                daysSinceUploaded = "1 day",
-                duration = "12:07",
-                uploadDate = "10 Dec 2024",
-                isVerified = true,
-                subscribersCount = "295K",
-                thumbnailAsset = Asset.Thumbnails.THUMBNAIL_1,
-                title = "I Redesigned the ENTIRE YouTube UI from Scratch",
-                views = "120K",
-                likeCount = "20K",
-                dislikeCount = "100",
-            )
+
+    // Reorderable States
+    // TODO: See if these states can be combined
+    val smallBreakpointReorderableState = remember { ReorderableListState() }
+    val largeBreakpointReorderableState = remember { ReorderableListState() }
+    val activeReorderableState by remember {
+        derivedStateOf {
+            if (isSmallBreakpoint) smallBreakpointReorderableState
+            else largeBreakpointReorderableState
         }
     }
-    val isSelectedStates = remember {
-        mutableStateListOf(*Array(size = videoDetails.size) { false })
-    }
 
-    SpacedColumn(spacePx = 32, modifier = Modifier.fillMaxWidth()) {
+    // Data States
+    val playlistDataProvider = remember { PlaylistDataProvider() }
+    val videos = remember(playlistDataProvider) {
+        playlistDataProvider.getVideosForPlaylistWithId(id)
+    }
+    val activeThumbnailRef: String? = remember(activeReorderableState.topIndex) {
+        videos.elementAtOrNull(activeReorderableState.topIndex)?.thumbnailAsset
+    }
+    val playlistDetails: PlaylistItemData = remember(playlistDataProvider, activeThumbnailRef) {
+        val playlist = playlistDataProvider.getPlaylistForId(id)
+        playlist.copy(thumbnailImageRef = activeThumbnailRef ?: playlist.thumbnailImageRef)
+    }
+    val isSelectedStates = remember { mutableStateListOf(*Array(size = videos.size) { false }) }
+
+    SpacedColumn(spacePx = 32, modifier = Modifier.fillMaxWidth().padding(bottom = 32.px)) {
         // Bordered container
         Box(
             modifier = Modifier
@@ -103,7 +106,7 @@ fun PlaylistPage(id: String) {
                 .padding(24.px)
         ) {
             PlaylistListItem(
-                data = remember(id, videoDetails) { getSamplePlaylistPage(id, videoDetails) },
+                data = playlistDetails,
                 showThumbnailColorPalette = false,
                 isEditable = true,
             )
@@ -154,11 +157,15 @@ fun PlaylistPage(id: String) {
         }
 
         if (isSmallBreakpoint) {
-            ReorderableList(modifier = Modifier.fillMaxWidth(), verticalSpacePx = 30) {
-                videoDetails.forEachIndexed { index, details ->
+            ReorderableList(
+                state = smallBreakpointReorderableState,
+                modifier = Modifier.fillMaxWidth(),
+                verticalSpacePx = REORDERABLE_LIST_VERTICAL_SPACE_PX,
+            ) {
+                videos.forEachIndexed { index, details ->
                     ReorderableListItem(
                         modifier = Modifier.fillMaxWidth(),
-                        onPressScale = 0.99f,
+                        onPressScale = REORDERABLE_LIST_ON_PRESS_SCALE,
                         handle = { GrabHandle() },
                         content = { handle ->
                             SmallListItem(
@@ -176,11 +183,15 @@ fun PlaylistPage(id: String) {
                 }
             }
         } else {
-            ReorderableList(modifier = Modifier.fillMaxWidth(), verticalSpacePx = 30) {
-                videoDetails.forEachIndexed { index, details ->
+            ReorderableList(
+                state = largeBreakpointReorderableState,
+                modifier = Modifier.fillMaxWidth(),
+                verticalSpacePx = REORDERABLE_LIST_VERTICAL_SPACE_PX,
+            ) {
+                videos.forEachIndexed { index, details ->
                     ReorderableListItem(
                         modifier = Modifier.fillMaxWidth(),
-                        onPressScale = 0.99f,
+                        onPressScale = REORDERABLE_LIST_ON_PRESS_SCALE,
                         handle = { GrabHandle() },
                         content = { handle ->
                             LargeListItem(
@@ -409,20 +420,5 @@ private fun RadioButtonWithHandle(
     }
 }
 
-private fun getSamplePlaylistPage(
-    id: String,
-    detailsList: List<VideoThumbnailDetails>,
-): PlaylistItemData? {
-    val details = detailsList.firstOrNull() ?: return null
-    return PlaylistItemData(
-        id = id,
-        name = details.title,
-        channelName = details.channelName,
-        thumbnailImageRef = details.thumbnailAsset,
-        isChannelVerified = details.isVerified,
-        subscriberCount = details.subscribersCount.orEmpty(),
-        viewsCount = detailsList.map { it.views }.reduce(::addOrdinals),
-        videosCount = detailsList.size,
-        totalDuration = detailsList.map { it.duration }.reduce(::addDurations),
-    )
-}
+private const val REORDERABLE_LIST_VERTICAL_SPACE_PX = 30
+private const val REORDERABLE_LIST_ON_PRESS_SCALE = 0.99f

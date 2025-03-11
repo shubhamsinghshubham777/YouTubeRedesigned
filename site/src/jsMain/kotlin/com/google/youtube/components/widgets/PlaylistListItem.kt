@@ -1,6 +1,7 @@
 package com.google.youtube.components.widgets
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -8,9 +9,11 @@ import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.google.youtube.data.PlaylistDataProvider
 import com.google.youtube.models.PlaylistItemData
 import com.google.youtube.utils.Asset
 import com.google.youtube.utils.Constants
+import com.google.youtube.utils.Crossfade
 import com.google.youtube.utils.LocalNavigator
 import com.google.youtube.utils.Route
 import com.google.youtube.utils.SpacedColumn
@@ -43,6 +46,8 @@ import com.varabyte.kobweb.compose.ui.modifiers.onMouseLeave
 import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
+import com.varabyte.kobweb.compose.ui.modifiers.width
+import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.theme.shapes.Circle
@@ -56,12 +61,30 @@ import org.w3c.dom.DOMRectReadOnly
 
 @Composable
 fun PlaylistListItem(
-    data: PlaylistItemData?,
+    data: PlaylistItemData,
     showThumbnailColorPalette: Boolean = true,
     isEditable: Boolean = false,
 ) {
     val navigator = LocalNavigator.current
     val isSmallBreakpoint by rememberIsSmallBreakpoint()
+
+    // Data States
+    val playlistDataProvider = remember { PlaylistDataProvider() }
+    val firstVideo = remember(playlistDataProvider) {
+        playlistDataProvider.getVideosForPlaylistWithId(data.id).first()
+    }
+
+    val onViewPlaylist: () -> Unit = remember {
+        {
+            navigator.pushRoute(Route.Playlist(id = data.id))
+        }
+    }
+    val onPlayAll: () -> Unit = remember {
+        {
+            navigator.pushRoute(Route.Video(id = firstVideo.id))
+        }
+    }
+
     val content = remember {
         movableContentOf {
             SpacedRow(
@@ -74,18 +97,23 @@ fun PlaylistListItem(
                     modifier = Modifier.weight(1).margin(top = 9.px),
                 ) {
                     TextBox(
-                        text = data?.name.orEmpty(),
+                        text = data.name,
                         size = 18,
                         weight = FontWeight.Medium,
                         lineHeight = 25,
                     )
                     Wrap(8) {
-                        Image(src = Asset.Icon.USER_AVATAR, width = 28, height = 28)
+                        Image(
+                            modifier = Modifier.clip(Circle()),
+                            src = data.channelAsset,
+                            width = 28,
+                            height = 28,
+                        )
                         TextBox(
-                            text = data?.channelName.orEmpty(),
+                            text = data.channelName.orEmpty(),
                             modifier = Modifier.margin(left = 7.px)
                         )
-                        if (data?.isChannelVerified == true) {
+                        if (data.isChannelVerified) {
                             Image(
                                 src = Asset.Icon.VERIFIED_BADGE,
                                 width = 15,
@@ -93,7 +121,7 @@ fun PlaylistListItem(
                             )
                         }
                         TextBox(
-                            text = "${data?.subscriberCount ?: 0} subscribers",
+                            text = "${data.subscriberCount} subscribers",
                             size = 14,
                             color = Styles.VIDEO_CARD_SECONDARY_TEXT
                         )
@@ -101,45 +129,45 @@ fun PlaylistListItem(
                     Wrap(horizontalGapPx = 24, verticalGapPx = 8) {
                         IconLabel(
                             iconAsset = Asset.Icon.EYE,
-                            label = (data?.viewsCount ?: 0).toString(),
+                            label = data.viewsCount,
                             secondaryLabel = "views",
                         )
                         IconLabel(
                             iconAsset = Asset.Icon.PLAY,
-                            label = data?.videosCount.toString(),
+                            label = data.videosCount.toString(),
                             secondaryLabel = "videos",
                         )
                         IconLabel(
                             iconAsset = Asset.Icon.DURATION,
-                            label = data?.totalDuration.orEmpty(),
+                            label = data.totalDuration,
                             secondaryLabel = "duration",
                         )
                     }
                     Wrap(horizontalGapPx = 15, modifier = Modifier.fillMaxWidth()) {
                         AssetSvgButton(
-                            id = "play_all_button_${data?.name.orEmpty()}",
+                            id = "play_all_button_${data.name}",
                             isDense = true,
                             startIconPath = Asset.Path.PLAY,
                             text = "Play All",
                             isSelected = true,
-                            onClick = {},
+                            onClick = onPlayAll,
                         )
                         AssetSvgButton(
-                            id = "share_button_${data?.name.orEmpty()}",
+                            id = "share_button_${data.name}",
                             isDense = true,
                             startIconPath = Asset.Path.SHARE,
                             text = "Share",
                             onClick = {},
                         )
                         AssetSvgButton(
-                            id = "add_video_button_${data?.name.orEmpty()}",
+                            id = "add_video_button_${data.name}",
                             isDense = true,
                             startIconPath = Asset.Path.ADD_SOLO,
                             text = "Add video",
                             onClick = {},
                         )
                         AssetSvgButton(
-                            id = "download_button_${data?.name.orEmpty()}",
+                            id = "download_button_${data.name}",
                             isDense = true,
                             startIconPath = Asset.Path.DOWNLOAD,
                             text = "Download",
@@ -155,19 +183,13 @@ fun PlaylistListItem(
             }
         }
     }
-    val onViewPlaylist: () -> Unit = remember {
-        {
-            data?.id?.let { id -> navigator.pushRoute(Route.Playlist(id = id)) }
-        }
-    }
-    val onPlayAll: () -> Unit = remember { {} }
 
     Box(modifier = Modifier.fillMaxWidth().clickable(onClick = onViewPlaylist)) {
         if (isSmallBreakpoint) {
             SpacedColumn(spacePx = 8, modifier = Modifier.fillMaxWidth()) {
                 StackedThumbnail(
-                    assetRef = Asset.Thumbnails.THUMBNAIL_1,
-                    videosCount = if (isEditable) null else data?.videosCount,
+                    assetRef = data.thumbnailImageRef,
+                    videosCount = if (isEditable) null else data.videosCount,
                     modifier = Modifier.fillMaxWidth(),
                     showThumbnailColorPalette = showThumbnailColorPalette,
                     onViewPlaylist = if (isEditable) null else onViewPlaylist,
@@ -182,8 +204,9 @@ fun PlaylistListItem(
                 centerContentVertically = false,
             ) {
                 StackedThumbnail(
-                    assetRef = Asset.Thumbnails.THUMBNAIL_1,
-                    videosCount = if (isEditable) null else data?.videosCount,
+                    modifier = Modifier.width(332.px),
+                    assetRef = data.thumbnailImageRef,
+                    videosCount = if (isEditable) null else data.videosCount,
                     showThumbnailColorPalette = showThumbnailColorPalette,
                     onViewPlaylist = if (isEditable) null else onViewPlaylist,
                     onPlayAll = if (isEditable) null else onPlayAll,
@@ -204,6 +227,7 @@ private fun StackedThumbnail(
     modifier: Modifier = Modifier,
     borderRadius: CSSLengthOrPercentageValue = 20.px,
 ) {
+    val updatedAssetRef = updateTransition(assetRef).currentState
     var paletteColors by remember { mutableStateOf<List<String>?>(null) }
     val commonModifier = remember(paletteColors) {
         Modifier
@@ -216,7 +240,9 @@ private fun StackedThumbnail(
     val hoveredControlsAnimatedOpacity by animateFloatAsState(if (isImageHovered) 1f else 0f)
 
     LaunchedEffect(assetRef, showThumbnailColorPalette) {
-        if (showThumbnailColorPalette) { paletteColors = generateColorPalette(assetRef) }
+        if (showThumbnailColorPalette) {
+            paletteColors = generateColorPalette(assetRef)
+        }
     }
 
     SpacedColumn(
@@ -254,30 +280,36 @@ private fun StackedThumbnail(
                         .onMouseLeave { isImageHovered = false }
                 },
         ) {
-            Image(
-                ref = if (!showHoveredControls) null else disposableRef { e ->
-                    imageRect = e.getBoundingClientRect()
-                    val observer = ResizeObserver { entries ->
-                        entries.firstOrNull()?.let { entry -> imageRect = entry.contentRect }
-                    }
-                    observer.observe(e)
-                    onDispose {
-                        with(observer) {
-                            disconnect()
-                            unobserve(e)
+            Crossfade(
+                targetState = updatedAssetRef,
+                modifier = Modifier.fillMaxSize(),
+                animateTranslationY = false,
+            ) { animatedAssetRef ->
+                Image(
+                    ref = if (!showHoveredControls) null else disposableRef { e ->
+                        imageRect = e.getBoundingClientRect()
+                        val observer = ResizeObserver { entries ->
+                            entries.firstOrNull()?.let { entry -> imageRect = entry.contentRect }
                         }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .aspectRatio(
-                        width = Constants.SUGGESTION_THUMBNAIL_SIZE.width,
-                        height = Constants.SUGGESTION_THUMBNAIL_SIZE.height
-                    )
-                    .borderRadius(borderRadius)
-                    .objectFit(ObjectFit.Cover),
-                src = assetRef,
-            )
+                        observer.observe(e)
+                        onDispose {
+                            with(observer) {
+                                disconnect()
+                                unobserve(e)
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .aspectRatio(
+                            width = Constants.SUGGESTION_THUMBNAIL_SIZE.width,
+                            height = Constants.SUGGESTION_THUMBNAIL_SIZE.height
+                        )
+                        .borderRadius(borderRadius)
+                        .objectFit(ObjectFit.Cover),
+                    src = animatedAssetRef,
+                )
+            }
             videosCount?.let { count ->
                 SpacedRow(
                     spacePx = 8,
@@ -309,7 +341,8 @@ private fun StackedThumbnail(
                             .background(Styles.BLACK.copyf(alpha = 0.5f))
                             .borderRadius(borderRadius)
                             .opacity(hoveredControlsAnimatedOpacity)
-                            .size(width = rect.width.px, height = rect.height.px),
+                            .size(width = rect.width.px, height = rect.height.px)
+                            .zIndex(1),
                         contentAlignment = Alignment.Center,
                     ) {
                         SpacedRow(15) {

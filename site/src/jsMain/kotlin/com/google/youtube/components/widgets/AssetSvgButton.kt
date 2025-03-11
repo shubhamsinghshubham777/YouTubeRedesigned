@@ -143,7 +143,7 @@ fun AssetSvgButton(
                             AssetSvgButtonType.Button -> when {
                                 startIconPath != null && isDense -> 12f
                                 startIconPath != null -> 16f
-                                else -> if (isDense) 12f else 24f
+                                else -> if (text == null && isDense) 12f else 24f
                             }
 
                             else -> if (startIconPath != null || content != null) 12f else 16f
@@ -154,7 +154,7 @@ fun AssetSvgButton(
                             AssetSvgButtonType.Button -> when {
                                 endIconPath != null && isDense -> 12f
                                 endIconPath != null -> 16f
-                                else -> if (isDense) 12f else 24f
+                                else -> if (text == null && isDense) 12f else 24f
                             }
 
                             else -> {

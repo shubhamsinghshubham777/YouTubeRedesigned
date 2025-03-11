@@ -1,6 +1,7 @@
 package com.google.youtube.data
 
 import com.google.youtube.models.ChannelListItemData
+import com.google.youtube.models.PlaylistItemData
 import com.google.youtube.models.ShortThumbnailDetails
 import com.google.youtube.models.VideoThumbnailDetails
 import com.google.youtube.utils.Asset
@@ -27,6 +28,10 @@ val IN_MEMORY_THUMBNAIL_DETAILS = listOf(
         isVerified = true,
         views = "433K",
         daysSinceUploaded = "1 month",
+        subscribersCount = "288K",
+        uploadDate = "1 Oct 2024",
+        likeCount = "20K",
+        dislikeCount = "100",
     ),
     VideoThumbnailDetails(
         id = "s6lb42MNOPQ",
@@ -60,6 +65,10 @@ val IN_MEMORY_THUMBNAIL_DETAILS = listOf(
         isVerified = true,
         views = "50K",
         daysSinceUploaded = "1 day",
+        subscribersCount = "288K",
+        uploadDate = "15 Dec 2024",
+        likeCount = "20K",
+        dislikeCount = "100",
     ),
     VideoThumbnailDetails(
         id = "b1wq73JUIOP",
@@ -170,6 +179,10 @@ val IN_MEMORY_THUMBNAIL_DETAILS = listOf(
         isVerified = true,
         views = "1.7M",
         daysSinceUploaded = "5 months",
+        subscribersCount = "288K",
+        uploadDate = "27 May 2024",
+        likeCount = "20K",
+        dislikeCount = "100",
     ),
     VideoThumbnailDetails(
         id = "u2qm13POIUYT",
@@ -181,6 +194,10 @@ val IN_MEMORY_THUMBNAIL_DETAILS = listOf(
         isVerified = true,
         views = "140K",
         daysSinceUploaded = "2 weeks",
+        subscribersCount = "288K",
+        uploadDate = "12 Nov 24",
+        likeCount = "20K",
+        dislikeCount = "100",
     ),
     VideoThumbnailDetails(
         id = "i3et90MNBVCX",
@@ -843,4 +860,19 @@ val IN_MEMORY_POSTS = listOf(
         postAsset = Asset.Post.DISCORD,
         isPinned = false,
     ),
+)
+
+val IN_MEMORY_PLAYLISTS: List<PlaylistItemData> = listOf(
+    PlaylistItemData(
+        id = "z8fr54ZXCVBNMA",
+        name = "Redesigns",
+        channelName = "Juxtopposed",
+        channelAsset = Asset.Channel.JUXTOPPOSED,
+        thumbnailImageRef = Asset.Thumbnail.Feed.WE_ARE_DONE,
+        isChannelVerified = true,
+        subscriberCount = "288K",
+        viewsCount = "50",
+        videosCount = 15,
+        totalDuration = "2:51:23",
+    )
 )

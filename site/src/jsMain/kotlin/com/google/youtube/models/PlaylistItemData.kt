@@ -7,6 +7,7 @@ data class PlaylistItemData(
     val id: String,
     val name: String,
     val channelName: String?,
+    val channelAsset: String,
     val thumbnailImageRef: String,
     val isChannelVerified: Boolean,
     val subscriberCount: String,
