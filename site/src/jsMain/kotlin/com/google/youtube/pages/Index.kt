@@ -10,6 +10,12 @@ import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import kotlinx.browser.window
 
+@Page("404")
+@Composable
+fun FallbackPage() {
+    IndexPage()
+}
+
 @Page("{...path?}")
 @Composable
 fun IndexPage() {
