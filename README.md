@@ -89,6 +89,8 @@ Get quick insights into channels without leaving the page.
 | `l`           | Seek forward (10 seconds)       |
 | `Arrow Left`  | Seek back (5 seconds)           |
 | `Arrow Right` | Seek forward (5 seconds)        |
+| `Arrow Down`  | Reduce volume (by 10%)          |
+| `Arrow Up`    | Increase volume (by 10%)        |
 
 ## Work In Progress: Join the Journey 🚧
 
