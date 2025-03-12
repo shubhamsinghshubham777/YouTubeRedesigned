@@ -5,32 +5,38 @@ import com.google.youtube.models.VideoThumbnailDetails
 
 class FeedProvider {
     fun getMissedFeed(): List<VideoThumbnailDetails> {
-        return IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
-            details.id == "r0ju95BXZGW" ||
-                    details.id == "p3va17HYCEF" ||
-                    details.id == "s6lb42MNOPQ" ||
-                    details.id == "g8df39ASDFJ"
-        }
+        return List(2) {
+            IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
+                details.id == "r0ju95BXZGW" ||
+                        details.id == "p3va17HYCEF" ||
+                        details.id == "s6lb42MNOPQ" ||
+                        details.id == "g8df39ASDFJ"
+            }
+        }.flatten()
     }
 
     fun getNormalFeed(): List<VideoThumbnailDetails> {
-        return IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
-            details.id == "m9kd28VOTLK" ||
-                    details.id == "b1wq73JUIOP" ||
-                    details.id == "z5cn61WZXCV" ||
-                    details.id == "a2fv50QWERA" ||
-                    details.id == "h7pe86NBVCX" ||
-                    details.id == "j4yi92LKJHG"
-        }
+        return List(3) {
+            IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
+                details.id == "m9kd28VOTLK" ||
+                        details.id == "b1wq73JUIOP" ||
+                        details.id == "z5cn61WZXCV" ||
+                        details.id == "a2fv50QWERA" ||
+                        details.id == "h7pe86NBVCX" ||
+                        details.id == "j4yi92LKJHG"
+            }
+        }.flatten()
     }
 
     fun getRecentWatchSuggestedFeed(): List<VideoThumbnailDetails> {
-        return IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
-            details.id == "x0gc74PYUIO" ||
-                    details.id == "n5rt21KLMNO" ||
-                    details.id == "c4dh98ZXCVB" ||
-                    details.id == "f6bq35CVBNM"
-        }
+        return List(2) {
+            IN_MEMORY_THUMBNAIL_DETAILS.filter { details ->
+                details.id == "x0gc74PYUIO" ||
+                        details.id == "n5rt21KLMNO" ||
+                        details.id == "c4dh98ZXCVB" ||
+                        details.id == "f6bq35CVBNM"
+            }
+        }.flatten()
     }
 
     fun getShortsFeed(): List<ShortThumbnailDetails> {

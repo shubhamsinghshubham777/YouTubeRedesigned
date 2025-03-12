@@ -314,7 +314,8 @@ private fun ShortVideoPlayer(
                     Breakpoint.LG -> 560.px
                     Breakpoint.XL -> 600.px
                 },
-                height = if (isShortWindowState.value) 80.vh else 85.vh,
+                height = if (isShortWindowState.value) 80.vh
+                else 100.vh - TopBarDefaults.HEIGHT - 40.px,
             )
     }
 

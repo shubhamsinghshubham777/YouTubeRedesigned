@@ -70,7 +70,7 @@ fun MissedVideosContainer(modifier: Modifier = Modifier, videos: List<VideoThumb
                 AssetImageButton(Asset.Icon.CLOSE) { showContainer = false }
             }
 
-            Box {
+            Box(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     ref = ref { elementRef -> rowRef = elementRef },
                     modifier = Modifier

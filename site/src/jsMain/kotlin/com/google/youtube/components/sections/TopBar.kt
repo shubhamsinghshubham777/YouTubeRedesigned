@@ -39,6 +39,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.width
@@ -100,6 +101,7 @@ fun TopBar(
         movableContentOf<Modifier> { modifier ->
             Row(
                 modifier = modifier
+                    .maxWidth(640.px)
                     .margin(left = 24.px, right = 12.px)
                     .border(
                         width = if (isTextFieldFocused) 1.5.px else 1.px,
