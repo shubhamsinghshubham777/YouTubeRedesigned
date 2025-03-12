@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://github.com/user-attachments/assets/3a7fca5b-598c-4d13-8bfc-1aadf08283c5" width=150 />
-  <h1>✨ Reimagine YouTube: A Stunning, Next-Gen Experience ✨</h1>
+  <h1>✨ Reimagine YouTube: A Stunning, Next-Gen Experience</h1>
   <p>Dive into a sleek, modern YouTube redesign, crafted with the power of Kotlin/JS and Jetpack Compose for Web. Experience your favorite content like never before!</p>
   <a href="https://youtuberedesignedv2.netlify.app/">🚀 Explore the Live Demo</a>
 </div>
