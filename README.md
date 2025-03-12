@@ -85,6 +85,10 @@ Get quick insights into channels without leaving the page.
 | `c`           | Toggle Closed Captions (On/Off) |
 | `t`           | Toggle Theater Mode (On/Off)    |
 | `f`           | Toggle Fullscreen Mode (On/Off) |
+| `j`           | Seek back (10 seconds)          |
+| `l`           | Seek forward (10 seconds)       |
+| `Arrow Left`  | Seek back (5 seconds)           |
+| `Arrow Right` | Seek forward (5 seconds)        |
 
 ## Work In Progress: Join the Journey 🚧
 
