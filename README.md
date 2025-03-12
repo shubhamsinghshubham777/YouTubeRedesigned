@@ -14,7 +14,7 @@ Imagine a YouTube that's not just functional, but visually breathtaking. We've t
 ## Why You'll Love This Redesign:
 
 * **Modern & Intuitive:** A fresh, clean interface that enhances your viewing experience. 🌟
-* **Powered by Kotlin/JS & Kobweb:** Experience the future of web development with seamless performance and elegant code. 💻
+* **Powered by Kotlin/JS & [Kobweb](https://github.com/varabyte/kobweb):** Experience the future of web development with seamless performance and elegant code. 💻
 * **Jetpack Compose for Web Magic:** Leverage the power of Compose to build beautiful, responsive UIs with ease. ✨
 * **Feature-Rich:** From dynamic drawers and intuitive playlists to immersive theater mode, we've got you covered. 🎬
 * **Keyboard Shortcuts:** Navigate like a pro with intuitive keyboard controls for the video player. ⌨️
