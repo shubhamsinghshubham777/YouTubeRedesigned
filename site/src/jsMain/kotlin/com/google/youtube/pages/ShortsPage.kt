@@ -207,7 +207,7 @@ private fun ShortVideoPlayer(
                         with(videoPlayer) {
                             this.controls = false
                             this.loop = true
-                            this.src = "/videos/SampleVideo_1280x720_10mb.mp4"
+                            this.src = details.videoUrl
                             this.volume = 1.0
                         }
                     }

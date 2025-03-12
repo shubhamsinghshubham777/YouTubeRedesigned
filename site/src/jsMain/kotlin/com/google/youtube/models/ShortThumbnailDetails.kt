@@ -6,6 +6,7 @@ import androidx.compose.runtime.Immutable
 data class ShortThumbnailDetails(
     val id: String,
     val thumbnailAsset: String,
+    val videoUrl: String,
     val title: String,
     val channelName: String,
     val channelAsset: String,

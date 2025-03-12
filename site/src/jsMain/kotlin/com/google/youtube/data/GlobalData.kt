@@ -783,8 +783,9 @@ val IN_MEMORY_SHORTS_DETAILS = listOf(
     ShortThumbnailDetails(
         id = "l7wk69TREWQ",
         thumbnailAsset = Asset.Thumbnail.Feed.CAT_1,
+        videoUrl = Asset.Videos.CAT_JAIL,
         title = "Put this cat in jail",
-        channelName = "DailyDostOfInternet",
+        channelName = "DailyDoseOfInternet",
         channelAsset = Asset.Channel.DAILY_DOSE_OF_INTERNET,
         views = "10M",
         daysSinceUploaded = "3 weeks",
@@ -793,8 +794,9 @@ val IN_MEMORY_SHORTS_DETAILS = listOf(
     ShortThumbnailDetails(
         id = "y1sp52UIOPL",
         thumbnailAsset = Asset.Thumbnail.Feed.CAT_2,
+        videoUrl = Asset.Videos.PIZZA_CRUST,
         title = "Pizza Crust Really wants Mac and Cheese",
-        channelName = "DailyDostOfInternetCats",
+        channelName = "DailyDoseOfInternetCats",
         channelAsset = Asset.Channel.DAILY_DOSE_OF_INTERNET_CATS,
         views = "10M",
         daysSinceUploaded = "3 weeks",

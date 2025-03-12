@@ -255,7 +255,7 @@ fun VideoPlayer(
                 htmlVideoPlayerRef = videoPlayer
                 with(videoPlayer) {
                     this.controls = false
-                    this.src = "/videos/SampleVideo_1280x720_10mb.mp4"
+                    this.src = Asset.Videos.SAMPLE_VIDEO
                     this.volume = 1.0
                 }
             }

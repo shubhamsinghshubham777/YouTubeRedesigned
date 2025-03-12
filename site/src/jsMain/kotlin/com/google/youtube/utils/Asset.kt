@@ -1,6 +1,176 @@
 package com.google.youtube.utils
 
 object Asset {
+    object Avatar {
+        const val BLUE = "/avatar/blue.png"
+        const val CEO_OF_DESIGN = "/avatar/ceo_of_design.png"
+        const val GREEN = "/avatar/green.png"
+        const val THE_RIZZLER = "/avatar/the_rizzler.png"
+    }
+
+    object Banner {
+        const val BANNER_1 = "/banners/banner_1.avif"
+    }
+
+    object Channel {
+        const val BELUGA = "/channel/beluga.png"
+        const val BOG = "/channel/bog.png"
+        const val BRANDON_SHEPHERD = "/channel/brandon_shepherd.png"
+        const val BRAWL_STARS = "/channel/brawl_stars.png"
+        const val CLIX = "/channel/clix.png"
+        const val CODING_WITH_LEWIS = "/channel/coding_with_lewis.png"
+        const val COLDPLAY = "/channel/coldplay.png"
+        const val CYBERPUNK_2077 = "/channel/cyberpunk_2077.png"
+        const val DAILY_DOSE_OF_INTERNET = "/channel/daily_dose_of_internet.jpg"
+        const val DAILY_DOSE_OF_INTERNET_CATS = "/channel/daily_dose_of_internet_cats.jpg"
+        const val DANIEL_KRAFFT = "/channel/daniel_krafft.png"
+        const val DAVE_2D = "/channel/dave_2d.jpg"
+        const val ETHAN_CHLEBOWSKI = "/channel/ethan_chlebowski.png"
+        const val EVE_ONLINE = "/channel/eve_online.png"
+        const val FACE_DEV = "/channel/face_dev.png"
+        const val FIRESHIP = "/channel/fireship.png"
+        const val FOOD_WISHES = "/channel/food_wishes.png"
+        const val FORTNITE = "/channel/fortnite.png"
+        const val GAMESPOT = "/channel/gamespot.png"
+        const val GOOGLE = "/channel/google.png"
+        const val HOW_TO_BASIC = "/channel/how_to_basic.png"
+        const val HYPERPLEXED = "/channel/hyperplexed.png"
+        const val IRENE_MAGAZINE = "/channel/irene_magazine.png"
+        const val JACKSEPTICEYE = "/channel/jacksepticeye.png"
+        const val JACKSFILMS = "/channel/jacksfilms.png"
+        const val JUXTOPPOSED = "/channel/juxtopposed.png"
+        const val LOFI_GIRL = "/channel/lofi_girl.png"
+        const val MAN_CARRYING_THING = "/channel/man_carrying_thing.jpg"
+        const val MKBHD = "/channel/mkbhd.jpg"
+        const val MUSICOS = "/channel/musicos.png"
+        const val NATASHA_KITCHEN = "/channel/natasha_kitchen.png"
+        const val NINJA = "/channel/ninja.png"
+        const val OK = "/channel/ok.png"
+        const val PAPA_MEAT = "/channel/papa_meat.png"
+        const val PLAYSTATION = "/channel/playstation.png"
+        const val PREPPY_KITCHEN = "/channel/preppy_kitchen.png"
+        const val RAUL_BLANCO = "/channel/raul_blanco.png"
+        const val RED_LETTER_MEDIA = "/channel/red_letter_media.png"
+        const val ROSE = "/channel/rose.png"
+        const val RYAN_TRAHAN = "/channel/ryan_trahan.png"
+        const val SCREEN_JUNKIES = "/channel/screen_junkies.png"
+        const val STEAM = "/channel/steam.png"
+        const val TECH_ALTAR = "/channel/tech_altar.png"
+        const val THE_CODING_SLOTH = "/channel/the_coding_sloth.png"
+        const val THE_CRITICAL_DRINKER = "/channel/the_critical_drinker.png"
+        const val THE_GAME_THEORISTS = "/channel/the_game_theorists.jpg"
+        const val THE_HUMAN_SPIDER = "/channel/the_human_spider.png"
+        const val THE_PRIME_TIME = "/channel/the_prime_time.png"
+        const val THE_REPORT_OF_THE_WEEK = "/channel/the_report_of_the_week.png"
+        const val TWO_STEPS_FROM_HELL = "/channel/two_steps_from_hell.png"
+        const val VAPING_CAT = "/channel/vaping_cat.jpg"
+        const val VICE_GRIP_GARAGE = "/channel/vice_grip_garage.png"
+        const val VSAUCE = "/channel/vsauce.jpg"
+        const val WWW = "/channel/www.png"
+        const val YUKON = "/channel/yukon.png"
+        const val ZOOM_ART_STUDIO = "/channel/zoom_art_studio.png"
+    }
+
+    object Thumbnail {
+        object Collection {
+            const val ANSWER_HIS_CALL = "/collection/answer_his_call.avif"
+            const val BALLISTIC = "/collection/ballistic.avif"
+            const val HELLDIVERS = "/collection/helldivers.avif"
+            const val INDIANA_JONES = "/collection/indiana_jones.avif"
+            const val INTERGALACTIC = "/collection/intergalactic.avif"
+            const val MAFIA_TRAILER = "/collection/mafia_trailer.avif"
+            const val OFFICIAL_TRAILER = "/collection/official_trailer.avif"
+            const val RUSTY_RABBIT = "/collection/rusty_rabbit.avif"
+            const val WEAPONS = "/collection/weapons.avif"
+        }
+
+        object Channel {
+            const val INSTAGRAM = "/thumbnails/instagram.avif"
+            const val ITS_TIME = "/thumbnails/its_time.avif"
+            const val MISSED_SHOT = "/thumbnails/missed_shot.avif"
+            const val MONETIZED = "/thumbnails/monetized.avif"
+            const val STREAM = "/thumbnails/stream.avif"
+            const val WHO_AM_I = "/thumbnails/who_am_i.avif"
+        }
+
+        object Feed {
+            const val ALL_AT_ONCE = "/feed/all_at_once.avif"
+            const val BITS = "/feed/bits.avif"
+            const val BLUR = "/feed/blur.avif"
+            const val CAT = "/feed/cat.avif"
+            const val CAT_1 = "/feed/cat_1.avif"
+            const val CAT_2 = "/feed/cat_2.avif"
+            const val COLOR = "/feed/color.avif"
+            const val DISCORD = "/feed/discord.avif"
+            const val DVD = "/feed/dvd.avif"
+            const val EGG = "/feed/egg.avif"
+            const val FACE_REVEAL = "/feed/face_reveal.avif"
+            const val JOSH = "/feed/josh.avif"
+            const val LED = "/feed/led.avif"
+            const val LOFI_GIRL = "/feed/lofi_girl.avif"
+            const val SHREK = "/feed/shrek.avif"
+            const val WE_ARE_DONE = "/feed/we_are_done.avif"
+        }
+
+        object History {
+            const val GOOGLE = "/history/google.avif"
+            const val HORSE_KICKS = "/history/horse_kicks.avif"
+            const val SHREK = "/history/shrek.avif"
+        }
+
+        object Search {
+            const val FOOD_WISHES = "/search/food_wishes.avif"
+            const val IRENE = "/search/irene.avif"
+            const val NATASHA = "/search/natasha.avif"
+            const val PREPPY = "/search/preppy.avif"
+        }
+
+        object Suggestion {
+            const val APPLE_SEARCH = "/suggestion/apple_search.avif"
+            const val CATS = "/suggestion/cats.avif"
+            const val DELETED_FILES = "/suggestion/deleted_files.avif"
+            const val MACOS_HORRIBLE = "/suggestion/macos_horrible.avif"
+            const val NOKIA_LUMIA = "/suggestion/nokia_lumia.avif"
+            const val SANS_TRUTH = "/suggestion/sans_truth.avif"
+            const val SPOTIFY = "/suggestion/spotify.avif"
+            const val TRUTH_ABOUT_LAPTOPS = "/suggestion/truth_about_laptops.avif"
+            const val YOUTUBERS_MUSIC = "/suggestion/youtubers_music.avif"
+        }
+
+        object Trending {
+            const val ANANTA_TRAILER = "/trending/ananta_trailer.avif"
+            const val BAD_BUNNY = "/trending/bad_bunny.avif"
+            const val BOOTING_UP = "/trending/booting_up.avif"
+            const val BRAWL_AND_BEYOND = "/trending/brawl_and_beyond.avif"
+            const val COLDPLAY = "/trending/coldplay.avif"
+            const val CYBERPUNK = "/trending/cyberpunk.avif"
+            const val EAT_IT = "/trending/eat_it.avif"
+            const val EXPENSIVE_BUTTER = "/trending/expensive_butter.avif"
+            const val GALAXY_QUEST = "/trending/galaxy_quest.avif"
+            const val JORJA_SMITH = "/trending/jorja_smith.avif"
+            const val JUICE_WRLD = "/trending/juice_wrld.avif"
+            const val LOCKED_UP = "/trending/locked_up.avif"
+            const val OG_FORTNITE = "/trending/og_fortnite.avif"
+            const val ROSE_TOXIC = "/trending/rose_toxic.avif"
+            const val SIMS_5 = "/trending/sims_5.avif"
+            const val YESTERDAY_WORLD = "/trending/yesterday_world.avif"
+        }
+
+        object TV {
+            const val TV_MODE_THUMBNAIL = "/tv/tv_mode_thumbnail.avif"
+        }
+
+        object Subscriptions {
+            const val BEST_AND_WORST = "/subscriptions/best_and_worst.avif"
+            const val FIRST_PERSON_ISLANDS = "/subscriptions/first_person_islands.avif"
+            const val GAME_THEORY = "/subscriptions/game_theory.avif"
+            const val IMPOSSIBLE_FAN = "/subscriptions/impossible_fan.avif"
+            const val PRINGLES = "/subscriptions/pringles.avif"
+            const val THOMAS_BERGERSEN = "/subscriptions/thomas_bergersen.avif"
+            const val UUID = "/subscriptions/uuid.avif"
+        }
+    }
+
     object Icon {
         const val ADD = "/icon/ic_add.svg"
         const val ADD_TO_PLAYLIST = "/icon/ic_add_to_playlist.svg"
@@ -224,178 +394,8 @@ object Asset {
             "M16.8077 9.24916H20.8078C21.0203 9.24916 21.1983 9.32107 21.342 9.46491C21.4858 9.60874 21.5578 9.78691 21.5578 9.99941C21.5578 10.2121 21.4858 10.3902 21.342 10.5337C21.1983 10.6773 21.0203 10.7492 20.8078 10.7492H16.8077C16.5953 10.7492 16.4171 10.6772 16.2732 10.5334C16.1296 10.3896 16.0577 10.2114 16.0577 9.99891C16.0577 9.78624 16.1296 9.60816 16.2732 9.46466C16.4171 9.32099 16.5953 9.24916 16.8077 9.24916ZM9 11.6914C8.0375 11.6914 7.21358 11.3487 6.52825 10.6634C5.84275 9.97791 5.5 9.15391 5.5 8.19141C5.5 7.22891 5.84275 6.40499 6.52825 5.71966C7.21358 5.03416 8.0375 4.69141 9 4.69141C9.9625 4.69141 10.7864 5.03416 11.4718 5.71966C12.1573 6.40499 12.5 7.22891 12.5 8.19141C12.5 9.15391 12.1573 9.97791 11.4718 10.6634C10.7864 11.3487 9.9625 11.6914 9 11.6914ZM1.5 17.7877V17.0837C1.5 16.594 1.633 16.1405 1.899 15.7232C2.165 15.3058 2.5205 14.985 2.9655 14.7607C3.95383 14.2762 4.95092 13.9127 5.95675 13.6704C6.96258 13.4281 7.977 13.3069 9 13.3069C10.023 13.3069 11.0374 13.4281 12.0433 13.6704C13.0491 13.9127 14.0462 14.2762 15.0345 14.7607C15.4795 14.985 15.835 15.3058 16.101 15.7232C16.367 16.1405 16.5 16.594 16.5 17.0837V17.7877C16.5 18.2093 16.3523 18.568 16.0568 18.8637C15.7613 19.1592 15.4026 19.3069 14.9808 19.3069H3.01925C2.59742 19.3069 2.23875 19.1592 1.94325 18.8637C1.64775 18.568 1.5 18.2093 1.5 17.7877ZM3 17.8069H15V17.0837C15 16.8812 14.9413 16.6937 14.824 16.5212C14.7067 16.3488 14.5474 16.2082 14.3462 16.0992C13.4846 15.6748 12.6061 15.3533 11.7107 15.1347C10.8153 14.9162 9.91167 14.8069 9 14.8069C8.08833 14.8069 7.18475 14.9162 6.28925 15.1347C5.39392 15.3533 4.51542 15.6748 3.65375 16.0992C3.45258 16.2082 3.29333 16.3488 3.176 16.5212C3.05867 16.6937 3 16.8812 3 17.0837V17.8069ZM9 10.1914C9.55 10.1914 10.0208 9.99557 10.4125 9.60391C10.8042 9.21224 11 8.74141 11 8.19141C11 7.64141 10.8042 7.17057 10.4125 6.77891C10.0208 6.38724 9.55 6.19141 9 6.19141C8.45 6.19141 7.97917 6.38724 7.5875 6.77891C7.19583 7.17057 7 7.64141 7 8.19141C7 8.74141 7.19583 9.21224 7.5875 9.60391C7.97917 9.99557 8.45 10.1914 9 10.1914Z"
     }
 
-    object Avatar {
-        const val BLUE = "/avatar/blue.png"
-        const val CEO_OF_DESIGN = "/avatar/ceo_of_design.png"
-        const val GREEN = "/avatar/green.png"
-        const val THE_RIZZLER = "/avatar/the_rizzler.png"
-    }
-
-    object Channel {
-        const val BELUGA = "/channel/beluga.png"
-        const val BOG = "/channel/bog.png"
-        const val BRANDON_SHEPHERD = "/channel/brandon_shepherd.png"
-        const val BRAWL_STARS = "/channel/brawl_stars.png"
-        const val CLIX = "/channel/clix.png"
-        const val CODING_WITH_LEWIS = "/channel/coding_with_lewis.png"
-        const val COLDPLAY = "/channel/coldplay.png"
-        const val CYBERPUNK_2077 = "/channel/cyberpunk_2077.png"
-        const val DAILY_DOSE_OF_INTERNET = "/channel/daily_dose_of_internet.jpg"
-        const val DAILY_DOSE_OF_INTERNET_CATS = "/channel/daily_dose_of_internet_cats.jpg"
-        const val DANIEL_KRAFFT = "/channel/daniel_krafft.png"
-        const val DAVE_2D = "/channel/dave_2d.jpg"
-        const val ETHAN_CHLEBOWSKI = "/channel/ethan_chlebowski.png"
-        const val EVE_ONLINE = "/channel/eve_online.png"
-        const val FACE_DEV = "/channel/face_dev.png"
-        const val FIRESHIP = "/channel/fireship.png"
-        const val FOOD_WISHES = "/channel/food_wishes.png"
-        const val FORTNITE = "/channel/fortnite.png"
-        const val GAMESPOT = "/channel/gamespot.png"
-        const val GOOGLE = "/channel/google.png"
-        const val HOW_TO_BASIC = "/channel/how_to_basic.png"
-        const val HYPERPLEXED = "/channel/hyperplexed.png"
-        const val IRENE_MAGAZINE = "/channel/irene_magazine.png"
-        const val JACKSEPTICEYE = "/channel/jacksepticeye.png"
-        const val JACKSFILMS = "/channel/jacksfilms.png"
-        const val JUXTOPPOSED = "/channel/juxtopposed.png"
-        const val LOFI_GIRL = "/channel/lofi_girl.png"
-        const val MAN_CARRYING_THING = "/channel/man_carrying_thing.jpg"
-        const val MKBHD = "/channel/mkbhd.jpg"
-        const val MUSICOS = "/channel/musicos.png"
-        const val NATASHA_KITCHEN = "/channel/natasha_kitchen.png"
-        const val NINJA = "/channel/ninja.png"
-        const val OK = "/channel/ok.png"
-        const val PAPA_MEAT = "/channel/papa_meat.png"
-        const val PLAYSTATION = "/channel/playstation.png"
-        const val PREPPY_KITCHEN = "/channel/preppy_kitchen.png"
-        const val RAUL_BLANCO = "/channel/raul_blanco.png"
-        const val RED_LETTER_MEDIA = "/channel/red_letter_media.png"
-        const val ROSE = "/channel/rose.png"
-        const val RYAN_TRAHAN = "/channel/ryan_trahan.png"
-        const val SCREEN_JUNKIES = "/channel/screen_junkies.png"
-        const val STEAM = "/channel/steam.png"
-        const val TECH_ALTAR = "/channel/tech_altar.png"
-        const val THE_CODING_SLOTH = "/channel/the_coding_sloth.png"
-        const val THE_CRITICAL_DRINKER = "/channel/the_critical_drinker.png"
-        const val THE_GAME_THEORISTS = "/channel/the_game_theorists.jpg"
-        const val THE_HUMAN_SPIDER = "/channel/the_human_spider.png"
-        const val THE_PRIME_TIME = "/channel/the_prime_time.png"
-        const val THE_REPORT_OF_THE_WEEK = "/channel/the_report_of_the_week.png"
-        const val TWO_STEPS_FROM_HELL = "/channel/two_steps_from_hell.png"
-        const val VAPING_CAT = "/channel/vaping_cat.jpg"
-        const val VICE_GRIP_GARAGE = "/channel/vice_grip_garage.png"
-        const val VSAUCE = "/channel/vsauce.jpg"
-        const val WWW = "/channel/www.png"
-        const val YUKON = "/channel/yukon.png"
-        const val ZOOM_ART_STUDIO = "/channel/zoom_art_studio.png"
-    }
-
-    object Thumbnail {
-        object Collection {
-            const val ANSWER_HIS_CALL = "/collection/answer_his_call.png"
-            const val BALLISTIC = "/collection/ballistic.png"
-            const val HELLDIVERS = "/collection/helldivers.png"
-            const val INDIANA_JONES = "/collection/indiana_jones.png"
-            const val INTERGALACTIC = "/collection/intergalactic.png"
-            const val MAFIA_TRAILER = "/collection/mafia_trailer.png"
-            const val OFFICIAL_TRAILER = "/collection/official_trailer.png"
-            const val RUSTY_RABBIT = "/collection/rusty_rabbit.png"
-            const val WEAPONS = "/collection/weapons.png"
-        }
-
-        object Channel {
-            const val INSTAGRAM = "/thumbnails/instagram.png"
-            const val ITS_TIME = "/thumbnails/its_time.png"
-            const val MISSED_SHOT = "/thumbnails/missed_shot.png"
-            const val MONETIZED = "/thumbnails/monetized.png"
-            const val STREAM = "/thumbnails/stream.png"
-            const val WHO_AM_I = "/thumbnails/who_am_i.png"
-        }
-
-        object Feed {
-            const val ALL_AT_ONCE = "/feed/all_at_once.png"
-            const val BITS = "/feed/bits.png"
-            const val BLUR = "/feed/blur.png"
-            const val CAT = "/feed/cat.png"
-            const val CAT_1 = "/feed/cat_1.png"
-            const val CAT_2 = "/feed/cat_2.png"
-            const val COLOR = "/feed/color.png"
-            const val DISCORD = "/feed/discord.png"
-            const val DVD = "/feed/dvd.png"
-            const val EGG = "/feed/egg.png"
-            const val FACE_REVEAL = "/feed/face_reveal.png"
-            const val JOSH = "/feed/josh.png"
-            const val LED = "/feed/led.png"
-            const val LOFI_GIRL = "/feed/lofi_girl.png"
-            const val SHREK = "/feed/shrek.png"
-            const val WE_ARE_DONE = "/feed/we_are_done.png"
-        }
-
-        object History {
-            const val GOOGLE = "/history/google.png"
-            const val HORSE_KICKS = "/history/horse_kicks.png"
-            const val SHREK = "/history/shrek.png"
-        }
-
-        object Search {
-            const val FOOD_WISHES = "/search/food_wishes.png"
-            const val IRENE = "/search/irene.png"
-            const val NATASHA = "/search/natasha.png"
-            const val PREPPY = "/search/preppy.png"
-        }
-
-        object Suggestion {
-            const val APPLE_SEARCH = "/suggestion/apple_search.png"
-            const val CATS = "/suggestion/cats.png"
-            const val DELETED_FILES = "/suggestion/deleted_files.png"
-            const val MACOS_HORRIBLE = "/suggestion/macos_horrible.png"
-            const val NOKIA_LUMIA = "/suggestion/nokia_lumia.png"
-            const val SANS_TRUTH = "/suggestion/sans_truth.png"
-            const val SPOTIFY = "/suggestion/spotify.png"
-            const val TRUTH_ABOUT_LAPTOPS = "/suggestion/truth_about_laptops.png"
-            const val YOUTUBERS_MUSIC = "/suggestion/youtubers_music.png"
-        }
-
-        object Trending {
-            const val ANANTA_TRAILER = "/trending/ananta_trailer.png"
-            const val BAD_BUNNY = "/trending/bad_bunny.png"
-            const val BOOTING_UP = "/trending/booting_up.png"
-            const val BRAWL_AND_BEYOND = "/trending/brawl_and_beyond.png"
-            const val COLDPLAY = "/trending/coldplay.png"
-            const val CYBERPUNK = "/trending/cyberpunk.png"
-            const val EAT_IT = "/trending/eat_it.png"
-            const val EXPENSIVE_BUTTER = "/trending/expensive_butter.png"
-            const val GALAXY_QUEST = "/trending/galaxy_quest.png"
-            const val JORJA_SMITH = "/trending/jorja_smith.png"
-            const val JUICE_WRLD = "/trending/juice_wrld.png"
-            const val LOCKED_UP = "/trending/locked_up.png"
-            const val OG_FORTNITE = "/trending/og_fortnite.png"
-            const val ROSE_TOXIC = "/trending/rose_toxic.png"
-            const val SIMS_5 = "/trending/sims_5.png"
-            const val YESTERDAY_WORLD = "/trending/yesterday_world.png"
-        }
-
-        object TV {
-            const val TV_MODE_THUMBNAIL = "/tv/tv_mode_thumbnail.png"
-        }
-
-        object Subscriptions {
-            const val BEST_AND_WORST = "/subscriptions/best_and_worst.png"
-            const val FIRST_PERSON_ISLANDS = "/subscriptions/first_person_islands.png"
-            const val GAME_THEORY = "/subscriptions/game_theory.png"
-            const val IMPOSSIBLE_FAN = "/subscriptions/impossible_fan.png"
-            const val PRINGLES = "/subscriptions/pringles.png"
-            const val THOMAS_BERGERSEN = "/subscriptions/thomas_bergersen.png"
-            const val UUID = "/subscriptions/uuid.png"
-        }
-    }
-
-    object Banner {
-        const val BANNER_1 = "/banners/banner_1.png"
-    }
-
     object Post {
-        const val DISCORD = "/post/discord_post.png"
+        const val DISCORD = "/post/discord_post.avif"
     }
 
     object Social {
@@ -405,5 +405,11 @@ object Asset {
         const val REALTIME_COLORS = "/social/realtime_colors.png"
         const val TWITTER = "/social/twitter.png"
         const val X = "/social/x.svg"
+    }
+
+    object Videos {
+        const val CAT_JAIL = "/videos/cat_jail.mp4"
+        const val PIZZA_CRUST = "/videos/pizza_crust.mp4"
+        const val SAMPLE_VIDEO = "/videos/sample_video.mp4"
     }
 }

@@ -42,6 +42,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.translateX
 import com.varabyte.kobweb.compose.ui.modifiers.userSelect
+import com.varabyte.kobweb.compose.ui.thenIfNotNull
 import com.varabyte.kobweb.silk.theme.shapes.Rect
 import com.varabyte.kobweb.silk.theme.shapes.clip
 import kotlinx.coroutines.launch
@@ -197,8 +198,11 @@ private fun List<ContextMenuChild>.toComposables(
                     Row(
                         ref = ref { ref -> buttonRef = ref },
                         modifier = Modifier
-                            .clickable { child.onClick?.invoke() }
-                            .background(animatedContainerColor.toKobwebColor())
+                            .thenIfNotNull(child.onClick) { safeOnClick ->
+                                Modifier
+                                    .background(animatedContainerColor.toKobwebColor())
+                                    .clickable(onClick = safeOnClick)
+                            }
                             .fillMaxWidth()
                             .padding(leftRight = CONTAINER_PADDING_HORIZONTAL.px)
                             .height(child.heightPx.px)
