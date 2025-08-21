@@ -1,9 +1,11 @@
 package com.google.youtube.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.google.youtube.components.widgets.AssetImageButton
 import com.google.youtube.components.widgets.CategoryTab
 import com.google.youtube.components.widgets.HorizontalDivider
@@ -61,6 +63,14 @@ import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun ChannelPage(id: String, initialTab: ChannelTab?) {
+    val navigator = LocalNavigator.current
+    var selectedTab by remember { mutableStateOf(initialTab ?: ChannelTab.Home) }
+    
+    // Update selected tab when route changes
+    LaunchedEffect(initialTab) {
+        selectedTab = initialTab ?: ChannelTab.Home
+    }
+    
     Column(modifier = Modifier.fillMaxWidth()) {
         // Header
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -92,14 +102,20 @@ fun ChannelPage(id: String, initialTab: ChannelTab?) {
         }
 
         // Content
-        Tabs(channelId = id, selectedTab = initialTab ?: ChannelTab.Home)
+        Tabs(
+            selectedTab = selectedTab,
+            onTabSelected = { tab ->
+                navigator.pushRoute(Route.Page(id = id, selectedTab = tab))
+            }
+        )
         HorizontalDivider(Styles.DIVIDER)
+        
         Crossfade(
-            targetState = initialTab,
+            targetState = selectedTab,
             modifier = Modifier.fillMaxWidth().padding(topBottom = 28.px)
-        ) { animatedSelectedTabLabel ->
-            when (animatedSelectedTabLabel) {
-                null, ChannelTab.Home -> ChannelHomePage()
+        ) { animatedSelectedTab ->
+            when (animatedSelectedTab) {
+                ChannelTab.Home -> ChannelHomePage()
                 ChannelTab.Videos -> ChannelVideosPage()
                 ChannelTab.Shorts -> ChannelShortsPage()
                 ChannelTab.Posts -> ChannelPostsPage()
@@ -112,8 +128,10 @@ fun ChannelPage(id: String, initialTab: ChannelTab?) {
 }
 
 @Composable
-private fun Tabs(channelId: String, selectedTab: ChannelTab) {
-    val navigator = LocalNavigator.current
+private fun Tabs(
+    selectedTab: ChannelTab,
+    onTabSelected: (ChannelTab) -> Unit
+) {
     Wrap(
         horizontalGapPx = 23,
         verticalGapPx = 0,
@@ -123,7 +141,7 @@ private fun Tabs(channelId: String, selectedTab: ChannelTab) {
             CategoryTab(
                 label = tab.name,
                 isSelected = selectedTab == tab,
-                onClick = { navigator.pushRoute(Route.Page(id = channelId, selectedTab = tab)) },
+                onClick = { onTabSelected(tab) },
             )
         }
         Spacer()
