@@ -1,7 +1,6 @@
 package com.google.youtube.pages
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,13 +63,8 @@ import org.jetbrains.compose.web.dom.Text
 @Composable
 fun ChannelPage(id: String, initialTab: ChannelTab?) {
     val navigator = LocalNavigator.current
-    var selectedTab by remember { mutableStateOf(initialTab ?: ChannelTab.Home) }
-    
-    // Update selected tab when route changes
-    LaunchedEffect(initialTab) {
-        selectedTab = initialTab ?: ChannelTab.Home
-    }
-    
+    var selectedTab by remember(initialTab) { mutableStateOf(initialTab ?: ChannelTab.Home) }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         // Header
         Box(modifier = Modifier.fillMaxWidth()) {
