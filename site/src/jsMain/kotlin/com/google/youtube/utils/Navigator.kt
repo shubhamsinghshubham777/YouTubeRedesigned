@@ -53,6 +53,9 @@ val LocalNavigator = staticCompositionLocalOf<Navigator> {
 }
 
 sealed class Route(val path: String) {
+    // Component key determines if routes should share the same component instance
+    open val componentKey: String get() = this::class.simpleName ?: ""
+    
     data object Home : Route(path = HOME)
     data object Explore : Route(path = EXPLORE)
     data object Shorts : Route(path = SHORTS)
@@ -67,7 +70,10 @@ sealed class Route(val path: String) {
     data class Collection(val id: String) : Route(path = "$COLLECTION$id")
     data object Subscriptions : Route(path = SUBSCRIPTIONS)
     data class Page(val id: String, val selectedTab: ChannelTab? = null) :
-        Route(path = "$PAGE$id/${selectedTab?.label.orEmpty()}")
+        Route(path = "$PAGE$id/${selectedTab?.label.orEmpty()}") {
+        // Pages with same ID share the same component instance
+        override val componentKey: String get() = "Page:$id"
+    }
 
     data class Video(val id: String) : Route(path = "$VIDEO$id")
     data class Search(val query: String) : Route(path = "$SEARCH$query")

@@ -119,8 +119,8 @@ fun MainLayout() {
                         .hideScrollBar()
                 ) {
                     Crossfade(
-                        // TODO: Substring this route to avoid reloading common parts of a page
-                        targetState = currentRoute,
+                        // Use componentKey to avoid reloading when only route params change
+                        targetState = currentRoute.componentKey,
                         modifier = Modifier
                             .fillMaxWidth(100.percent - horizontalPaddingState.value.px)
                             .fillMaxHeight()
@@ -128,9 +128,10 @@ fun MainLayout() {
                             .padding(top = Constants.CONTENT_PADDING),
                         onStateChange = { window.scrollTo(0.0, 0.0) },
                         animateTranslationY = false,
-                    ) { animatedRoute ->
-                        when (animatedRoute) {
-                            is Route.Collection -> CollectionPage(collectionId = animatedRoute.id)
+                    ) { _ ->
+                        val route = currentRoute
+                        when (route) {
+                            is Route.Collection -> CollectionPage(collectionId = route.id)
 
                             Route.Explore -> ExplorePage(
                                 Modifier.padding(bottom = Constants.CONTENT_PADDING)
@@ -148,34 +149,34 @@ fun MainLayout() {
                             )
 
                             is Route.Page -> ChannelPage(
-                                id = animatedRoute.id,
-                                initialTab = animatedRoute.selectedTab,
+                                id = route.id,
+                                initialTab = route.selectedTab,
                             )
 
-                            is Route.Playlist -> PlaylistPage(id = animatedRoute.id)
+                            is Route.Playlist -> PlaylistPage(id = route.id)
 
                             Route.Playlists -> AllPlaylistsPage()
 
                             is Route.Short -> ShortDetails(
-                                id = animatedRoute.id,
+                                id = route.id,
                                 onBackPressed = navigator::pop,
                             )
 
                             Route.Shorts -> ShortsGrid(showPersonalisedFeedDialogState)
 
                             Route.Collections, Route.Subscriptions -> SubscriptionsPage(
-                                isSubscriptionsCategorySelected = animatedRoute == Route.Subscriptions,
+                                isSubscriptionsCategorySelected = route == Route.Subscriptions,
                             )
 
                             Route.TVMode -> TVModePage()
 
-                            is Route.Video -> VideoPlayerPage(videoId = animatedRoute.id)
+                            is Route.Video -> VideoPlayerPage(videoId = route.id)
 
                             Route.WatchLater -> WorkInProgressSection(
                                 modifier = Modifier.align(Alignment.Center)
                             )
 
-                            is Route.Search -> SearchPage(query = animatedRoute.query)
+                            is Route.Search -> SearchPage(query = route.query)
                         }
                     }
                 }
